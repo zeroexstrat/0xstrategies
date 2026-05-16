@@ -77,11 +77,13 @@ body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:
   line-height:1.7;padding-top:8px;border-top:1px solid var(--border)}
 
 /* main */
-.main{flex:1;min-width:0;padding:56px 52px 100px;max-width:760px}
+.main{flex:1;min-width:0;padding:56px 52px 100px;max-width:900px}
 .sec{margin-bottom:68px}
 .sec-anchor{scroll-margin-top:40px}
-.eyebrow{font-size:9px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;
-  color:var(--aqua);font-family:var(--mono);margin-bottom:18px}
+.eyebrow{font-size:9px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--aqua);font-family:var(--mono);margin-bottom:8px}
+.sec-h{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);
+  letter-spacing:-0.3px;line-height:1.15;margin-bottom:22px}
 
 /* hero */
 .hero-bio{font-size:15px;color:var(--ink-lt);line-height:1.8;max-width:600px;margin-bottom:24px}
@@ -284,7 +286,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   </div>
 
   <div class="s-foot">
-    Generated 2026-05-16 21:43<br>
+    Generated 2026-05-16 22:08<br>
     0xstrategies.com
   </div>
 
@@ -312,6 +314,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 <!-- ─ THE LATTICE ──────────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="lattice">
   <div class="eyebrow">The Lattice</div>
+  <h2 class="sec-h">The Lattice</h2>
   <div class="lattice-wrap">
     <video controls playsinline>
       <source src="The Lattice May 16 2026.mp4" type="video/mp4">
@@ -332,6 +335,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 <!-- ─ METHODOLOGY ─────────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="methodology">
   <div class="eyebrow">Technical Architecture</div>
+  <h2 class="sec-h">How I Work</h2>
   <div class="cap-grid">
     <div class="cap-card">
       <div class="cap-title">Self-Correcting Development</div>
@@ -360,7 +364,8 @@ a.badge-ver:hover{border-color:var(--aqua)}
   </div>
 
   <div style="margin-top:40px">
-    <div class="eyebrow">How I work</div>
+    <div class="eyebrow">Approach</div>
+    <h2 class="sec-h">How I Work</h2>
     <p class="how-para">I present problems with operational specificity. Not &ldquo;the data is unreliable&rdquo; &mdash; but &ldquo;scanner ID substitution corrupts iGate PPH silently, and there&rsquo;s no surface indicator unless you cross-reference the SOR employee summary against the sort window to identify who was where and for how long.&rdquo; That precision is what makes the solutions exact rather than approximate.</p>
     <p class="how-para">I don&rsquo;t stop at solving a problem. I build infrastructure around the solution so the next one is easier. The tracker needed a corpus. The corpus needed analysis tooling. The analysis needed a research framework. The research framework needed a quality system. Each layer compounds on the previous one &mdash; and the system that exists now is the product of that compounding, not of any single build decision.</p>
     <p class="how-para">The AI collaboration is structured, not conversational. Post-mortem quality scoring after every milestone. Mandatory self-backtracking before any fix. Persistent memory so architectural decisions from six weeks ago are still in context today. I&rsquo;m not using AI as an autocomplete. I built a thinking partner with accountability, continuity, and a clear role in the research program.</p>
@@ -374,12 +379,14 @@ a.badge-ver:hover{border-color:var(--aqua)}
 <!-- ─ PROJECTS ─────────────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="projects">
   <div class="eyebrow">Projects</div>
+  <h2 class="sec-h">What I've Built</h2>
   <div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Hub Operations Tracker</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · python · idb</div><div class="proj-entry-desc">Six embedded OR models running on a 613-sort corpus. Full sort lifecycle — Upload, Intel, Hub, Timeline, DOP, History — in a single HTML file. 6,200+ lines. IDB v4 persistence.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">KPI Presort Dashboard</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · chart.js</div><div class="proj-entry-desc">Real-time operations view for Twilight sort. Eight KPI modules reconciling iGate ESR, SOR/TMS, and CURE across the full sort window.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Hub Ops Container</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · iframe · base64</div><div class="proj-entry-desc">Single-launch wrapper combining tracker and dashboard in one URL. iframe + base64 architecture with container-level footer.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Sort Intelligence Master</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · sheetjs · chart.js</div><div class="proj-entry-desc">Standalone browser tool on the full 613-sort corpus. Per-employee Phase 2 PPH at parity, zone analytics, borrow/loan risk scoring. No install required.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Master Trend Analysis</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · chart.js</div><div class="proj-entry-desc">Eight-tab prediction and analysis app. 620-sort corpus. Trend forecasting, zone decomposition, OR model integration.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">UPS Sort Training Platform</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js</div><div class="proj-entry-desc">Browser-based sorter certification system. 41,000 ZIP routing records. Three-tier access: Sorter / Supervisor / Admin. Eight-tab supervisor analytics dashboard. Zero licensing cost — deployed at CHEMA May 2026.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">CHEMA Analytics Program</div><div class="proj-entry-badges"><span class="badge-status" style="color:#6B8C6B;background:#EEF4EE">research</span></div></div><div class="proj-entry-stack">markdown · python · latex</div><div class="proj-entry-desc">97-page unified research monograph. Five independent analytical branches — A through D plus Sort Intelligence — merged into one self-referential opus. All proofs inline, no external citations for the math.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">AI Memory System</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">python · sqlite · fts5 · langgraph</div><div class="proj-entry-desc">SQLite + FTS5 knowledge store with LangGraph postmortem pipeline. 875+ memories, 40+ sessions, full architectural continuity across all work.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">chema-qwen RAG</div><div class="proj-entry-badges"><span class="badge-status" style="color:#6B8C6B;background:#EEF4EE">research</span></div></div><div class="proj-entry-stack">python · ollama · chromadb</div><div class="proj-entry-desc">QLoRA fine-tuned Qwen2.5-7B on 1,018 CHEMA-specific training pairs. Three-stage retrieval: SPECTER2 semantic + tier re-rank + keyword supplement with content-coverage gate. Runs locally via Ollama.</div></div>
 </div>
 
 <!-- ─ BACKGROUND ───────────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="background">
   <div class="eyebrow">Background</div>
+  <h2 class="sec-h">Experience &amp; Credentials</h2>
 
   <div class="bg-blk">
     <div class="bg-title">Program Statistics</div>
@@ -433,6 +440,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 <!-- ─ HISTORICAL PATH ──────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="history">
   <div class="eyebrow">Historical Path</div>
+  <h2 class="sec-h">How It Was Built</h2>
   <p style="font-size:13px;color:var(--ink-lt);line-height:1.7;margin-bottom:32px;max-width:560px">
     A technical narrative of the 0xStrategies program &mdash; from the first Excel tracker through the research program, the memory architecture, and the local intelligence layer. Written in sequence. All version numbers and dates are sourced from verified records.
   </p>
@@ -515,7 +523,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 </div>
   <div class="bio-col">
     <span style="font-family:var(--mono);font-size:10px;display:block;margin-top:8px;color:var(--muted)">
-    Last updated: 2026-05-16 21:43 &middot; Rafael Almeida &middot; 0xStrategies</span>
+    Last updated: 2026-05-16 22:08 &middot; Rafael Almeida &middot; 0xStrategies</span>
   </div>
 </div>
 
