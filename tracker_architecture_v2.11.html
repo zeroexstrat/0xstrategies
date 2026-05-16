@@ -91,8 +91,7 @@ a{color:var(--orange);text-decoration:none}
   <h1>Tracker <span>v2.11</span> — System Architecture</h1>
   <div class="subtitle">Subsystems, communication pathways &amp; feedback loops · CHEMA Twilight Operations</div>
   <div class="meta">
-    <span><span class="dot"></span>Rafael Almeida, Employee 6068314</span>
-    <span><span class="dot"></span>CHEMA Twilight · 18:00–22:00</span>
+    <span><span class="dot"></span>CHEMA Twilight Operations</span>
     <span><span class="dot"></span>4,600+ lines · 7 tabs · 3 data sources</span>
     <span><span class="dot"></span>Built 2026-05</span>
   </div>
@@ -787,7 +786,7 @@ a{color:var(--orange);text-decoration:none}
     <h2>On-Floor Coordinator Feedback Loop</h2>
   </div>
   <div class="prose">
-    The tracker is designed around a four-hour sort window (18:00–22:00 Twilight). The coordinator's interaction has three phases: pre-sort setup, intra-sort monitoring, and post-sort capture. Each phase drives a different subsystem.
+    The tracker is designed around a four-hour sort window (Twilight). The coordinator's interaction has three phases: pre-sort setup, intra-sort monitoring, and post-sort capture. Each phase drives a different subsystem.
   </div>
 
   <div class="diagram">
@@ -808,10 +807,10 @@ a{color:var(--orange);text-decoration:none}
       <line x1="1020" y1="136" x2="1020" y2="152" stroke="#6c6a64" stroke-width="1.5"/>
 
       <text x="40"   y="166" text-anchor="middle" fill="#8A8880" font-size="9">17:30</text>
-      <text x="285"  y="166" text-anchor="middle" fill="#f59e0b" font-size="9">18:00</text>
+      <text x="285"  y="166" text-anchor="middle" fill="#f59e0b" font-size="9">Start</text>
       <text x="530"  y="166" text-anchor="middle" fill="#4A4740" font-size="9">19:30</text>
       <text x="775"  y="166" text-anchor="middle" fill="#4A4740" font-size="9">21:00</text>
-      <text x="1020" y="166" text-anchor="middle" fill="#22c55e" font-size="9">22:00</text>
+      <text x="1020" y="166" text-anchor="middle" fill="#22c55e" font-size="9">End</text>
       <text x="285"  y="178" text-anchor="middle" fill="#f59e0b" font-size="8">SORT START</text>
       <text x="1020" y="178" text-anchor="middle" fill="#22c55e" font-size="8">SORT DOWN</text>
 
@@ -828,7 +827,7 @@ a{color:var(--orange);text-decoration:none}
       <text x="125" y="38" text-anchor="middle" fill="#a78bfa" font-size="9" font-weight="700">PRE-SORT SETUP</text>
       <text x="125" y="52" text-anchor="middle" fill="#4A4740" font-size="8">Enter Plan PPH (Adj Bldg ~119)</text>
       <text x="125" y="64" text-anchor="middle" fill="#4A4740" font-size="8">Enter Plan Volume</text>
-      <text x="125" y="76" text-anchor="middle" fill="#4A4740" font-size="8">Set sort window (18:00–22:00)</text>
+      <text x="125" y="76" text-anchor="middle" fill="#4A4740" font-size="8">Set sort window</text>
       <text x="125" y="88" text-anchor="middle" fill="#4A4740" font-size="8">Upload SOR (planned fields)</text>
       <text x="125" y="100" text-anchor="middle" fill="#8A8880" font-size="8">→ KPI stripe colors initialized</text>
       <text x="125" y="112" text-anchor="middle" fill="#8A8880" font-size="8">→ DOP back-solve targets set</text>
@@ -895,7 +894,7 @@ a{color:var(--orange);text-decoration:none}
       <tr>
         <td>3</td>
         <td>Back-Solve showed fabricated projections ("305,619 projected · burn 76k pkgs/hr") when old sort data was loaded</td>
-        <td><code>_dopRenderPace</code> computed <code>elapsedH</code> from wall-clock time. Old sort data: wall-clock is past 22:00 → status = 'post' → <code>elapsedH = span.spanH = 4h</code> → <code>burnNow = 305k/4 = 76k pkgs/hr</code>.</td>
+        <td><code>_dopRenderPace</code> computed <code>elapsedH</code> from wall-clock time. Old sort data: wall-clock is past sort end → status = 'post' → <code>elapsedH = span.spanH = 4h</code> → <code>burnNow = 305k/4 = 76k pkgs/hr</code>.</td>
         <td><code>_dopRenderPace()</code>: check <code>DATA.sor.sortDate !== today</code> → if true, show static historical summary banner and return early. Also: volume anomaly warning if <code>netVol &gt; planVol × 1.2</code>.</td>
       </tr>
       <tr>
@@ -927,7 +926,7 @@ a{color:var(--orange);text-decoration:none}
 </div><!-- /page -->
 
 <div style="background:var(--bg2);border-top:1px solid var(--border);padding:20px 80px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
-  <span>Tracker v2.11 Architecture · CHEMA Twilight Operations · Rafael Almeida, Employee 6068314</span>
+  <span>Tracker v2.11 Architecture · CHEMA Twilight Operations</span>
   <span>Generated 2026-05-14</span>
 </div>
 
