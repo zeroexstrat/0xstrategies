@@ -46,7 +46,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:
   letter-spacing:-0.02em;line-height:1.0}
 .s-tagline{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:0.4px;margin-top:6px}
 .s-div{height:1px;background:var(--border);flex-shrink:0}
-.s-lbl{font-size:9px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-family:var(--mono);margin-bottom:7px}
+.s-lbl{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-lt);font-family:var(--mono);margin-bottom:9px}
 .s-name{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-0.1px}
 .s-role{font-size:11.5px;color:var(--ink-lt);line-height:1.5;margin-top:2px}
 .s-org{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px}
@@ -96,7 +96,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:
 .lattice-wrap video{width:100%;display:block}
 .lattice-cap{padding:22px 26px 26px}
 .lattice-cap p{font-size:13px;color:rgba(245,244,240,0.52);line-height:1.82;margin-bottom:12px}
-.lattice-cap p:last-child{margin-bottom:0;font-size:13.5px;color:rgba(245,244,240,0.78);font-style:italic}
+.lattice-cap p:last-child{margin-bottom:0;font-size:13.5px;color:var(--sage);font-style:italic;font-weight:700}
 
 /* capability cards */
 .cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
@@ -185,15 +185,47 @@ a.badge-ver:hover{border-color:var(--aqua)}
 .pdf-modal-close:hover{background:var(--cream3);color:var(--ink)}
 .pdf-modal iframe{flex:1;border:none;width:100%;display:block}
 
-/* responsive */
-@media(max-width:820px){
+/* ── responsive ────────────────────────────────────────────── */
+
+/* iPad (portrait + landscape) */
+@media(max-width:1024px){
+  :root{--sw:220px}
+  .main{padding:48px 36px 80px}
+}
+
+/* Phone */
+@media(max-width:767px){
   .page-wrap{flex-direction:column}
-  .sidebar{width:100%;height:auto;position:static;border-right:none;
-    border-bottom:1px solid var(--border);padding:24px 20px}
-  .main{padding:36px 20px 80px}
+  .sidebar{
+    width:100%;height:auto;position:static;
+    border-right:none;border-bottom:1px solid var(--border);
+    padding:20px 20px 16px;flex-direction:row;flex-wrap:wrap;gap:0;
+    overflow:visible
+  }
+  .s-head{padding:0;margin-bottom:16px;width:100%;border-bottom:none}
+  .s-div{display:none}
+  .s-meta,.s-about-blk,.s-session-blk,.s-edu,.s-contact-blk,.s-foot{display:none}
+  .s-name-blk{display:none}
+  .s-nav{
+    display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;
+    width:100%;margin-top:10px
+  }
+  .nav-a{
+    padding:5px 10px;border-radius:20px;font-size:11px;
+    border:1px solid var(--border);border-left:none
+  }
+  .nav-a.active{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .ndot{display:none}
+  .s-lbl{display:none}
+  .s-wordmark,.s-tagline{display:block}
+  .brief-list,.s-about,.s-edu,.s-contact,.s-foot,.stk-wrap,.s-role,.s-org{display:none}
+  .main{padding:28px 18px 60px;max-width:100%}
   .cap-grid{grid-template-columns:1fr}
   .stats-g{grid-template-columns:repeat(2,1fr)}
-  .s-nav{display:none}
+  .proj-entry-badges{flex-wrap:wrap}
+  .lattice-wrap video{border-radius:0}
+  .sec-h{font-size:22px}
+  .bio-container,.two-col{padding:0}
 }
 </style>
 </head>
@@ -231,11 +263,11 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <div>
     <div class="s-lbl">Navigate</div>
     <nav class="s-nav">
-      <a class="nav-a active" href="#lattice"><span class="ndot"></span>The Lattice</a>
-      <a class="nav-a" href="#methodology"><span class="ndot"></span>Methodology</a>
-      <a class="nav-a" href="#projects"><span class="ndot"></span>Projects</a>
-      <a class="nav-a" href="#background"><span class="ndot"></span>Background</a>
-      <a class="nav-a" href="#history"><span class="ndot"></span>Historical Path</a>
+      <a class="nav-a active" href="#lattice"><span class="ndot"></span>Lattice</a>
+      <a class="nav-a" href="#methodology"><span class="ndot"></span>Architecture</a>
+      <a class="nav-a" href="#projects"><span class="ndot"></span>Builds</a>
+      <a class="nav-a" href="#background"><span class="ndot"></span>Resume</a>
+      <a class="nav-a" href="#history"><span class="ndot"></span>Origin</a>
     </nav>
   </div>
 
@@ -244,7 +276,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <div>
     <div class="s-lbl">Briefings</div>
     <div class="brief-list">
-      <a class="brief-a" href="presentation_v1.1.html" target="_blank">
+      <a class="brief-a" href="./presentation_v1.1.html" target="_blank">
         <div class="brief-nm">Hub Operations Suite</div>
         <div class="brief-sub">presentation_v1.1.html &rarr;</div>
       </a>
@@ -302,7 +334,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   </div>
 
   <div class="s-foot">
-    Generated 2026-05-16 22:17<br>
+    Generated 2026-05-16 22:31<br>
     0xstrategies.com
   </div>
 
@@ -313,17 +345,9 @@ a.badge-ver:hover{border-color:var(--aqua)}
 
 <!-- ─ INTRO ────────────────────────────────────────────────────── -->
 <div class="sec">
-  <p class="hero-bio">Every project here started as a real problem I was spending time on at work.
-  I built tools to solve it, then tools to understand those tools, then a research
-  program to formalize what I was learning. AI was a direct collaborator throughout &mdash;
-  not a search engine, a genuine thinking partner. The work accelerated.
-  The system learned alongside me.</p>
+  <p class="hero-bio">I started where most operations people stop &mdash; at the edge of what the data could tell me. The tracker existed. The dashboard existed. What didn&rsquo;t exist was anything that connected them to a question worth asking in real time.<br><br>So I built it. Not with a team, not with IT support, not with a budget. With a terminal, an AI collaborator, and a specific enough understanding of the operation that I could tell the model exactly where the gaps were.</p>
   <div class="corpus-bridge">
-    The program that produced all of this isn&rsquo;t just a collection of tools &mdash; it&rsquo;s a
-    methodology for building under constraints that don&rsquo;t support building. No IT budget.
-    No admin access. No dedicated development time. Every component was designed, built,
-    tested, and deployed autonomously, with a quality system running alongside it from day one.
-    The constraint became the architecture.
+    This isn&rsquo;t a collection of tools &mdash; it&rsquo;s a methodology for building under constraints that don&rsquo;t support building. No IT budget. No admin access. No dedicated development time. Every component designed, built, tested, and deployed on my own, with a quality system running alongside from day one. The constraint became the architecture.
   </div>
 </div>
 
@@ -336,12 +360,9 @@ a.badge-ver:hover{border-color:var(--aqua)}
       <source src="lattice.mp4" type="video/mp4">
     </video>
     <div class="lattice-cap">
-      <p>Each point of light is a fact the system decided to keep. They arrive across sessions,
-      one at a time, without ceremony &mdash; a coefficient, an exception, a transition that only
-      becomes visible after enough repetition.</p>
-      <p>The edges aren&rsquo;t drawn. They emerge when two things share enough reality that the
-      system stops treating them as separate &mdash; not because someone connected them,
-      but because they never were.</p>
+      <p>Each node is a unit the system decided to keep &mdash; a coefficient, a conditional, a boundary that held under pressure. They accumulate across sessions, individually weightless, collectively the topology that defines what the model can reach.</p>
+      <p>Edges form where cosine similarity between embedding vectors crosses the retrieval threshold. Not declared &mdash; computed. Two facts become adjacent when their learned representations land close enough in the latent space that the graph, given a live query, pulls activation through both. That proximity is what you&rsquo;re seeing rendered as light.</p>
+      <p>When a RAG query arrives mid-sort, the system traverses this graph: embedding the query, scoring similarity against every stored node, propagating relevance across the neighborhood, and surfacing the subgraph most likely to ground the answer in operational truth rather than model prior. The walk isn&rsquo;t random. It converges.</p>
       <p>What you are watching is the becoming of understanding. The moment information holds shape.</p>
     </div>
   </div>
@@ -354,36 +375,36 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <div class="cap-grid">
     <div class="cap-card">
       <div class="cap-title">Self-Correcting Development</div>
-      <div class="cap-desc">Every architectural decision is preceded by a root-cause diagnosis, not a symptom fix. 38 documented self-backtracks in the session record, each with a named root cause before any code change was made.</div>
+      <div class="cap-desc">Every architectural decision starts with a root-cause diagnosis, not a symptom fix. 38 documented self-backtracks in the record &mdash; each one named before any code changed.</div>
     </div>
     <div class="cap-card">
       <div class="cap-title">Persistent AI Memory</div>
-      <div class="cap-desc">A two-tier system: SQLite + FTS5 for fast retrieval, and a LangGraph postmortem pipeline that converts every session into structured, queryable knowledge. 875+ memories across 40+ sessions. The system doesn&rsquo;t start fresh &mdash; it starts from where it left off.</div>
+      <div class="cap-desc">Two tiers: SQLite + FTS5 for fast retrieval, LangGraph postmortem pipeline that turns every session into structured, queryable knowledge. 875+ memories across 40+ sessions. It doesn&rsquo;t start fresh &mdash; it picks up where it left off.</div>
     </div>
     <div class="cap-card">
       <div class="cap-title">Semantic + Keyword Retrieval</div>
-      <div class="cap-desc">Three-stage RAG pipeline: SPECTER2 semantic embeddings, tier re-ranking (exception &rarr; operational &rarr; learned &rarr; constant), and a keyword supplement triggered by a content-coverage gate. Defeats embedding-layer collapse on domain-specific terminology.</div>
+      <div class="cap-desc">Three-stage RAG pipeline: SPECTER2 semantic embeddings, tier re-ranking (exception &rarr; operational &rarr; learned &rarr; constant), keyword supplement triggered by a content-coverage gate. Built to beat embedding-layer collapse on domain-specific terminology.</div>
     </div>
     <div class="cap-card">
       <div class="cap-title">Autoresearch Loop</div>
-      <div class="cap-desc">An independent research cycle that runs without human direction &mdash; scores each iteration, identifies open gaps, generates candidate hypotheses, queues them for the next session. A 20-cycle overnight run on the operational corpus produced measurable compression of the open research surface.</div>
+      <div class="cap-desc">A research cycle that runs without direction &mdash; scores each iteration, finds open gaps, generates candidate hypotheses, queues them for the next session. A 20-cycle overnight run measurably compressed the open research surface.</div>
     </div>
     <div class="cap-card">
       <div class="cap-title">Multi-Branch Convergence</div>
-      <div class="cap-desc">Five independent research branches each audit the others before any update reaches the unified state. Modeled as fixed-point iteration &mdash; convergence is the condition, not the assumption. The 97-page unified opus is the current convergent state across all five branches.</div>
+      <div class="cap-desc">Five research branches that each audit the others before anything reaches the unified state. Fixed-point iteration &mdash; convergence is the condition, not the assumption. The 97-page unified opus is the current convergent state across all five.</div>
     </div>
     <div class="cap-card">
       <div class="cap-title">Operational Constant Derivation</div>
-      <div class="cap-desc">Four structural constants (&kappa;, &gamma;, &epsilon;, &rho;) derived from 613 sorts of empirical data, cross-validated across two independent measurement systems, and embedded as live parameters in the tracker&rsquo;s OR models. Not estimated &mdash; derived, validated, formalized.</div>
+      <div class="cap-desc">&kappa;, &gamma;, &epsilon;, &rho; &mdash; four structural constants pulled from 613 sorts of empirical data, cross-validated across two independent measurement systems, embedded as live parameters in the tracker&rsquo;s OR models. Not estimated. Derived, validated, formalized.</div>
     </div>
   </div>
 
   <div style="margin-top:40px">
     <div class="eyebrow">Approach</div>
     <h2 class="sec-h">How I Work</h2>
-    <p class="how-para">I present problems with operational specificity. Not &ldquo;the data is unreliable&rdquo; &mdash; but &ldquo;scanner ID substitution corrupts iGate PPH silently, and there&rsquo;s no surface indicator unless you cross-reference the SOR employee summary against the sort window to identify who was where and for how long.&rdquo; That precision is what makes the solutions exact rather than approximate.</p>
-    <p class="how-para">I don&rsquo;t stop at solving a problem. I build infrastructure around the solution so the next one is easier. The tracker needed a corpus. The corpus needed analysis tooling. The analysis needed a research framework. The research framework needed a quality system. Each layer compounds on the previous one &mdash; and the system that exists now is the product of that compounding, not of any single build decision.</p>
-    <p class="how-para">The AI collaboration is structured, not conversational. Post-mortem quality scoring after every milestone. Mandatory self-backtracking before any fix. Persistent memory so architectural decisions from six weeks ago are still in context today. I&rsquo;m not using AI as an autocomplete. I built a thinking partner with accountability, continuity, and a clear role in the research program.</p>
+    <p class="how-para">I name the exact problem. Not &ldquo;the data is unreliable&rdquo; &mdash; but &ldquo;scanner ID substitution corrupts iGate PPH silently, and there&rsquo;s no surface indicator unless you cross-reference the SOR employee summary against the sort window to see who was where and for how long.&rdquo; That&rsquo;s what makes solutions exact rather than approximate.</p>
+    <p class="how-para">I don&rsquo;t stop at solving. I build infrastructure around the solution so the next one is faster. The tracker needed a corpus. The corpus needed analysis tooling. The analysis needed a research framework. The framework needed a quality system. Each layer compounds &mdash; the system now is the product of that, not of any single build decision.</p>
+    <p class="how-para">The AI collaboration is structured. Post-mortem quality scoring after every milestone. Mandatory self-backtracking before any fix. Persistent memory so decisions from six weeks ago are still in context. I didn&rsquo;t build an autocomplete. I built a thinking partner with accountability, continuity, and a defined role in the research program.</p>
     <div class="pull-q">
       <div class="pull-q-text">&ldquo;No decision you make exists in isolation; no process you affect exists in isolation &mdash; the only difference is the boundaries of your system.&rdquo;</div>
       <div class="pull-q-attr">Rafael Almeida &middot; from a talk presented to UPS management team, March 5, 2024</div>
@@ -538,7 +559,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 </div>
   <div class="bio-col">
     <span style="font-family:var(--mono);font-size:10px;display:block;margin-top:8px;color:var(--muted)">
-    Last updated: 2026-05-16 22:17 &middot; Rafael Almeida &middot; 0xStrategies</span>
+    Last updated: 2026-05-16 22:31 &middot; Rafael Almeida &middot; 0xStrategies</span>
   </div>
 </div>
 
