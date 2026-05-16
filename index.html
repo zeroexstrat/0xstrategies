@@ -169,6 +169,22 @@ a.badge-ver:hover{border-color:var(--aqua)}
 .proj-entry-stack{font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:5px}
 .proj-entry-desc{font-size:13px;color:var(--ink-lt);line-height:1.65}
 
+/* pdf modal */
+.pdf-modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,24,0.72);
+  z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.pdf-modal-overlay.open{display:flex}
+.pdf-modal{background:#fff;border-radius:10px;overflow:hidden;
+  width:min(900px,94vw);height:90vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(26,26,24,0.3)}
+.pdf-modal-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--cream2)}
+.pdf-modal-title{font-size:13px;font-weight:600;color:var(--ink);font-family:var(--mono)}
+.pdf-modal-close{width:28px;height:28px;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:4px;
+  color:var(--muted);font-size:18px;line-height:1;transition:all .15s}
+.pdf-modal-close:hover{background:var(--cream3);color:var(--ink)}
+.pdf-modal iframe{flex:1;border:none;width:100%;display:block}
+
 /* responsive */
 @media(max-width:820px){
   .page-wrap{flex-direction:column}
@@ -232,7 +248,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
         <div class="brief-nm">Hub Operations Suite</div>
         <div class="brief-sub">presentation_v1.1.html &rarr;</div>
       </a>
-      <a class="brief-a" href="UPS Sort Training Platform.pdf" target="_blank">
+      <a class="brief-a" href="#" onclick="openPdfModal('UPS Sort Training Platform.pdf','Sort Training Platform');return false;">
         <div class="brief-nm">Sort Training Platform</div>
         <div class="brief-sub">UPS Sort Training Platform.pdf &rarr;</div>
       </a>
@@ -286,7 +302,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   </div>
 
   <div class="s-foot">
-    Generated 2026-05-16 22:08<br>
+    Generated 2026-05-16 22:17<br>
     0xstrategies.com
   </div>
 
@@ -317,8 +333,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <h2 class="sec-h">The Lattice</h2>
   <div class="lattice-wrap">
     <video controls playsinline>
-      <source src="The Lattice May 16 2026.mp4" type="video/mp4">
-      <source src="assets/The Lattice May 16 2026.mp4" type="video/mp4">
+      <source src="lattice.mp4" type="video/mp4">
     </video>
     <div class="lattice-cap">
       <p>Each point of light is a fact the system decided to keep. They arrive across sessions,
@@ -335,7 +350,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 <!-- ─ METHODOLOGY ─────────────────────────────────────────────── -->
 <div class="sec sec-anchor" id="methodology">
   <div class="eyebrow">Technical Architecture</div>
-  <h2 class="sec-h">How I Work</h2>
+  <h2 class="sec-h">The System</h2>
   <div class="cap-grid">
     <div class="cap-card">
       <div class="cap-title">Self-Correcting Development</div>
@@ -523,7 +538,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 </div>
   <div class="bio-col">
     <span style="font-family:var(--mono);font-size:10px;display:block;margin-top:8px;color:var(--muted)">
-    Last updated: 2026-05-16 22:08 &middot; Rafael Almeida &middot; 0xStrategies</span>
+    Last updated: 2026-05-16 22:17 &middot; Rafael Almeida &middot; 0xStrategies</span>
   </div>
 </div>
 
@@ -543,6 +558,40 @@ function _updNav(){
 }
 window.addEventListener('scroll',_updNav,{passive:true});
 _updNav();
+
+// PDF modal
+const _pdfOverlay = document.getElementById('pdf-modal-overlay');
+const _pdfFrame   = document.getElementById('pdf-modal-frame');
+const _pdfTitle   = document.getElementById('pdf-modal-title');
+function openPdfModal(src, title){
+  _pdfFrame.src = src;
+  _pdfTitle.textContent = title;
+  _pdfOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePdfModal(){
+  _pdfOverlay.classList.remove('open');
+  _pdfFrame.src = '';
+  document.body.style.overflow = '';
+}
+_pdfOverlay.addEventListener('click', function(e){
+  if(e.target === _pdfOverlay) closePdfModal();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closePdfModal();
+});
 </script>
+
+<!-- PDF modal -->
+<div class="pdf-modal-overlay" id="pdf-modal-overlay">
+  <div class="pdf-modal">
+    <div class="pdf-modal-bar">
+      <span class="pdf-modal-title" id="pdf-modal-title"></span>
+      <button class="pdf-modal-close" onclick="closePdfModal()" aria-label="Close">&times;</button>
+    </div>
+    <iframe id="pdf-modal-frame" src="" title="PDF viewer"></iframe>
+  </div>
+</div>
+
 </body>
 </html>
