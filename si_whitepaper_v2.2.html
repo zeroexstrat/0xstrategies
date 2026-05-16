@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Observation to Intelligence — CHEMA Sort Intelligence Whitepaper v2.2</title>
+<meta name="author" content="Rafael Almeida">
+<meta name="description" content="CHEMA Sort Intelligence Whitepaper v2.2 — from operational observation to predictive analytics on 613 sorts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5F4F0;
+    --terra:#C4622D;
+    --aqua:#4A7C7E;
+    --sage:#6B8C6B;
+    --ink:#1A1A18;
+    --border:#E2DFD8;
+    --muted:#8A8880;
+    --gold:#B8921A;
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+    --nav-w:220px;
+    --r:6px;
+    --rl:12px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.7;
+    display:flex;
+    min-height:100vh;
+  }
+
+  /* ── NAV SIDEBAR ── */
+  nav{
+    width:var(--nav-w);
+    flex-shrink:0;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    border-right:1px solid var(--border);
+    padding:32px 20px;
+    background:var(--cream);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .nav-logo{
+    font-family:var(--serif);
+    font-size:13px;
+    font-weight:600;
+    color:var(--terra);
+    letter-spacing:0.02em;
+    margin-bottom:6px;
+  }
+  .nav-ver{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--muted);
+    margin-bottom:24px;
+  }
+  .nav-sec{
+    font-family:var(--mono);
+    font-size:9px;
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    margin:16px 0 6px;
+  }
+  .nav-a{
+    display:block;
+    font-size:12.5px;
+    color:var(--ink);
+    text-decoration:none;
+    padding:5px 10px;
+    border-radius:var(--r);
+    border-left:2px solid transparent;
+    transition:all 0.15s;
+    line-height:1.4;
+  }
+  .nav-a:hover{background:rgba(74,124,126,0.08);border-left-color:var(--aqua);color:var(--aqua)}
+  .nav-a.active{background:rgba(196,98,45,0.08);border-left-color:var(--terra);color:var(--terra);font-weight:500}
+  .nav-footer{
+    margin-top:auto;
+    padding-top:20px;
+    border-top:1px solid var(--border);
+    font-family:var(--mono);
+    font-size:9.5px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main{
+    flex:1;
+    max-width:800px;
+    padding:60px 56px 100px;
+  }
+
+  /* ── COVER ── */
+  .cover{
+    margin-bottom:72px;
+    padding-bottom:48px;
+    border-bottom:1px solid var(--border);
+  }
+  .cover-eyebrow{
+    font-family:var(--mono);
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--terra);
+    margin-bottom:16px;
+  }
+  .cover-title{
+    font-family:var(--serif);
+    font-size:42px;
+    font-weight:700;
+    line-height:1.12;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .cover-sub{
+    font-family:var(--serif);
+    font-size:20px;
+    font-weight:400;
+    font-style:italic;
+    color:var(--muted);
+    margin-bottom:32px;
+  }
+  .cover-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  .cover-meta-item{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .cover-meta-lbl{
+    font-family:var(--mono);
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+  }
+  .cover-meta-val{
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  /* ── ABSTRACT BOX ── */
+  .abstract{
+    background:var(--ink);
+    color:var(--cream);
+    border-radius:var(--rl);
+    padding:32px 36px;
+    margin-bottom:64px;
+  }
+  .abstract-label{
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:rgba(245,244,240,0.4);
+    margin-bottom:12px;
+  }
+  .abstract p{
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.6;
+    color:rgba(245,244,240,0.9);
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section{
+    margin-bottom:64px;
+    scroll-margin-top:32px;
+  }
+  .sec-num{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--terra);
+    margin-bottom:8px;
+  }
+  h2{
+    font-family:var(--serif);
+    font-size:28px;
+    font-weight:700;
+    line-height:1.2;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    margin-bottom:20px;
+  }
+  h3{
+    font-family:var(--serif);
+    font-size:18px;
+    font-weight:600;
+    color:var(--ink);
+    margin:28px 0 12px;
+  }
+  p{
+    margin-bottom:16px;
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.75;
+  }
+  p:last-child{margin-bottom:0}
+
+  /* ── DATA TABLE ── */
+  .tbl-wrap{
+    overflow-x:auto;
+    margin:28px 0;
+    border-radius:var(--r);
+    border:1px solid var(--border);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  thead{
+    background:var(--ink);
+    color:var(--cream);
+  }
+  thead th{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:12px 16px;
+    text-align:left;
+    font-weight:500;
+  }
+  tbody tr{border-bottom:1px solid var(--border)}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:nth-child(even){background:rgba(26,26,24,0.025)}
+  td{
+    padding:11px 16px;
+    vertical-align:middle;
+    font-size:13.5px;
+  }
+  td.num{
+    font-family:var(--mono);
+    font-size:13px;
+    text-align:right;
+  }
+  td.mono{
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  .day-mon{color:var(--terra);font-weight:600}
+  .day-fri{color:var(--aqua);font-weight:600}
+  .kz-high{
+    background:rgba(196,98,45,0.1);
+    border-radius:4px;
+    padding:2px 6px;
+    color:var(--terra);
+    font-weight:600;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  .kz-low{
+    background:rgba(74,124,126,0.1);
+    border-radius:4px;
+    padding:2px 6px;
+    color:var(--aqua);
+    font-weight:600;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  .kz-mid{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink);
+  }
+
+  /* ── PHASE LADDER ── */
+  .phase-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:24px 0;
+  }
+  .phase-card{
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:16px 18px;
+    background:#fff;
+  }
+  .phase-num{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .phase-name{
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .phase-range{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--terra);
+    margin-bottom:8px;
+  }
+  .phase-desc{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout{
+    border-left:3px solid var(--terra);
+    background:rgba(196,98,45,0.04);
+    padding:18px 22px;
+    border-radius:0 var(--r) var(--r) 0;
+    margin:24px 0;
+  }
+  .callout-aqua{
+    border-left-color:var(--aqua);
+    background:rgba(74,124,126,0.04);
+  }
+  .callout-sage{
+    border-left-color:var(--sage);
+    background:rgba(107,140,107,0.04);
+  }
+  .callout p{margin-bottom:0;font-size:14px}
+  .callout strong{color:var(--ink);font-weight:600}
+
+  /* ── MODULE STACK ── */
+  .module-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin:20px 0;
+  }
+  .module-item{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:14px 18px;
+  }
+  .module-nm{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--aqua);
+    font-weight:500;
+    min-width:160px;
+    flex-shrink:0;
+    padding-top:1px;
+  }
+  .module-desc{
+    font-size:13px;
+    color:var(--ink);
+    line-height:1.55;
+  }
+
+  /* ── CHAIN ── */
+  .chain{
+    font-family:var(--mono);
+    font-size:13.5px;
+    background:var(--ink);
+    color:var(--cream);
+    padding:20px 24px;
+    border-radius:var(--r);
+    margin:20px 0;
+    line-height:2;
+  }
+  .chain-arrow{color:var(--terra);margin:0 6px}
+  .chain-item{color:var(--cream)}
+  .chain-item.hi{color:var(--gold)}
+
+  /* ── DEPLOY TABLE ── */
+  .deploy-tbl{
+    margin:20px 0;
+    border-radius:var(--r);
+    border:1px solid var(--border);
+    overflow:hidden;
+  }
+  .deploy-row{
+    display:grid;
+    grid-template-columns:40px 1fr 90px 1fr;
+    gap:0;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+  }
+  .deploy-row:last-child{border-bottom:none}
+  .deploy-row.hd{
+    background:var(--ink);
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:rgba(245,244,240,0.6);
+  }
+  .deploy-cell{
+    padding:10px 14px;
+    border-right:1px solid var(--border);
+    vertical-align:middle;
+  }
+  .deploy-cell:last-child{border-right:none}
+  .deploy-row.hd .deploy-cell{border-right-color:rgba(255,255,255,0.08)}
+  .ph-badge{
+    display:inline-block;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--terra);
+    color:#fff;
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:600;
+    text-align:center;
+    line-height:22px;
+  }
+
+  /* ── ZONE CONTRIB BARS ── */
+  .contrib-bars{
+    margin:20px 0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .c-row{display:flex;align-items:center;gap:12px}
+  .c-label{font-family:var(--mono);font-size:11.5px;color:var(--muted);width:80px;flex-shrink:0}
+  .c-bar-wrap{flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden}
+  .c-bar{height:100%;border-radius:3px;transition:width 0.4s ease}
+  .c-val{font-family:var(--mono);font-size:11px;color:var(--ink);width:42px;text-align:right;flex-shrink:0}
+
+  /* ── PULL QUOTE ── */
+  .pull-quote{
+    background:var(--ink);
+    color:var(--cream);
+    border-radius:var(--rl);
+    padding:36px 40px;
+    margin:40px 0;
+  }
+  .pq-text{
+    font-family:var(--serif);
+    font-size:21px;
+    color:#F5F4F0;
+    line-height:1.45;
+    letter-spacing:-0.01em;
+    margin-bottom:14px;
+  }
+  .pq-attr{
+    font-family:var(--mono);
+    font-size:10px;
+    color:rgba(245,244,240,0.35);
+    letter-spacing:0.04em;
+  }
+
+  /* ── CAREER GRID ── */
+  .career-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:24px 0;
+  }
+  .career-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--r);
+    padding:18px 20px;
+  }
+  .cc-domain{
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--terra);
+    margin-bottom:6px;
+  }
+  .cc-title{
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:6px;
+    line-height:1.3;
+  }
+  .cc-desc{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+  /* ── CONCLUSION ── */
+  .conclusion{
+    border-top:2px solid var(--ink);
+    padding-top:40px;
+    margin-top:48px;
+  }
+
+  /* ── REFERENCES ── */
+  .ref-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:20px;
+  }
+  .ref-item{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.55;
+    padding-left:40px;
+    position:relative;
+  }
+  .ref-num{
+    position:absolute;
+    left:0;
+    top:0;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--terra);
+    font-weight:500;
+  }
+
+  /* ── SCROLLSPY ── */
+  nav::-webkit-scrollbar{width:4px}
+  nav::-webkit-scrollbar-track{background:transparent}
+  nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+  @media(max-width:900px){
+    nav{display:none}
+    main{padding:40px 24px 80px}
+    .phase-grid,.career-grid{grid-template-columns:1fr}
+    .cover-title{font-size:32px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ───── SIDEBAR NAV ───── -->
+<nav id="sidebar">
+  <div class="nav-logo">Sort Intelligence</div>
+  <div class="nav-ver">v2.2 · May 2026</div>
+
+  <div class="nav-sec">Document</div>
+  <a class="nav-a active" href="#cover">Overview</a>
+  <a class="nav-a" href="#abstract">Abstract</a>
+
+  <div class="nav-sec">Research</div>
+  <a class="nav-a" href="#s1">1 · Operational Context</a>
+  <a class="nav-a" href="#s2">2 · Development Arc</a>
+  <a class="nav-a" href="#s3">3 · Fidelity Problem</a>
+  <a class="nav-a" href="#s4">4 · Phase Ladder + k_Z</a>
+
+  <div class="nav-sec">Application</div>
+  <a class="nav-a" href="#s5">5 · Python Runtime</a>
+  <a class="nav-a" href="#s6">6 · Replication</a>
+  <a class="nav-a" href="#s7">7 · Supervisor as Agent</a>
+  <a class="nav-a" href="#s8">8 · Career Development</a>
+  <a class="nav-a" href="#s9">9 · Conclusion</a>
+  <a class="nav-a" href="#s10">10 · References</a>
+
+  <div class="nav-footer">
+    CHEMA Twilight Hub<br>
+    Rafael Almeida · May 2026<br>
+    Internal Operations Research
+  </div>
+</nav>
+
+<!-- ───── MAIN CONTENT ───── -->
+<main>
+
+  <!-- COVER -->
+  <div class="cover" id="cover">
+    <div class="cover-eyebrow">CHEMA Sort Intelligence Whitepaper · v2.2</div>
+    <div class="cover-title">From Observation<br>to Intelligence</div>
+    <div class="cover-sub">A data-driven framework for sort-floor supervision</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-lbl">Author</div>
+        <div class="cover-meta-val">Rafael Almeida</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-lbl">Facility</div>
+        <div class="cover-meta-val">CHEMA Twilight Hub</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-lbl">Corpus</div>
+        <div class="cover-meta-val">613 sorts · Dec 2023–May 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-lbl">Published</div>
+        <div class="cover-meta-val">May 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABSTRACT -->
+  <div class="abstract" id="abstract">
+    <div class="abstract-label">Abstract</div>
+    <p>This paper presents Sort Intelligence Master — an empirical analytics framework built on 613 sorts of operational data from the CHEMA Twilight Hub, spanning December 2023 through May 2026. The system derives DOW-indexed zone load coefficients (k_Z), a weekly PPH decay constant (γ = 0.958), and a four-phase operational model from seven heterogeneous data sources. It is implemented as a browser-native tool requiring no installation or IT support. The framework converts pre-sort labor allocation from floor intuition to a quantified, fidelity-corrected decision brief that takes under two minutes to generate.</p>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="s1">
+    <div class="sec-num">Section 1</div>
+    <h2>Operational Context</h2>
+    <p>CHEMA Twilight Hub operates Monday through Friday, 18:00–22:00. At peak induction, the facility processes 12,000–28,000 packages per hour across 38 active outbound bays organized into three zones: Zone 1 (PD-01 to PD-04), Zone 2 (PD-05 to PD-08), and Zone 3 (PD-09 to PD-12). Approximately 18–28 loaders staff each zone during diagnostic phases; total outbound headcount ranges from 54 to 84 depending on day of week and volume forecast.</p>
+    <p>The supervisor's core instruments — iGate ESR scan reports, Schedule of Record (SOR-T) headcount exports, SEAS service exception reports, and CURE destination load files — are generated nightly but have historically been consumed in isolation, each providing a partial view of the operation. The analytical work described in this paper connects them.</p>
+    <div class="callout">
+      <p><strong>Three-zone structure.</strong> Z1 = PD-01 to PD-04 (northeast corridor). Z2 = PD-05 to PD-08 (southeast + L.L. Bean). Z3 = PD-09 to PD-12 (southern New England + outliers). Each zone has a distinct freight composition that varies structurally by day of week — not by operational preference.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="s2">
+    <div class="sec-num">Section 2</div>
+    <h2>Development Arc</h2>
+    <p>Four tools were built sequentially over approximately two weeks, each building on the data infrastructure established by the previous. The development occurred alongside daily operations — no dedicated time was allocated, no project was opened, no budget was requested.</p>
+    <div class="chain">
+      <span class="chain-item hi">KPI Dashboard</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">Apr 28, 2026</span>
+      <br>
+      <span class="chain-item hi">Live-Sort Tracker v1.0</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">May 6, 2026</span>
+      <br>
+      <span class="chain-item hi">Label Training Certification (LTC)</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">May 11, 2026</span>
+      <br>
+      <span class="chain-item hi">Sort Intelligence Master</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">May 12, 2026</span>
+    </div>
+    <p>The corpus accumulation began with the facility's first available SOR export in December 2023 and extends through May 2026. 29 of 30 validation sorts reconcile within rounding tolerance between SOR volume and SEAS reported totals. Three sorts exhibit scan efficiency above 100%, which refutes the prior assumption that iGate scan totals must be bounded by SOR reported volume — a correction that propagates into all downstream fidelity calculations.</p>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="s3">
+    <div class="sec-num">Section 3</div>
+    <h2>The Fidelity Problem</h2>
+    <p>Raw iGate ESR data carries three structural distortions that, left uncorrected, produce unreliable belt-level PPH signals. The fidelity cascade module addresses each.</p>
+
+    <h3>Mechanism 1 — Bay Attribution Error</h3>
+    <p>iGate attributes scans to the ULD bay the employee scanned on entry. When a loader moves between bays — either as a borrow from a coordinator or through unauthorized migration — their scans continue crediting the original bay until a new ULD scan is recorded. A loader physically working PD-11 but last-scanned into PD-09 shows as PD-09 PPH. The affected bay gains phantom scan credit; the actual bay shows an artificial deficit.</p>
+
+    <h3>Mechanism 2 — Shared Equipment</h3>
+    <p>In high-volume phases, loaders occasionally use a co-worker's scan gun or scan from a shared device. Scans recorded under an incorrect employee ID create attribution that the PPH system assigns to the wrong person and, by extension, the wrong belt segment. This is not detectable from iGate output alone — it requires cross-referencing SOR headcount assignments against scan ID distribution.</p>
+
+    <h3>Mechanism 3 — Synthetic IDs</h3>
+    <p>DWS machines (IDs 1–40), return belt systems (IDs 101–104), and bulk belt systems (IDs 401–404) generate automated scan events that appear in the ESR employee summary. Unfiltered, these inflate per-employee averages and distort zone-level totals. The fidelity cascade applies an ID taxonomy filter before any PPH or load coefficient computation.</p>
+
+    <div class="callout callout-aqua">
+      <p><strong>Fidelity score.</strong> Each sort receives a per-sort fidelity score (0.0–1.0) based on the proportion of scans attributable to correctly-positioned human loaders with verified ID discipline. Sorts below threshold are down-weighted in k_Z and γ computations.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="s4">
+    <div class="sec-num">Section 4</div>
+    <h2>Phase Ladder &amp; k_Z(DOW)</h2>
+
+    <p>A sort-night is not uniform. PPH varies structurally across four phases driven by freight volume, package geometry, and labor fatigue. Treating all-night data as a single diagnostic baseline produces a systematically biased signal.</p>
+
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">Phase 0</div>
+        <div class="phase-name">Pre-Sort Setup</div>
+        <div class="phase-range">0% → ~15% completion</div>
+        <div class="phase-desc">Trailer positioning, ULD scans, equipment staging. PPH is below diagnostic baseline — expected and irrelevant to staffing assessment.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">Phase 1</div>
+        <div class="phase-name">Ramp</div>
+        <div class="phase-range">~15% → ~35% completion</div>
+        <div class="phase-desc">Volume flow increasing. PPH climbing toward diagnostic ceiling. Staffing decisions made here shape Phase 2 outcomes.</div>
+      </div>
+      <div class="phase-card" style="border-color:var(--terra);background:rgba(196,98,45,0.03)">
+        <div class="phase-num" style="color:var(--terra)">Phase 2</div>
+        <div class="phase-name">Diagnostic Window</div>
+        <div class="phase-range">~35% → ~75% completion</div>
+        <div class="phase-desc">Full-flow steady state. The only phase from which reliable PPH baselines should be drawn. k_Z coefficients are computed from this phase exclusively.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">Phase 3</div>
+        <div class="phase-name">Wind-Down</div>
+        <div class="phase-range">&gt;~75% completion</div>
+        <div class="phase-desc">Volume decreasing geometrically. PPH decline is structural — not underperformance. Phase 3 discount prevents phantom pressure calls in the sort's final 40 minutes.</div>
+      </div>
+    </div>
+
+    <h3>Zone Load Coefficient k_Z(DOW)</h3>
+    <p>The zone-level load coefficient k_Z(DOW) measures each zone's share of total hub scan volume during the diagnostic phase (Phase 2), indexed by day of week. The three zone coefficients are zero-sum: k_Z1 + k_Z2 + k_Z3 ≈ 1.0. Values below are derived from 29 sorts of ESR data (weeks 13–18, 2026).</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>k_Z3 (Phase 2)</th>
+            <th>Std Error</th>
+            <th>Z3 Share</th>
+            <th>Z1+Z2 Combined</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="day-mon">Monday</td>
+            <td class="num"><span class="kz-high">0.413</span></td>
+            <td class="num mono">±0.012</td>
+            <td class="num mono">~41%</td>
+            <td class="num mono">~59%</td>
+          </tr>
+          <tr>
+            <td>Tuesday</td>
+            <td class="num"><span class="kz-mid">0.395</span></td>
+            <td class="num mono">±0.015</td>
+            <td class="num mono">~40%</td>
+            <td class="num mono">~60%</td>
+          </tr>
+          <tr>
+            <td>Wednesday</td>
+            <td class="num"><span class="kz-mid">0.385</span></td>
+            <td class="num mono">±0.014</td>
+            <td class="num mono">~39%</td>
+            <td class="num mono">~61%</td>
+          </tr>
+          <tr>
+            <td>Thursday</td>
+            <td class="num"><span class="kz-mid">0.380</span></td>
+            <td class="num mono">±0.013</td>
+            <td class="num mono">~38%</td>
+            <td class="num mono">~62%</td>
+          </tr>
+          <tr>
+            <td class="day-fri">Friday</td>
+            <td class="num"><span class="kz-low">0.322</span></td>
+            <td class="num mono">±0.009</td>
+            <td class="num mono">~32%</td>
+            <td class="num mono">~68%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Monday–Friday k_Z3 visualization — Zone 3 (terra) vs Z1+Z2 (ink) share of hub scan volume:</p>
+    <div class="contrib-bars">
+      <div class="c-row">
+        <div class="c-label">Monday</div>
+        <div class="c-bar-wrap"><div class="c-bar" style="width:41.3%;background:var(--terra)"></div></div>
+        <div class="c-val">0.413</div>
+      </div>
+      <div class="c-row">
+        <div class="c-label">Tuesday</div>
+        <div class="c-bar-wrap"><div class="c-bar" style="width:39.5%;background:var(--terra)"></div></div>
+        <div class="c-val">0.395</div>
+      </div>
+      <div class="c-row">
+        <div class="c-label">Wednesday</div>
+        <div class="c-bar-wrap"><div class="c-bar" style="width:38.5%;background:var(--terra)"></div></div>
+        <div class="c-val">0.385</div>
+      </div>
+      <div class="c-row">
+        <div class="c-label">Thursday</div>
+        <div class="c-bar-wrap"><div class="c-bar" style="width:38.0%;background:var(--terra)"></div></div>
+        <div class="c-val">0.380</div>
+      </div>
+      <div class="c-row">
+        <div class="c-label">Friday</div>
+        <div class="c-bar-wrap"><div class="c-bar" style="width:32.2%;background:var(--aqua)"></div></div>
+        <div class="c-val">0.322</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The Monday–Friday swing.</strong> The difference between k_Z3(Monday) = 0.413 and k_Z3(Friday) = 0.322 is a 28% structural difference in Zone 3's proportion of hub volume — driven entirely by what the freight network routes on those days, not by anything the facility controls. A supervisor who staffs Monday's Z3 the same way they staffed Friday's will be short by the equivalent of 5–6 loaders' worth of loading capacity before the first package reaches the belt.</p>
+    </div>
+
+    <h3>Reading k alongside γ</h3>
+    <p>k answers <em>where</em> tonight's labor needs to be. γ = 0.958 answers <em>what result to expect</em> from it. If Zone 3 averaged 320 PPH last week, the baseline expectation this week — absent any other change — is approximately 306 (320 × 0.958), about 4.2% lower from structural decay. A reading of 280 entering Phase 2 is 1.5 color bands below the expected trajectory — warranting a scan compliance and borrow/loan attribution review before the sort progresses further.</p>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="s5">
+    <div class="sec-num">Section 5</div>
+    <h2>The Python Runtime — Deployment Plan</h2>
+
+    <p>Every tool described in this paper runs in a standard web browser. No Python is required to use them. They read files via the browser's FileReader API and store data in IndexedDB — no installation, no network dependency, no IT ticket to deploy an update. Python serves one distinct offline purpose: ingesting raw weekly export files into the corpus and running batch analytical modules against the full sort history.</p>
+
+    <h3>Deployment Sequence</h3>
+    <div class="deploy-tbl">
+      <div class="deploy-row hd">
+        <div class="deploy-cell">Ph</div>
+        <div class="deploy-cell">Action</div>
+        <div class="deploy-cell">Time</div>
+        <div class="deploy-cell">Dependency</div>
+      </div>
+      <div class="deploy-row">
+        <div class="deploy-cell"><span class="ph-badge">1</span></div>
+        <div class="deploy-cell">Install Python via MS Store</div>
+        <div class="deploy-cell" style="font-family:var(--mono);font-size:12px">5 min</div>
+        <div class="deploy-cell" style="font-size:12.5px;color:var(--terra)">IT approval</div>
+      </div>
+      <div class="deploy-row">
+        <div class="deploy-cell"><span class="ph-badge">2</span></div>
+        <div class="deploy-cell">Run corpus_builder.py on existing Raw_Import folder</div>
+        <div class="deploy-cell" style="font-family:var(--mono);font-size:12px">2–3 min</div>
+        <div class="deploy-cell" style="font-size:12.5px">Phase 1</div>
+      </div>
+      <div class="deploy-row">
+        <div class="deploy-cell"><span class="ph-badge">3</span></div>
+        <div class="deploy-cell">Verify 613-sort corpus integrity (row counts, date range)</div>
+        <div class="deploy-cell" style="font-family:var(--mono);font-size:12px">5 min</div>
+        <div class="deploy-cell" style="font-size:12.5px">Phase 2</div>
+      </div>
+      <div class="deploy-row">
+        <div class="deploy-cell"><span class="ph-badge">4</span></div>
+        <div class="deploy-cell">Run weekly update after next sort week export</div>
+        <div class="deploy-cell" style="font-family:var(--mono);font-size:12px">2–3 min recurring</div>
+        <div class="deploy-cell" style="font-size:12.5px">Phase 3</div>
+      </div>
+    </div>
+
+    <h3>Module Stack</h3>
+    <ul class="module-list">
+      <li class="module-item">
+        <div class="module-nm">corpus_builder.py</div>
+        <div class="module-desc">Idempotent ingestion pipeline. Drop new weekly SOR, CURE, and SEAS exports into Raw_Import and run one command. Atomic write pattern prevents corpus corruption on interruption.</div>
+      </li>
+      <li class="module-item">
+        <div class="module-nm">fidelity_cascade.py</div>
+        <div class="module-desc">Cross-references SOR headcount against iGate scan attribution. Identifies scanner ID mismatches and positional mistogles. Computes a per-sort fidelity score (0.0–1.0) and flags affected belts.</div>
+      </li>
+      <li class="module-item">
+        <div class="module-nm">emergence_gap.py</div>
+        <div class="module-desc">Computes predicted Phase 2 PPH per belt from k_Z(DOW) × hub scan volume ÷ belt headcount, then compares against actual iGate Phase 2 PPH. A persistent negative gap signals a structural problem.</div>
+      </li>
+      <li class="module-item">
+        <div class="module-nm">staffing_model.py</div>
+        <div class="module-desc">Inputs: day of week, phase, planned volume, historical k values with standard errors. Output: zone-by-zone staffing recommendation with confidence interval and Phase 3 discount flag.</div>
+      </li>
+      <li class="module-item">
+        <div class="module-nm">cure_pressure.py</div>
+        <div class="module-desc">Maps CURE destination loads onto the PD belt serving each destination. Flags trailers running above 85% utilization and adjusts zone staffing recommendations accordingly.</div>
+      </li>
+      <li class="module-item">
+        <div class="module-nm">trend_engine.py</div>
+        <div class="module-desc">Applies the γ = 0.958 weekly decay model to rolling PPH baselines. Detects drift below expected trajectory and generates a plain-language pre-sort alert with numeric summary.</div>
+      </li>
+    </ul>
+
+    <div class="callout callout-sage">
+      <p><strong>Data security.</strong> Every script reads from and writes to the local project folder on the work laptop. No data leaves the machine. The Python interpreter requires no network access after installation. The files processed are identical to those already opened in Excel at the facility daily. Python introduces no new data exposure surface.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="s6">
+    <div class="sec-num">Section 6</div>
+    <h2>Replication and Scaling Potential</h2>
+    <p>These tools were built for CHEMA Twilight. The architecture is intentionally generic. Every UPS hub running the same SOR/TMS, iGate/ESR, SEAS, and CURE exports produces identically structured files. The corpus builder requires exactly one configuration change per facility: the SLIC number. Every other component — phase engine, fidelity cascade, staffing model, UI tabs, PPH palette — is facility-agnostic and requires no modification.</p>
+    <p>A district deploying this stack would maintain one local corpus instance per hub, managed by the on-site FTS coordinator running corpus_builder.py after each export week. A district-level aggregation script pulls all facility corpora into a single district JSON. A district manager reviewing the trend engine's output before the week begins can identify which facilities are approaching PPH threshold risk and which have staffing capacity available to share.</p>
+    <div class="callout callout-aqua">
+      <p><strong>The path from CHEMA to a district pilot:</strong> Python approval at one facility, one quarter of documented results, and a shared file folder for district-level aggregation. The tools are already built. The data is already being collected. The only unlock is the runtime.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section" id="s7">
+    <div class="sec-num">Section 7</div>
+    <h2>The Supervisor as Agent: Signal, Decision, Outcome</h2>
+    <p>Every operational system produces data. The question is whether anyone is positioned to use it. At CHEMA Twilight, the supervisor is the decision node between the system's signals and its outcomes. The quality of those interventions depends on the quality of the signal the supervisor reads — grounded in 613 sorts of measured history, indexed by day of week, segmented by sort phase, and corrected for the three fidelity distortions that make raw iGate data an unreliable guide.</p>
+
+    <h3>7.1 Upstream — Inbound as the Leading Signal</h3>
+    <p>The inbound operation is the earliest available indicator of what the sort will demand from outbound. Door turn rate during Phase 0 and Phase 1 signals freight composition arriving in real time: fast turns indicate flowable cube; slow turns indicate bulk irregular. The Phase Engine makes this explicit — enter the current fractional completion and day of week, receive phase identification, k_Z-implied load distribution across all three zones, and a staffing recommendation calibrated to the freight structure the historical record says today's sort should carry.</p>
+
+    <h3>7.2 Midfield — The Belt as the Decision Surface</h3>
+    <p>The outbound belts are where labor allocation becomes service outcome. Every correct staffing decision reduces misloads, reduces LIB events, and reduces overgood and damage. Phase 3 discount distinguishes genuine understaffing from geometrically exhausted volume — a distinction no existing UPS reporting system makes.</p>
+
+    <h3>7.3 Downstream — Service as the Measured Outcome</h3>
+    <p>Every package that makes its correct trailer, in the correct load position, without damage, is a package that delivers on time. LTC certifies that the employee scanning the package is the employee the system credits. The fidelity cascade detects where that chain has broken. The Phase Engine prevents valid Phase 2 PPH from being contaminated by Phase 3 wind-down data. The staffing model translates the clean signal into an actionable recommendation.</p>
+
+    <h3>7.4 Safety — The Unseen KPI</h3>
+    <p>PPH and service metrics have dashboards. Safety does not — not at the granularity that matters. Phase 3 discount is, among other things, a safety mechanism. When the system correctly identifies that a belt's PPH has declined because the sort is winding down — not because the team needs to go harder — the supervisor does not issue a pressure call on a ghost signal. Injuries that happen in the last 20 minutes of a sort, when fatigue is highest and the temptation to read low PPH as underperformance is greatest, become avoidable.</p>
+    <p>Data-oriented supervision does not remove the supervisor's authority. It removes the conditions under which that authority gets exercised against a population of employees based on corrupted inputs.</p>
+
+    <h3>7.5 LTC as the Human Link</h3>
+    <p>Label Training Certification is the only tool in this program that directly addresses employee behavior rather than analytical infrastructure. UPS's On-Job Supervision system (GEMS #1760) specifies 111 methods for sorters, 87 for pick-offs, 168 for loaders — each must be demonstrated at production rate, passing threshold 95%, recertified every six months. OJS certifies how to execute the role; LTC certifies where to send the package.</p>
+    <p>Three layers of attribution:</p>
+    <div class="callout">
+      <p><strong>Layer 1 — Sort aisle sorters:</strong> route by SLIC and exception to color-coded belt. No scan. Compliance shows in missort rate. LTC certifies sort chart knowledge.</p>
+    </div>
+    <div class="callout callout-aqua">
+      <p><strong>Layer 2 — Pick-off employees:</strong> secondary sort by ZIP exception within SLIC group to chute 1, chute 2, or let-ride. No scan. LTC certifies zip code exception routing.</p>
+    </div>
+    <div class="callout callout-sage">
+      <p><strong>Layer 3 — Loaders inside trailers:</strong> scan ULD bay-door label before entry, then scan each package. <em>This is the only source of all iGate PPH attribution.</em> LTC certifies scan discipline: own employee scanning ID, correct ULD scan before entry, individual package scanning. When this layer fails, the PPH signal the coordinator receives does not match the work being done.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section" id="s8">
+    <div class="sec-num">Section 8</div>
+    <h2>Career Development and Organizational Value</h2>
+    <p>These tools were built in approximately two weeks, by a single sort floor supervisor, using data that was already there. No budget was requested, no project was opened, no timeline was assigned. The development happened alongside daily operations.</p>
+
+    <div class="career-grid">
+      <div class="career-card">
+        <div class="cc-domain">Data Engineering</div>
+        <div class="cc-title">Idempotent ETL across 7 heterogeneous sources</div>
+        <div class="cc-desc">Tracker JSON exports, SOR XLSX files, iGate/ESR reports, SEAS service exception files, CURE destination load files — atomic write safety, schema versioning, 81 MB unified corpus covering 613 sorts.</div>
+      </div>
+      <div class="career-card">
+        <div class="cc-domain">Statistical Modeling</div>
+        <div class="cc-title">Empirical derivation with honest uncertainty</div>
+        <div class="cc-desc">DOW-indexed load coefficients, weekly PPH decay constant γ = 0.958, correlation coefficient — all from operational data, all with confidence intervals transparent about sample size limits.</div>
+      </div>
+      <div class="career-card">
+        <div class="cc-domain">Systems Theory</div>
+        <div class="cc-title">Four-branch research program</div>
+        <div class="cc-desc">Hub as a purposeful system with adaptive agents, distortion mechanisms, and feedback loops — documented as internal whitepapers at research-paper quality across four concurrent branches.</div>
+      </div>
+      <div class="career-card">
+        <div class="cc-domain">Software Development</div>
+        <div class="cc-title">Four production tools in active daily use</div>
+        <div class="cc-desc">Browser-native architecture requiring zero IT support for any deployment or update. Tracker v4.0: 6,200+ lines, 40+ versions, full lifecycle from problem identification to iteration.</div>
+      </div>
+      <div class="career-card">
+        <div class="cc-domain">Technical Writing</div>
+        <div class="cc-title">Research-grade documentation</div>
+        <div class="cc-desc">Spanning floor-level instruction, mathematical derivation, and executive-level briefing — across the same operational domain, written for audiences ranging from loaders to district management.</div>
+      </div>
+      <div class="career-card">
+        <div class="cc-domain">Operational Judgment</div>
+        <div class="cc-title">Derived from direct supervisory experience</div>
+        <div class="cc-desc">The phase ladder, k staffing model, fidelity cascade, and borrow/loan detection were derived from direct supervisory experience and validated against measured data — not from external research.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The ask for this presentation is narrow:</strong> Python runtime on one laptop, for one supervisor, to run scripts that process files the facility already generates every day. The output is better staffing decisions, earlier identification of performance problems, and a replicable model any FTS coordinator in the district could be trained to operate in a single session.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9 — CONCLUSION -->
+  <div class="section conclusion" id="s9">
+    <div class="sec-num">Section 9</div>
+    <h2>Conclusion</h2>
+    <p>A PPH target always set near the performance ceiling. A workforce making real-time decisions with imperfect signals. A service standard that depends on both. That tension is manageable — not by removing the target or reducing the supervisor's responsibility, but by improving the quality of the information available when decisions are made.</p>
+
+    <div class="pull-quote">
+      <div class="pq-text">"The KPI connections are direct. Clean scanner attribution → accurate belt-level PPH → correct staffing → fewer misloads, fewer LIB events, less overgood and damage. Phase-segmented analysis → no wind-down data contaminating diagnostic baselines → no phantom pressure calls in the sort's final 40 minutes. Zone-general k_Z(DOW) staffing → every zone allocated from its own empirically-derived freight share."</div>
+      <div class="pq-attr">From Section 9 — CHEMA Sort Intelligence Whitepaper v2.2</div>
+    </div>
+
+    <p>The tools are built. The corpus is queryable. Every browser-based component runs today within network policy. The one remaining capability gap is a Python runtime on one work laptop.</p>
+    <p style="font-weight:600;font-size:16px;font-family:var(--serif)">That approval is the difference between a supervisor who observes the sort and a supervisor who understands it.</p>
+  </div>
+
+  <!-- SECTION 10 — REFERENCES -->
+  <div class="section" id="s10">
+    <div class="sec-num">Section 10</div>
+    <h2>References</h2>
+    <p style="font-size:13px;color:var(--muted)">Internal documents reference the CHEMA Analytics Program research corpus. External references are standard academic and open-source citations.</p>
+    <ul class="ref-list">
+      <li class="ref-item"><span class="ref-num">[A]</span>Almeida, R. (2026). Hub Operations Mathematical Framework, v1.8. <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">whitepapers/hub_ops_mathematical_framework_v1.8.md</span></li>
+      <li class="ref-item"><span class="ref-num">[B]</span>Almeida, R. (2026). Hub Operations Digital Twin, v2.3. <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">whitepapers/hub_ops_digital_twin_v2.3.md</span></li>
+      <li class="ref-item"><span class="ref-num">[C]</span>Almeida, R. (2026). Purposeful Systems in Hub Operations, v3.9. <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">whitepapers/hub_ops_purposeful_systems_v3.9.md</span></li>
+      <li class="ref-item"><span class="ref-num">[D]</span>Almeida, R. (2026). Unified Framework for Hub Operations Analytics, v4.3. <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">whitepapers/hub_ops_unified_framework_v4.3.md</span></li>
+      <li class="ref-item"><span class="ref-num">[OJS]</span>UPS Corporate Industrial Engineering. Hub Management Job Methods Certification, GEMS Code #1760. Passing threshold 95%; recertification every 6 months.</li>
+      <li class="ref-item"><span class="ref-num">[9]</span>openpyxl Project Contributors. (2024). openpyxl — A Python library to read/write Excel 2010 xlsx/xlsm files. <a href="https://openpyxl.readthedocs.io/" style="color:var(--aqua)">openpyxl.readthedocs.io</a></li>
+      <li class="ref-item"><span class="ref-num">[10]</span>Hunter, J. D. (2007). Matplotlib: A 2D Graphics Environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90–95.</li>
+      <li class="ref-item"><span class="ref-num">[14]</span>Ackoff, R. L. (1971). Towards a System of Systems Concepts. <em>Management Science</em>, 17(11), 661–671.</li>
+    </ul>
+  </div>
+
+</main>
+
+<script>
+// Scroll-spy
+const _navAs = document.querySelectorAll('.nav-a[href^="#"]');
+const _secs  = ['cover','abstract','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+function _updNav(){
+  let cur = _secs[0];
+  _secs.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top <= 140) cur = id;
+  });
+  _navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+}
+window.addEventListener('scroll', _updNav, {passive:true});
+_updNav();
+</script>
+</body>
+</html>

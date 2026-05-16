@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LTC — Mathematical Abstractions of the UPS Sort Training System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    tags: 'none'
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{
+  --cream:#F5F4F0;--cream2:#EBE8E1;--cream3:#E0DDD5;
+  --terra:#C4622D;--aqua:#4A7C7E;--sage:#6B8C6B;
+  --ink:#1A1A18;--ink-lt:#4A4740;--muted:#8A8880;
+  --border:#D8D4CC;--border-lt:#E5E2DA;
+  --serif:'Playfair Display',Georgia,serif;
+  --mono:'JetBrains Mono','Consolas',monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --sidebar:268px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.7}
+
+/* ── PAGE LAYOUT ── */
+.page-wrap{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--cream2);
+  border-right:1px solid var(--border);
+  position:sticky;top:0;height:100vh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  padding:0;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.s-head{padding:28px 20px 20px;border-bottom:1px solid var(--border)}
+.s-eyebrow{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--aqua);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
+.s-title{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--terra);line-height:1.2;margin-bottom:4px}
+.s-subtitle{font-size:11px;color:var(--muted);line-height:1.4}
+
+.s-meta{padding:16px 20px;border-bottom:1px solid var(--border)}
+.s-meta-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;margin-bottom:3px}
+.s-meta-label{color:var(--muted);font-family:var(--mono);font-size:10px}
+.s-meta-val{color:var(--ink-lt);font-weight:500}
+
+.s-session{padding:16px 20px;border-bottom:1px solid var(--border)}
+.s-lbl{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.sess-row{margin-bottom:8px;padding:8px;background:var(--cream3);border-radius:5px;border-left:2px solid var(--aqua)}
+.sess-num{font-family:var(--mono);font-size:10px;color:var(--aqua);font-weight:600}
+.sess-date{font-size:10px;color:var(--muted);margin:1px 0}
+.sess-desc{font-size:11px;color:var(--ink-lt);line-height:1.4}
+
+.s-nav{padding:16px 20px;flex:1}
+.s-nav .s-lbl{margin-bottom:8px}
+.nav-a{
+  display:block;padding:6px 8px;margin-bottom:1px;
+  border-radius:4px;font-size:12px;color:var(--ink-lt);
+  text-decoration:none;line-height:1.3;
+  transition:all .15s;cursor:pointer;
+  border-left:2px solid transparent;
+}
+.nav-a:hover{background:var(--cream3);color:var(--ink)}
+.nav-a.active{background:var(--cream3);border-left-color:var(--terra);color:var(--terra);font-weight:500}
+.nav-a .n-num{font-family:var(--mono);font-size:10px;color:var(--muted);display:block;margin-bottom:1px}
+
+.s-open{padding:12px 20px 20px;border-top:1px solid var(--border)}
+.open-count{font-size:28px;font-family:var(--serif);color:var(--sage);font-weight:700;line-height:1}
+.open-label{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── MAIN CONTENT ── */
+.main{flex:1;padding:48px 64px 100px;max-width:860px}
+
+/* Section headings */
+.sec{margin-bottom:60px;scroll-margin-top:32px}
+.sec-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sec-num{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--terra);letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.3px}
+
+.subsec{margin-bottom:28px}
+.subsec h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;padding-left:10px;border-left:2px solid var(--aqua)}
+
+/* Prose */
+p{margin-bottom:14px;color:var(--ink-lt);line-height:1.8}
+p strong{color:var(--ink);font-weight:600}
+p em{color:var(--ink);font-style:italic}
+code{font-family:var(--mono);font-size:12px;background:var(--cream2);color:var(--aqua);padding:1px 5px;border-radius:3px}
+
+/* Math blocks */
+.math-block{background:var(--cream2);border:1px solid var(--border-lt);border-left:3px solid var(--aqua);border-radius:0 6px 6px 0;padding:16px 20px;margin:16px 0;overflow-x:auto}
+
+/* Open problem callout */
+.open-problem{background:var(--cream2);border:1px solid var(--border-lt);border-left:3px solid var(--sage);border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:13px}
+.open-problem .op-tag{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--sage);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.open-problem p{margin:0;color:var(--ink-lt)}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);background:var(--cream2);border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border-lt);color:var(--ink-lt);vertical-align:top}
+td code{font-size:11px}
+tr:hover td{background:var(--cream2)}
+
+/* Belt grid */
+.belt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;font-family:var(--mono);font-size:11px;margin-bottom:16px}
+.belt-entry{background:var(--cream2);padding:5px 8px;border-radius:3px;color:var(--ink-lt)}
+.belt-entry .bi{color:var(--terra);font-weight:600}
+
+/* Open problems list */
+.op-list{counter-reset:oplist}
+.op-item{counter-increment:oplist;display:flex;gap:12px;margin-bottom:12px;padding:12px;background:var(--cream2);border-radius:6px;border:1px solid var(--border-lt)}
+.op-item::before{content:counter(oplist);font-family:var(--serif);font-size:22px;color:var(--sage);font-weight:700;line-height:1;flex-shrink:0;width:28px}
+.op-item-body{flex:1}
+.op-item-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.op-item-desc{font-size:12px;color:var(--ink-lt);line-height:1.6}
+
+/* Summary table badge */
+.struct-badge{display:inline-block;font-family:var(--mono);font-size:10px;background:var(--cream3);color:var(--aqua);padding:1px 6px;border-radius:3px}
+
+/* Session context box */
+.ctx-box{background:var(--cream2);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:28px}
+.ctx-box h4{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+.ctx-box ol{padding-left:18px;font-size:13px;color:var(--ink-lt);line-height:1.8}
+
+/* Cover area at top of main */
+.cover{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;color:var(--aqua);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px}
+.cover-title{font-family:var(--serif);font-size:32px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:12px;letter-spacing:-0.5px}
+.cover-meta{display:flex;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted)}
+.cover-meta span{display:flex;align-items:center;gap:6px}
+.cover-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--terra);flex-shrink:0}
+
+@media(max-width:900px){
+  .page-wrap{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}
+  .main{padding:28px 20px 60px}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- ══ SIDEBAR ═══════════════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="s-head">
+    <div class="s-eyebrow">LabelTrainingCertification</div>
+    <div class="s-title">Mathematical Abstractions</div>
+    <div class="s-subtitle">UPS Sort Training System · Living document</div>
+  </div>
+
+  <div class="s-meta">
+    <div class="s-meta-row"><span class="s-meta-label">Author</span><span class="s-meta-val">Rafael Almeida</span></div>
+    <div class="s-meta-row"><span class="s-meta-label">ID</span><span class="s-meta-val">6068314</span></div>
+    <div class="s-meta-row"><span class="s-meta-label">Version</span><span class="s-meta-val">v1.0 · May 2026</span></div>
+    <div class="s-meta-row"><span class="s-meta-label">Sessions</span><span class="s-meta-val">2 complete</span></div>
+  </div>
+
+  <div class="s-session">
+    <div class="s-lbl">Session Log</div>
+    <div class="sess-row">
+      <div class="sess-num">Session 1</div>
+      <div class="sess-date">2026-05-12</div>
+      <div class="sess-desc">Initial framework: routing function, ultrametric, confusion graph, weighted sampling, channel model, Bernoulli process, monoid reducers, overlay algebra, knowledge map.</div>
+    </div>
+    <div class="sess-row">
+      <div class="sess-num">Session 2</div>
+      <div class="sess-date">2026-05-13</div>
+      <div class="sess-desc">OJS-to-LTC certification chain context (§0). LTC positioned within two-layer system; OJS is method-layer prerequisite. Open problems extended.</div>
+    </div>
+  </div>
+
+  <nav class="s-nav">
+    <div class="s-lbl">Contents</div>
+    <a class="nav-a active" href="#s0"><span class="n-num">00</span>OJS-to-LTC Chain</a>
+    <a class="nav-a" href="#s1"><span class="n-num">01</span>Routing Function</a>
+    <a class="nav-a" href="#s2"><span class="n-num">02</span>ZIP Ultrametric</a>
+    <a class="nav-a" href="#s3"><span class="n-num">03</span>Belt Confusion Graph</a>
+    <a class="nav-a" href="#s4"><span class="n-num">04</span>Weighted Sampling</a>
+    <a class="nav-a" href="#s5"><span class="n-num">05</span>Missort Matrix / Channel</a>
+    <a class="nav-a" href="#s6"><span class="n-num">06</span>Statistical Process</a>
+    <a class="nav-a" href="#s7"><span class="n-num">07</span>Monoid Homomorphisms</a>
+    <a class="nav-a" href="#s8"><span class="n-num">08</span>Overlay System</a>
+    <a class="nav-a" href="#s9"><span class="n-num">09</span>Knowledge Map</a>
+    <a class="nav-a" href="#s10"><span class="n-num">10</span>Sort Chart Automaton</a>
+    <a class="nav-a" href="#s11"><span class="n-num">11</span>Bayesian Skill Model</a>
+    <a class="nav-a" href="#s12"><span class="n-num">12</span>Summary Table</a>
+    <a class="nav-a" href="#s13"><span class="n-num">13</span>Open Problems</a>
+  </nav>
+
+  <div class="s-open">
+    <div class="open-count">13</div>
+    <div class="open-label">open problems</div>
+  </div>
+
+</aside>
+
+<!-- ══ MAIN ═══════════════════════════════════════════════ -->
+<main class="main">
+
+  <div class="cover">
+    <div class="cover-eyebrow">CHEMA Hub Operations · Sort Intelligence Branch</div>
+    <div class="cover-title">Mathematical Abstractions of the UPS Chelmsford Sort Training System</div>
+    <div class="cover-meta">
+      <span><span class="dot"></span>Rafael Almeida, Employee 6068314</span>
+      <span><span class="dot"></span>LabelTrainingCertification v1.0</span>
+      <span><span class="dot"></span>Last updated May 2026</span>
+      <span><span class="dot"></span>Living document — read from top before resuming</span>
+    </div>
+  </div>
+
+  <!-- PROJECT STATE -->
+  <div class="sec" id="state">
+    <div class="sec-hdr">
+      <span class="sec-num">State</span>
+      <h2>Project State &amp; Key Data Structures</h2>
+    </div>
+    <p>The system is a single-page browser app (<code>index.html</code> + five JS modules) that trains UPS package sorters on routing decisions. The core data structures underlying all mathematical analysis are:</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Code name</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>$Z$</td><td><code>TRUTH_RAW</code> → <code>_tmap</code></td><td>Set of ~41,000 ZIP codes with routing</td></tr>
+          <tr><td>$B$</td><td><code>BELT_NAMES</code> indices 0–15</td><td>16 belt destinations</td></tr>
+          <tr><td>$f$</td><td><code>_tmap : Map&lt;zip, entry&gt;</code></td><td>The routing function</td></tr>
+          <tr><td>$\mathcal{F}$</td><td><code>BELT_FAMILIES</code></td><td>Confusion neighbourhood graph</td></tr>
+          <tr><td>$\mathcal{E}$</td><td><code>sort_events</code> store</td><td>Sequence of sorter answer events</td></tr>
+          <tr><td>$\mathcal{O}$</td><td><code>overlays</code> store</td><td>Finite set of routing corrections</td></tr>
+          <tr><td>$w$</td><td><code>_cfg.stateWeights</code></td><td>State weight vector</td></tr>
+          <tr><td>$M$</td><td>computed in <code>missortMatrix()</code></td><td>The missort count matrix</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Belt index reference (canonical, corrected 2026-05-13):</p>
+    <div class="belt-grid">
+      <div class="belt-entry"><span class="bi">0</span> Top Black (PD-01)</div>
+      <div class="belt-entry"><span class="bi">8</span> Top Red (PD-09)</div>
+      <div class="belt-entry"><span class="bi">1</span> Top Yellow (PD-02)</div>
+      <div class="belt-entry"><span class="bi">9</span> Orange (PD-10)</div>
+      <div class="belt-entry"><span class="bi">2</span> Top White (PD-03)</div>
+      <div class="belt-entry"><span class="bi">10</span> Bottom Yellow (PD-11)</div>
+      <div class="belt-entry"><span class="bi">3</span> Middle Yellow (PD-04)</div>
+      <div class="belt-entry"><span class="bi">11</span> Top Blue (PD-12)</div>
+      <div class="belt-entry"><span class="bi">4</span> Bottom Red (PD-05)</div>
+      <div class="belt-entry"><span class="bi">12</span> Middle Blue (PD-13)*</div>
+      <div class="belt-entry"><span class="bi">5</span> Middle White (PD-06)</div>
+      <div class="belt-entry"><span class="bi">13</span> Middle Green (AF1)</div>
+      <div class="belt-entry"><span class="bi">6</span> Top Green (PD-07)</div>
+      <div class="belt-entry"><span class="bi">14</span> Bottom Green (AF2)</div>
+      <div class="belt-entry"><span class="bi">7</span> Middle Red (PD-08)</div>
+      <div class="belt-entry"><span class="bi">15</span> Middle Black (Secondary)</div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">*PD-13/Middle Blue (index 12): peak season overflow only. CCHIL belts: {3, 4, 8}. Air belts: {13, 14}.</p>
+  </div>
+
+  <!-- §0 -->
+  <div class="sec" id="s0">
+    <div class="sec-hdr">
+      <span class="sec-num">00</span>
+      <h2>The OJS-to-LTC Certification Chain</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>0.1 What OJS Certifies</h3>
+      <p>The LTC system does not operate in isolation. It is the <strong>knowledge layer</strong> in a two-layer employee certification architecture; the <strong>method layer</strong> beneath it is the On-Job Supervision system (GEMS #1760). Four role-specific OJS certification sheets exist:</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Sheet</th><th>Role</th><th>Total Methods</th><th>Nature of Certification</th></tr></thead>
+          <tbody>
+            <tr><td>unloader-ojs</td><td>Metro Unloader</td><td>127</td><td>Equipment setup, package selection, unload sequence, flow management</td></tr>
+            <tr><td>sorter-ojs</td><td>Sort aisle sorter</td><td>111</td><td>Presort, label reading, body position, package routing to color-coded belts</td></tr>
+            <tr><td>pickoff-ojs</td><td>Pick-off employee</td><td>87</td><td>Chute routing, belt flow management, loader coordination</td></tr>
+            <tr><td>loader-ojs</td><td>Loader (Load SMART Scanning)</td><td>168</td><td>Scanner setup, ULD bay-scan, package scanning, wall building, smalls handling</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Each method must be <strong>explained</strong> (E) with a benefit or consequence in the trainee's own words, and <strong>demonstrated</strong> (D) at production rate. Passing threshold: 95% or higher. Recertification: every six months.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>0.2 How OJS and LTC Differ</h3>
+      <p>The two certifications address orthogonal dimensions of competency. <strong>OJS certifies <em>how</em></strong> to execute the role: correct body position, hand-to-surface handling, scanner setup, ULD bay-scan sequence, "scan one, load one" cadence. <strong>LTC certifies <em>where</em></strong>: SLIC-to-belt routing for sorters, ZIP exception routing for pick-offs, scan attribution discipline for loaders.</p>
+      <p>An employee with full OJS but incomplete LTC routing knowledge executes the correct physical method while making routing errors — producing missorts (sorters) or misloads (pick-offs). An employee with complete LTC routing knowledge but degraded OJS method compliance may know the correct destination but execute the scanning sequence in ways that corrupt iGate attribution (e.g., skipping Method #20 — the bay-door ULD scan — or using a coworker's ID in violation of Method #7).</p>
+    </div>
+
+    <div class="subsec">
+      <h3>0.3 Implication for the Sorter Channel Model</h3>
+      <p>Section 5 models the sorter as a discrete memoryless channel with transition matrix $\mathbf{M}$. Departures from the identity $\mathbf{I}_{16}$ arise from two distinct sources the channel model does not currently separate:</p>
+      <ol style="padding-left:20px;font-size:13px;color:var(--ink-lt);line-height:1.9;margin-bottom:14px">
+        <li><strong>Knowledge gaps (LTC layer):</strong> the sorter does not know the correct belt for a given ZIP/SLIC. This is what LTC quiz accuracy measures.</li>
+        <li><strong>Method gaps (OJS layer):</strong> the sorter knows the correct belt but reads the label incorrectly (label facing wrong, fatigue-degraded pattern recognition). These produce errors even at full routing knowledge.</li>
+      </ol>
+
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.11]</div>
+        <p>Partition the confusion matrix $\mathbf{M}$ into a knowledge-gap component $\mathbf{M}_K$ and a method-gap component $\mathbf{M}_E$ such that $\mathbf{M} = \mathbf{M}_K \cdot \mathbf{M}_E$. LTC directly reduces $\mathbf{M}_K \to \mathbf{I}$; OJS recertification reduces $\mathbf{M}_E \to \mathbf{I}$. Both are needed for $\mathbf{M} \to \mathbf{I}$.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §1 -->
+  <div class="sec" id="s1">
+    <div class="sec-hdr">
+      <span class="sec-num">01</span>
+      <h2>The Routing Function</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>1.1 Basic Structure</h3>
+      <p>Let $Z \subset \{0, \ldots, 99999\}$ be the set of ZIP codes with defined routes, $|Z| \approx 41{,}000$. Let $B = \{0, 1, \ldots, 15\}$ be the belt index set. The <strong>routing function</strong> is:</p>
+      <div class="math-block">$$f : Z \to B$$</div>
+      <p>This is a total function on its domain (every loaded ZIP maps to exactly one belt), but a <em>partial</em> function over all possible 5-digit strings $\{00000, \ldots, 99999\}$. The pair $(Z, B, f)$ constitutes a <strong>finite relational structure</strong> — specifically a functional binary relation (each $z \in Z$ has exactly one image under $f$).</p>
+    </div>
+
+    <div class="subsec">
+      <h3>1.2 The CCHIL Multivalued Extension</h3>
+      <p>For ZIPs in the 13 CCHIL states (MS, IA, WI, MN, SD, ND, NE, LA, OK, CO, WY, AZ, NM), the app accepts any of the three CCHIL belts as correct. The routing becomes a <strong>multifunction</strong>:</p>
+      <div class="math-block">$$\tilde{f} : Z \to \mathcal{P}(B), \quad \tilde{f}(z) = \begin{cases} \{f(z)\} & z \notin Z_{\text{CCHIL}} \\ \{3, 4, 8\} & z \in Z_{\text{CCHIL}} \end{cases}$$</div>
+      <p>The sorter's answer $a \in B$ is marked correct iff $a \in \tilde{f}(z)$. This is equivalent to defining an <strong>acceptance relation</strong> $\mathcal{A} \subseteq Z \times B$ where $(z, b) \in \mathcal{A}$ iff $b \in \tilde{f}(z)$.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>1.3 Properties</h3>
+      <p>$f$ is <strong>not injective</strong> in general: many ZIPs in different states share a belt destination. $f$ is <strong>not surjective</strong> over $B$ from every state. The preimage partition $\{f^{-1}(b) : b \in B\}$ is a partition of $Z$ into 16 classes — this partition is the fundamental structure the sorter must learn.</p>
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.1]</div>
+        <p>Characterise the preimage sizes $|f^{-1}(b)|$ for each belt $b$. Belts with large preimages are easier to learn by frequency; belts with small preimages are easily missed and dominate the Missort Matrix.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §2 -->
+  <div class="sec" id="s2">
+    <div class="sec-hdr">
+      <span class="sec-num">02</span>
+      <h2>The ZIP Code Space as an Ultrametric</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>2.1 Prefix Metric</h3>
+      <p>ZIP codes viewed as 5-character strings admit a natural <strong>prefix metric</strong>. Define the longest common prefix length $\ell(z_1, z_2) = \max\{k : z_1[1..k] = z_2[1..k]\}$ and the metric:</p>
+      <div class="math-block">$$d(z_1, z_2) = 10^{5 - \ell(z_1, z_2)}$$</div>
+      <p>(with $d(z,z)=0$). This satisfies the <strong>ultrametric inequality</strong>:</p>
+      <div class="math-block">$$d(z_1, z_3) \leq \max(d(z_1, z_2),\; d(z_2, z_3))$$</div>
+      <p>which is strictly stronger than the triangle inequality. The set $(Z_{\text{all}}, d)$ is therefore an <strong>ultrametric space</strong>. Ultrametric spaces are "tree-like" — the metric corresponds to depth of divergence in the ZIP prefix trie, which matches physical geography: nearby ZIP codes share longer prefixes and route to the same or related belts.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>2.2 Local Constancy of the Routing Function</h3>
+      <p>Empirically, $f$ is <strong>locally constant</strong> at the 3-digit prefix level:</p>
+      <div class="math-block">$$d(z_1, z_2) \leq 100 \implies f(z_1) = f(z_2) \quad \text{(almost always)}$$</div>
+      <p>Formally, $f$ approximately factors through the quotient map $\pi : Z \to Z/{\sim_3}$ where $z_1 \sim_3 z_2 \iff z_1[1..3] = z_2[1..3]$, giving $f \approx \bar{f} \circ \pi$ where $\bar{f} : Z/{\sim_3} \to B$ is the prefix routing function. The ~800 active 3-digit prefixes cover all 41,000 ZIP entries.</p>
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.2]</div>
+        <p>Quantify the exceptions to local constancy — ZIPs within the same 3-digit block routing to different belts. These are the cases where the sort chart has sub-prefix distinctions and are prime candidates for sorter confusion.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §3 -->
+  <div class="sec" id="s3">
+    <div class="sec-hdr">
+      <span class="sec-num">03</span>
+      <h2>The Belt Confusion Graph</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>3.1 Definition</h3>
+      <p>Define the <strong>confusion graph</strong> $G = (B, E)$ as a directed graph on the 16 belt nodes, where $(b_i, b_j) \in E \iff b_j \in \texttt{BELT\_FAMILIES}[b_i]$. The graph encodes domain knowledge about which belts are physically or visually similar.</p>
+      <p>Top Red (8) confuses with Top Blue (11) — sister belts in the Z3 area (PD-09/PD-12): same physical quadrant, different colour. Middle Red (7) and Middle Blue (12) form the PD-08/PD-13 sister pair — high confusion because PD-13 appears only during peak season, making it unfamiliar even to experienced sorters returning after non-peak rotation.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>3.2 Role in the Quiz Engine</h3>
+      <p>When generating a wrong-answer distractor set, the quiz selects answers from $\mathcal{F}(b^*) = \{b : (b^*, b) \in E\}$ — the out-neighbourhood of the correct belt. This ensures distractors are <em>semantically hard</em>, not random. From a learning theory perspective, this is related to <strong>hard negative mining</strong>: training on confusable pairs accelerates discriminative learning compared to random negatives.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>3.3 Graph-Theoretic Properties</h3>
+      <p><code>BELT_FAMILIES</code> is not symmetric in general, so $G$ is a directed graph. Define <strong>confusion classes</strong> as weakly connected components. From the belt naming, the natural colour families are: Black {0, 15}, Blue {11, 12}, Red {8, 7, 4}, Green {6, 13, 14}, Yellow {1, 3, 10}, White {2, 5}, Air {13, 14}, Orange {9} (singleton).</p>
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.3]</div>
+        <p>Compute the chromatic number of the undirected version of $G$. A $k$-colouring assigns each belt a "colour class" such that confusable belts get different colours — the minimum number of visually distinguishable categories needed to make belt identification unambiguous.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §4 -->
+  <div class="sec" id="s4">
+    <div class="sec-hdr">
+      <span class="sec-num">04</span>
+      <h2>Weighted Question Selection as a Mixture Distribution</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>4.1 The Four-Pool Model</h3>
+      <p>The quiz generates questions from four pools — Ground ($P_g$), CCHIL ($P_c$), Exception labels ($P_e$), and Air sort ($P_a$) — where the average per-state contribution $\bar{n}$ normalises all special pools:</p>
+      <div class="math-block">$$\bar{n} = \frac{\sum_{s \notin \text{CCHIL}} w_s \cdot |G_s|}{|\{s : s \notin \text{CCHIL}\}|}$$</div>
+      <p>The question type is selected by sampling uniformly from the total pool, giving a <strong>categorical mixture distribution</strong> over question types:</p>
+      <div class="math-block">$$\Pr[\text{type} = t] = \frac{P_t}{P_g + P_c + P_e + P_a}$$</div>
+    </div>
+
+    <div class="subsec">
+      <h3>4.2 The Pre-v0.14 Bug and Its Fix</h3>
+      <p>Before v0.14, air and exception bucket sizes were computed as $|\text{candidates}| \times w$ (e.g., $7 \times 20 = 140$) while the ground pool was ~33,000 — giving an air share of $140/33{,}140 \approx 0.4\%$, negligible at any weight. The fix: replace the raw count with $w \times \bar{n}$, making all pools <strong>commensurate</strong>. With $w_a = 3$ and $\bar{n} \approx 868$: $P_a = 3 \times 868 = 2604$, giving $\Pr[\text{air}] \approx 7.4\%$. The fix is equivalent to converting heterogeneous measures to a common denominator before mixing — the mixture distribution becomes <em>well-calibrated</em> with respect to the weight sliders.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>4.3 The CCHIL Isolation Fix (v0.12)</h3>
+      <p>Before v0.12, CCHIL states were included in the ground pool weighted by $w_s \times |G_s|$, causing their aggregate contribution to dominate. The fix isolates CCHIL into its own pool with a single weight $w_c$, imposing <strong>independence of CCHIL frequency from regional weight adjustments</strong> — making the CCHIL component orthogonal to regional adjustments in the mixture.</p>
+    </div>
+  </div>
+
+  <!-- §5 -->
+  <div class="sec" id="s5">
+    <div class="sec-hdr">
+      <span class="sec-num">05</span>
+      <h2>The Missort Matrix as a Discrete Communication Channel</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>5.1 Channel Model</h3>
+      <p>A sorter can be modelled as a <strong>discrete memoryless channel</strong> with input and output alphabet $B$. The <strong>channel transition matrix</strong> is:</p>
+      <div class="math-block">$$\mathbf{M} \in \mathbb{R}^{|B| \times |B|}, \quad M_{ij} = \frac{\text{count}(f(z) = b_i,\; \text{answer} = b_j)}{\text{count}(f(z) = b_i)}$$</div>
+      <p>$\mathbf{M}$ is a <strong>right stochastic matrix</strong>: each row sums to 1. A <strong>perfect sorter</strong> has $\mathbf{M} = \mathbf{I}_{16}$. A <strong>random guesser</strong> has $M_{ij} = 1/16$ for all $i, j$. The diagonal $M_{ii}$ is per-belt accuracy; off-diagonal $M_{ij}$ are missort rates.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>5.2 Information-Theoretic Measures</h3>
+      <p>Per-belt Shannon entropy of the sorter's output distribution (the $i$-th row of $\mathbf{M}$):</p>
+      <div class="math-block">$$H_i = -\sum_{j} M_{ij} \log_2 M_{ij} \in [0, \log_2 16] \text{ bits}$$</div>
+      <p>The mutual information between correct belt $X$ and chosen belt $Y$:</p>
+      <div class="math-block">$$I(X; Y) = H(Y) - H(Y|X) = H(X) - H(X|Y)$$</div>
+      <p>$I(X;Y)$ measures how much the sorter's answer reveals about the correct belt. For a perfect sorter, $I(X;Y) = H(X)$ (full information). For a random guesser, $I(X;Y) = 0$. Channel capacity $C = \max_{p(X)} I(X;Y)$ bits per question.</p>
+
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.5]</div>
+        <p>Add an entropy column to the belt analysis tab showing $H_i$ per belt. High-entropy belts are a priority for coaching regardless of absolute accuracy, because entropy captures <em>systematic</em> confusion (wrong internal model), whereas low accuracy on a low-entropy belt may just mean the sorter doesn't know it — a simpler training problem.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §6 -->
+  <div class="sec" id="s6">
+    <div class="sec-hdr">
+      <span class="sec-num">06</span>
+      <h2>Sorter Performance as a Statistical Process</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>6.1 Bernoulli Trials Model</h3>
+      <p>Each quiz question for sorter $k$ is modelled as a <strong>Bernoulli trial</strong> with success probability $\theta_k \in [0,1]$. The MLE of $\theta_k$ is the sample accuracy: $\hat{\theta}_k = \text{correct}/n$.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>6.2 Confidence Intervals</h3>
+      <p>The Wald interval behaves poorly for small $n$. The <strong>Wilson score interval</strong> is preferred:</p>
+      <div class="math-block">$$\left[\frac{\hat{\theta} + \frac{z^2}{2n} \mp z\sqrt{\frac{\hat{\theta}(1-\hat{\theta})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}\right]$$</div>
+      <p>with $z = 1.96$ for 95% confidence. This interval has correct coverage for all $n$ and all $\theta$, including $\theta$ near 0 or 1. A sorter with 5/5 correct ($\hat{\theta} = 100\%$) has a Wilson interval of $[0.54, 1.00]$ — the data are entirely consistent with a true skill of 54%.</p>
+
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.4]</div>
+        <p>Add Wilson lower-bound sorting as an alternative ranking mode — rank sorters by the lower endpoint of their Wilson interval rather than $\hat{\theta}$. This corrects for the optimism bias that makes new sorters with 3/3 appear above experienced sorters with 120/150.</p>
+      </div>
+    </div>
+
+    <div class="subsec">
+      <h3>6.3 Trend Detection: Half-Split Test</h3>
+      <p>The proper statistical test for non-stationarity is a <strong>two-sample proportions test</strong>:</p>
+      <div class="math-block">$$z = \frac{\hat{\theta}_{\text{late}} - \hat{\theta}_{\text{early}}}{\sqrt{\hat{\theta}(1-\hat{\theta})(1/n_1 + 1/n_2)}}$$</div>
+      <p>under $H_0: \theta_{\text{early}} = \theta_{\text{late}}$, where $\hat{\theta}$ is the pooled accuracy.</p>
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.6]</div>
+        <p>Implement the formal two-proportions $z$-test and display a $p$-value alongside the trend arrow. A threshold like $p &lt; 0.05$ gives statistical confidence that the apparent trend is real rather than noise.</p>
+      </div>
+    </div>
+
+    <div class="subsec">
+      <h3>6.4 Session-Level Trend: A CUSUM Perspective</h3>
+      <p>The sparkline chart can be interpreted as a <strong>CUSUM (cumulative sum control chart)</strong>: if we define $S_n = \sum_{t=1}^{n}(X_t - \theta_0)$ for some target accuracy $\theta_0$, then $S_n > h$ signals that the process has shifted above $\theta_0$. CUSUM is standard in industrial quality control — exactly the setting in which this system operates.</p>
+    </div>
+  </div>
+
+  <!-- §7 -->
+  <div class="sec" id="s7">
+    <div class="sec-hdr">
+      <span class="sec-num">07</span>
+      <h2>The Analytics Reducers as Monoid Homomorphisms</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>7.1 Algebraic Setup</h3>
+      <p>Let $\mathcal{E}^*$ be the set of all finite sequences of sort events, with concatenation $(\cdot)$ as the binary operation and the empty sequence $\varepsilon$ as the identity. Then $(\mathcal{E}^*, \cdot, \varepsilon)$ is the <strong>free monoid</strong> over the event type $\mathcal{E}$.</p>
+      <p>Each analytics function that maps events to additive summary statistics is a <strong>monoid homomorphism</strong>: $(\mathcal{E}^*, \cdot, \varepsilon) \to (\text{Stats}, \oplus, 0)$. For example:</p>
+      <div class="math-block">$$\texttt{overviewStats}(e_1 \cdot e_2) = \texttt{overviewStats}(e_1) \oplus \texttt{overviewStats}(e_2)$$</div>
+    </div>
+
+    <div class="subsec">
+      <h3>7.2 Why This Matters</h3>
+      <p>The monoid structure implies the computation can be <strong>parallelised via MapReduce</strong>: partition the event log into chunks, reduce each chunk independently, then merge. This is the mathematical reason the analytics module is architected as pure reducers — the "no side effects in computation functions" design note is a structural requirement for the monoid homomorphism property to hold. Practically, incremental computation becomes possible: store partial aggregates and update only the new events.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>7.3 Functions That Are Not Monoid Homomorphisms</h3>
+      <p><code>worstBelt</code>, <code>worstSorter</code> — these involve sorting and filtering, which are non-linear operations on the merged stats. <code>missortMatrix</code> — the matrix itself is a homomorphic aggregate, but rendering top confusion pairs involves a sort, making the render step non-homomorphic. The pattern is: (1) compute the aggregate homomorphically, (2) apply a non-linear query to the aggregate — analogous to SQL's <code>GROUP BY</code> (homomorphic) vs <code>ORDER BY</code> / <code>HAVING</code> (not).</p>
+    </div>
+  </div>
+
+  <!-- §8 -->
+  <div class="sec" id="s8">
+    <div class="sec-hdr">
+      <span class="sec-num">08</span>
+      <h2>The Overlay System as a Pointed Function Update</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>8.1 Algebraic Formulation</h3>
+      <p>An <strong>overlay</strong> is a finite partial function $o : D_o \to B$ where $D_o \subset Z$. The <strong>overlay application operator</strong> $\triangleleft$ produces:</p>
+      <div class="math-block">$$f \triangleleft o = \lambda z.\; \begin{cases} o(z) & \text{if } z \in D_o \\ f(z) & \text{otherwise} \end{cases}$$</div>
+      <p>This is the <strong>pointwise override</strong> — $o$ takes precedence at its domain. In the category of sets and partial functions, $f \triangleleft o$ is a <strong>pushout</strong>.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>8.2 Composability and Audit Trail</h3>
+      <p>Multiple overlays $o_1, o_2, \ldots, o_k$ applied sequentially: $f' = f \triangleleft o_1 \triangleleft o_2 \triangleleft \cdots \triangleleft o_k$. The operation $\triangleleft$ is <strong>not commutative</strong> in general (later overlays override earlier ones on shared domains). The set of all finite partial functions $D \to B$ with $\triangleleft$ forms a <strong>left-regular band</strong> — an idempotent semigroup where $a \triangleleft a = a$ and $a \triangleleft b \triangleleft a = a \triangleleft b$. Associativity holds. The append-only log (<code>overlays.jsonl</code>) preserves the exact sequence of overrides — the history is auditable.</p>
+    </div>
+  </div>
+
+  <!-- §9 -->
+  <div class="sec" id="s9">
+    <div class="sec-hdr">
+      <span class="sec-num">09</span>
+      <h2>The Knowledge Map as a Linear Functional</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>9.1 Event Space and Filters</h3>
+      <p>A <strong>filter</strong> $\varphi : \mathcal{E} \to \{0,1\}$ selects a subset of events. The <strong>sorter accuracy under filter $\varphi$</strong> for sorter $k$ is:</p>
+      <div class="math-block">$$a_k(\varphi) = \frac{\sum_{e : e.k = k} \varphi(e) \cdot e.c}{\sum_{e : e.k = k} \varphi(e)}$$</div>
+      <p>This is a <strong>rational linear functional</strong> on the indicator function space — a ratio of two linear functionals (numerator and denominator are both linear in $\varphi$).</p>
+    </div>
+
+    <div class="subsec">
+      <h3>9.2 Filter Combinations as Set Operations</h3>
+      <p>The combined filter $\varphi_{S, \text{CCHIL}, \text{air}}$ is the logical OR (union) of event subsets. The filter algebra is the <strong>Boolean algebra</strong> $\mathcal{P}(\mathcal{E})$ under union, intersection, and complement — the Knowledge Map explores a slice of this algebra indexed by the state/category selectors.</p>
+
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.7]</div>
+        <p>Implement intersection filters: "sorters who are strong in CCHIL <em>and</em> Air" — selects events matching both criteria, or evaluates sorter accuracy separately per category and ranks by the minimum (weakest category). Identifies sorters with balanced, broad knowledge versus specialists.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §10 -->
+  <div class="sec" id="s10">
+    <div class="sec-hdr">
+      <span class="sec-num">10</span>
+      <h2>The Sort Chart as a Finite Automaton</h2>
+    </div>
+
+    <p>The truth table was derived from a Sort Charts Master spreadsheet mapping ZIP → SLIC → Belt. This pipeline defines a <strong>two-step composed function</strong>:</p>
+    <div class="math-block">$$Z \xrightarrow{g} \text{SLIC} \xrightarrow{h} B, \quad f = h \circ g$$</div>
+    <p>Viewing the routing lookup as a <strong>decision process</strong>, the 3-digit ZIP prefix determines the SLIC, and the SLIC determines the belt. This is a <strong>deterministic finite transducer</strong>. The "truth edits" system (<code>truth_edits.jsonl</code>) applies <strong>state-transition overrides</strong> — rewriting individual arcs in the transducer without rebuilding the whole automaton.</p>
+  </div>
+
+  <!-- §11 -->
+  <div class="sec" id="s11">
+    <div class="sec-hdr">
+      <span class="sec-num">11</span>
+      <h2>The Probabilistic Skill Model (Bayesian Extension)</h2>
+    </div>
+
+    <div class="subsec">
+      <h3>11.1 Beta-Bernoulli Model</h3>
+      <p>A natural Bayesian model treats each sorter's true accuracy $\theta_k$ as a random variable with a <strong>Beta prior</strong>:</p>
+      <div class="math-block">$$\theta_k \sim \text{Beta}(\alpha, \beta) \quad \Rightarrow \quad \theta_k | c, n \sim \text{Beta}(\alpha + c,\; \beta + n - c)$$</div>
+      <p>With a uniform prior $(\alpha = \beta = 1)$, the posterior mean is the <strong>Laplace-smoothed accuracy</strong>:</p>
+      <div class="math-block">$$\mathbb{E}[\theta_k | c, n] = \frac{c + 1}{n + 2}$$</div>
+      <p>This shrinks extreme estimates towards 0.5, appropriate for small $n$.</p>
+    </div>
+
+    <div class="subsec">
+      <h3>11.2 Hierarchical Model for Belt-Specific Skill</h3>
+      <p>A sorter's skill is not uniform across belts. A <strong>hierarchical Bayesian model</strong> would parameterise global sorter skill $\theta_k \sim \text{Beta}(\alpha_0, \beta_0)$ and per-belt skill $\theta_{k,b} \sim \text{Beta}(\alpha(\theta_k), \beta(\theta_k))$. The belt-specific posterior enables more precise coaching: a sorter globally proficient but with 60% accuracy on Top Blue (PD-12) likely has sister-belt confusion with Top Red (PD-09) — targeted intervention, not general retraining.</p>
+
+      <div class="open-problem">
+        <div class="op-tag">[OPEN — §13.9]</div>
+        <p>Formalise the Beta-Bernoulli model per belt per sorter and evaluate whether it changes coaching recommendations in practice. Each sorter has a latent skill vector $(\theta_{k,s})_{s \in \text{States}}$ indexed by state — a proper ranking should account for uncertainty using Wilson CI as a frequentist approximation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- §12 -->
+  <div class="sec" id="s12">
+    <div class="sec-hdr">
+      <span class="sec-num">12</span>
+      <h2>Summary Table of Mathematical Structures</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Mathematical Object</th><th>Key Property</th></tr></thead>
+        <tbody>
+          <tr><td>ZIP-to-belt mapping</td><td>Partial function $f : Z \to B$</td><td>Locally constant at 3-digit prefix</td></tr>
+          <tr><td>CCHIL routing</td><td>Multifunction $\tilde{f} : Z \to \mathcal{P}(B)$</td><td>Acceptance relation, set-valued</td></tr>
+          <tr><td>ZIP code space</td><td>Ultrametric space $(Z, d)$</td><td>$d(x,z) \leq \max(d(x,y), d(y,z))$</td></tr>
+          <tr><td>Belt set with confusion</td><td>Directed graph $G = (B, E)$</td><td>Encodes hard-negative structure</td></tr>
+          <tr><td>Question selection</td><td>Categorical mixture distribution</td><td>4-pool weighted sampling</td></tr>
+          <tr><td>Sorter channel</td><td>Right stochastic matrix $\mathbf{M}$</td><td>Perfect sorter $\Rightarrow \mathbf{M} = \mathbf{I}$</td></tr>
+          <tr><td>Accuracy</td><td>Binomial proportion $\hat{\theta}$</td><td>Wilson CI for uncertainty</td></tr>
+          <tr><td>Trend</td><td>Two-proportions test</td><td>Formal non-stationarity check</td></tr>
+          <tr><td>Overlay system</td><td>Pointed function update $f \triangleleft o$</td><td>Left-regular band</td></tr>
+          <tr><td>Analytics reducers</td><td>Monoid homomorphisms $\mathcal{E}^* \to \text{Stats}$</td><td>Enables MapReduce</td></tr>
+          <tr><td>Knowledge map filter</td><td>Boolean algebra $\mathcal{P}(\mathcal{E})$</td><td>OR-composition of state indicators</td></tr>
+          <tr><td>Sorter skill</td><td>Beta-Bernoulli posterior</td><td>Bayesian shrinkage for small $n$</td></tr>
+          <tr><td>Pipeline composition</td><td>Finite transducer $g \circ h$</td><td>Two-step ZIP → SLIC → Belt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- §13 -->
+  <div class="sec" id="s13">
+    <div class="sec-hdr">
+      <span class="sec-num">13</span>
+      <h2>Open Problems &amp; Future Sessions</h2>
+    </div>
+
+    <div class="op-list">
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Preimage size analysis</div>
+          <div class="op-item-desc">Characterise $|f^{-1}(b)|$ across belts. Which belts are underrepresented in training data purely by geography?</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Local constancy exceptions</div>
+          <div class="op-item-desc">Find ZIPs where $f$ is not locally constant at the 3-digit prefix level. These are training hard cases.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Chromatic number of confusion graph</div>
+          <div class="op-item-desc">What is the minimum number of distinct visual cues needed to make all belts unambiguous?</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Wilson CI ranking</div>
+          <div class="op-item-desc">Add lower-bound sorting to the Sorters tab as an alternative ranking mode. Corrects optimism bias for new sorters with small sample sizes.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Entropy column in Belt Analysis</div>
+          <div class="op-item-desc">Add Shannon entropy $H_i$ per belt to quantify systematic confusion versus low-frequency misses.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Formal trend test</div>
+          <div class="op-item-desc">Implement two-proportions $z$-test for the half-split trend comparison, with displayed $p$-value.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Intersection filters in Knowledge Map</div>
+          <div class="op-item-desc">AND-combination: rank sorters by their weakest category, or by the product of category accuracies. Distinguishes balanced from specialist sorters.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">CUSUM monitoring</div>
+          <div class="op-item-desc">Implement a CUSUM chart for per-sorter accuracy over time, replacing or augmenting the sparkline.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Bayesian hierarchical model</div>
+          <div class="op-item-desc">Formalise the Beta-Bernoulli model per belt per sorter and evaluate whether it changes coaching recommendations in practice.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Air sort internal routing (pending feature)</div>
+          <div class="op-item-desc">When air sort slide sub-destinations are added, the routing becomes $f_{\text{air}} : (\text{rule} \times Z) \to B_{\text{air}}$ — another partial function on a product domain.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">OJS-LTC confusion matrix decomposition</div>
+          <div class="op-item-desc">Partition $\mathbf{M}$ into knowledge-gap and method-gap components $\mathbf{M}_K$ and $\mathbf{M}_E$. Requires cross-referencing quiz accuracy with missort category data.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">OJS method compliance score as a covariate</div>
+          <div class="op-item-desc">LTC quiz accuracy $\hat{\theta}_k$ combined with OJS certification status (passed within 6 months / lapsed) as a categorical covariate in the sorter performance model. A lapsed OJS combined with declining $\hat{\theta}_k$ may signal a higher-risk employee profile.</div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-item-body">
+          <div class="op-item-title">Dual-role certification tracking</div>
+          <div class="op-item-desc">Employees cross-trained in multiple roles (sorter + pick-off, or pick-off + loader) have separate OJS sheets and knowledge domains. LTC multi-role extension would test secondary routing domain and flag conflicts between primary and secondary role knowledge.</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;font-size:12px;color:var(--muted);font-style:italic">End of Session 2. Next session: pick up any [OPEN] item, or extend the framework with new mathematical connections discovered during implementation. Read Session Log before resuming.</p>
+  </div>
+
+</main>
+</div>
+
+<script>
+// Scroll-spy
+const navAs = document.querySelectorAll('.nav-a');
+const secs = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13'];
+function updNav(){
+  let cur = secs[0];
+  secs.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top <= 120) cur = id;
+  });
+  if((window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 80)
+    cur = secs[secs.length - 1];
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+}
+window.addEventListener('scroll', updNav, {passive:true});
+updNav();
+</script>
+</body>
+</html>
