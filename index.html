@@ -302,24 +302,24 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <div class="s-div"></div>
 
   <div>
-    <div class="s-lbl">Education</div>
-    <div class="s-edu">
-      <strong>B.S. Physics</strong> &middot; Minor: Mathematics<br>
-      University of Texas at Austin &middot; 2017<br>
-      GPA 3.3 &middot; Math Alliance Scholar<br>
-      <span style="font-size:10.5px;color:var(--muted)">2014 Field of Dreams Conference, Mesa AZ</span>
-    </div>
-  </div>
-
-  <div class="s-div"></div>
-
-  <div>
     <div class="s-lbl">Stack</div>
     <div class="stk-wrap">
       <span class="stk">Python</span><span class="stk">JavaScript</span><span class="stk">HTML/CSS</span>
       <span class="stk">SQLite</span><span class="stk">LangGraph</span><span class="stk">Chart.js</span>
       <span class="stk">IndexedDB</span><span class="stk">Tailscale</span><span class="stk">Claude API</span>
       <span class="stk">ReportLab</span><span class="stk">pandas</span><span class="stk">Ollama</span>
+    </div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Education</div>
+    <div class="s-edu">
+      <strong>B.S. Physics</strong> &middot; Minor: Mathematics<br>
+      University of Texas at Austin &middot; 2017<br>
+      GPA 3.3 &middot; Math Alliance Scholar<br>
+      <span style="font-size:10.5px;color:var(--muted)">2014 Field of Dreams Conference, Mesa AZ</span>
     </div>
   </div>
 
@@ -334,7 +334,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
   </div>
 
   <div class="s-foot">
-    Generated 2026-05-16 22:59<br>
+    Generated 2026-05-16 23:29<br>
     0xstrategies.com
   </div>
 
@@ -536,18 +536,18 @@ a.badge-ver:hover{border-color:var(--aqua)}
   <p>875+ memories accumulated across the program. The postmortem pipeline runs at session end: it synthesizes what happened, scores the session against research objectives, identifies open gaps, and commits the result as a permanent record. The knowledge graph holds three node types — CONSTANT (empirically derived values), DECISION (architectural choices with documented rationale), and FINDING (verified operational facts). The system doesn't start fresh. It starts from where it left off, with the same architecture decisions and the same corrected assumptions in context that were present when they were made.</p>
 </div>
 
-<div class="hist-chapter" id="hist-intelligence">
-  <div class="hist-ch-label aqua">Chapter IX · Ongoing</div>
-  <div class="hist-ch-title">Local Intelligence — Knowledge Graph, RAG, and chema-qwen</div>
-  <p>The knowledge graph stores what the program knows. The RAG pipeline makes it queryable in natural language. chema-qwen makes it answerable by a model fine-tuned specifically on CHEMA operational context. The three layers are distinct: the KG holds structured facts; the retrieval system (SPECTER2 semantic + tier re-rank + keyword supplement with a content coverage gate) surfaces the right nodes for a given query; the local model — QLoRA fine-tuned Qwen2.5-7B on 1,018 CHEMA-specific training pairs, quantized to Q4_K_M at 4.4 GB — answers questions grounded in what was retrieved.</p>
-  <p>The practical target is a supervisor who can ask "why is Zone 3 low on Mondays" and receive an answer grounded in 613 sorts of empirical data, not a generic response. The retrieval pipeline exposed a significant failure mode along the way: SPECTER2's embeddings collapse domain-specific technical terms (SLIC codes, belt designations, PPH ranges) to near-identical vectors, causing irrelevant nodes to score 1.000 for entity queries. The fix — tier-based re-ranking with a content coverage check — is now in place. Verification of end-to-end accuracy continues.</p>
-</div>
-
 <div class="hist-chapter" id="hist-opus">
-  <div class="hist-ch-label">Chapter X · May 2026</div>
+  <div class="hist-ch-label">Chapter IX · May 2026</div>
   <div class="hist-ch-title">Unified Opus — One Self-Referential Monograph</div>
   <p>The five research branches — A, B, C, D, and Sort Intelligence — were consolidated into a single document: <em>hub_ops_unified_opus_v5.0.md</em>, 97 pages. Not a summary of the branches but a synthesis: all proofs inline, all cross-references inside the body, no external citations for the mathematics. The document is self-referential in the precise sense — every claim it makes about the hub derives from data or reasoning contained within it. The unified opus is the current canonical state of the research program.</p>
   <p>Eleven parts plus appendices. The final section closes with the same operational premise that started the whole program: that the difference between a supervisor who observes the sort and a supervisor who understands it is the quality of the signal they're reading when they make a decision. The research program exists to close that gap.</p>
+</div>
+
+<div class="hist-chapter" id="hist-intelligence">
+  <div class="hist-ch-label aqua">Chapter X · Ongoing</div>
+  <div class="hist-ch-title">Local Intelligence — Knowledge Graph, RAG, and chema-qwen</div>
+  <p>The knowledge graph stores what the program knows. The RAG pipeline makes it queryable in natural language. chema-qwen makes it answerable by a model fine-tuned specifically on CHEMA operational context. The three layers are distinct: the KG holds structured facts; the retrieval system (SPECTER2 semantic + tier re-rank + keyword supplement with a content coverage gate) surfaces the right nodes for a given query; the local model — QLoRA fine-tuned Qwen2.5-7B on 1,018 CHEMA-specific training pairs, quantized to Q4_K_M at 4.4 GB — answers questions grounded in what was retrieved.</p>
+  <p>The practical target is a supervisor who can ask "why is Zone 3 low on Mondays" and receive an answer grounded in 613 sorts of empirical data, not a generic response. The retrieval pipeline exposed a significant failure mode along the way: SPECTER2's embeddings collapse domain-specific technical terms (SLIC codes, belt designations, PPH ranges) to near-identical vectors, causing irrelevant nodes to score 1.000 for entity queries. The fix — tier-based re-ranking with a content coverage check — is now in place. Verification of end-to-end accuracy continues.</p>
 </div>
 
 <div class="hist-chapter" id="hist-swarm">
@@ -558,7 +558,7 @@ a.badge-ver:hover{border-color:var(--aqua)}
 </div>
   <div class="bio-col">
     <span style="font-family:var(--mono);font-size:10px;display:block;margin-top:8px;color:var(--muted)">
-    Last updated: 2026-05-16 22:59 &middot; Rafael Almeida &middot; 0xStrategies</span>
+    Last updated: 2026-05-16 23:29 &middot; Rafael Almeida &middot; 0xStrategies</span>
   </div>
 </div>
 
