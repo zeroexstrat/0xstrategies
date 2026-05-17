@@ -1,0 +1,253 @@
+<!--
+  ═══════════════════════════════════════════════════════════
+  0x-template.html — Hub Control document skeleton
+  ═══════════════════════════════════════════════════════════
+  Drop a new document's content into the marked slots.
+  Pair with 0x-system.css and the spec in CLAUDE.md.
+
+  Slot conventions:
+    {{DOC_TITLE}}      — appears in <title>, doc-bar crumb, cover h1
+    {{DOC_TYPE}}       — "brief", "whitepaper", "spec", "deck"
+    {{DOC_VERSION}}    — e.g. "v1.0"
+    {{DISPATCH_ID}}    — "/b" (brief) "/c" "/d" (whitepapers) "/e" (spec)
+    {{STATUS}}         — "live · deployed" | "verified · v1.0" | "research"
+    {{LIVE_LABEL}}     — text inside the .live pill at top right
+    {{COVER_HEAD}}     — h1 with one <em>italic accent</em>
+    {{COVER_SUB}}      — italic subtitle
+    {{META_*}}         — 4 cover meta cells
+    {{SEC_N_*}}        — section content slots
+  ═══════════════════════════════════════════════════════════
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0D1A12">
+<meta name="description" content="{{DOC_TITLE}} — 0xStrategies dispatch.">
+<title>{{DOC_TITLE}} · 0xStrategies</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="0x-system.css">
+
+<!-- Optional MathJax for whitepaper variant (delete if not needed) -->
+<!--
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+-->
+
+</head>
+<body>
+
+<!-- ═══════════ DOC BAR ═══════════ -->
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb">
+    <a href="index.html">portfolio</a> ·
+    <a href="index.html#briefs">dispatches</a> ·
+    <span class="cur">{{DOC_TITLE}}</span>
+  </span>
+  <div class="end">
+    <span class="live">{{LIVE_LABEL}}</span>
+    <a class="back" href="index.html">← back</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ═══════════ COVER ═══════════ -->
+  <header class="cover">
+    <div class="eyebrow">dispatch {{DISPATCH_ID}} · {{DOC_TYPE}} · {{DOC_VERSION}}</div>
+    <h1>{{COVER_HEAD}}</h1>
+    <p class="sub">{{COVER_SUB}}</p>
+
+    <dl class="cover-meta">
+      <div>
+        <dt>Author</dt>
+        <dd>Rafael Almeida<span class="sub">Operations Coordinator</span></dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd>{{STATUS}}<span class="sub">{{META_STATUS_SUB}}</span></dd>
+      </div>
+      <div>
+        <dt>Scope</dt>
+        <dd>{{META_SCOPE}}<span class="sub">{{META_SCOPE_SUB}}</span></dd>
+      </div>
+      <div>
+        <dt>Identifier</dt>
+        <dd>{{META_ID}}<span class="sub">{{META_ID_SUB}}</span></dd>
+      </div>
+    </dl>
+  </header>
+
+  <!-- ═══════════ SECTIONS ═══════════ -->
+  <!-- Repeat this block per section. Renumber the .id. -->
+
+  <section class="box" id="s1">
+    <div class="sec-hdr">
+      <span class="id">/ 01</span>
+      <span class="t">{{SEC_1_TITLE}} <em>{{SEC_1_ACCENT}}</em></span>
+      <span class="meta">{{SEC_1_META}}</span>
+    </div>
+
+    <div class="prose">
+      <p>{{SEC_1_PROSE}}</p>
+    </div>
+
+    <!-- Pick the right component for the content type: -->
+
+    <!-- A · Capability cards (2/3/4 col grids) -->
+    <div class="cards c3">
+      <div class="card">
+        <div class="icon"><span class="idx">01</span><span>{{TAG}}</span></div>
+        <h3>{{CARD_TITLE}}</h3>
+        <div class="d">{{CARD_DESCRIPTION}}</div>
+      </div>
+      <!-- repeat -->
+    </div>
+
+    <!-- B · Sensor stat grid -->
+    <div class="sensors">
+      <div class="sensor">
+        <div class="l">{{LABEL}} <span class="ok">nominal</span></div>
+        <div class="v">{{VALUE}}<span class="u">{{UNIT}}</span></div>
+        <div class="sub">{{SUBLABEL}}</div>
+      </div>
+      <!-- repeat -->
+    </div>
+
+    <!-- C · Greek constant cards (κ γ ε ρ etc.) -->
+    <div class="constants">
+      <div class="const">
+        <div class="sym">κ</div>
+        <div class="nm">kappa · {{NAME}}</div>
+        <div class="d">{{DESCRIPTION}}</div>
+      </div>
+      <!-- repeat -->
+    </div>
+
+    <!-- D · Cargo manifest table -->
+    <table class="mtable">
+      <thead><tr><th>tracking</th><th>name</th><th>description</th><th style="text-align:right">status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="code">{{CODE}}</td>
+          <td class="nm">{{NAME}}<span class="small">{{META}}</span></td>
+          <td class="dsc">{{DESCRIPTION}}</td>
+          <td style="text-align:right"><span class="b live">{{STATUS}}</span></td>
+        </tr>
+        <!-- repeat -->
+      </tbody>
+    </table>
+
+    <!-- E · Callout (gold default; .warn coral; .ok moss) -->
+    <div class="callout">
+      <span class="tag">{{TAG}}</span>
+      <strong>{{HEADLINE}}</strong> {{BODY}}
+    </div>
+
+    <!-- F · Inheritance flow (between sections) -->
+    <div class="flow-down">
+      <div class="line"></div>
+      <div class="lbl">
+        {{LEFT}}<span class="arr">→</span><strong>{{CENTER}}</strong><span class="arr">→</span>{{RIGHT}}
+      </div>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- (additional <section class="box"> blocks repeat the pattern) -->
+
+  <!-- ═══════════ TRAJECTORY (optional · chronology variant) ═══════════ -->
+  <!--
+  <section class="box" id="log">
+    <div class="sec-hdr"><span class="id">/ 06</span><span class="t">program <em>trajectory</em></span></div>
+    <div class="traj">
+      <div class="tnode">
+        <div class="meta">
+          <span class="roman">I</span>
+          <span class="ts">date</span>
+          label
+        </div>
+        <div class="body">
+          <h4>{{HEADING}} — <em>{{ACCENT}}</em></h4>
+          <p>{{BODY}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- ═══════════ DISPATCH LINKS ═══════════ -->
+  <section class="box" id="briefs" style="border-bottom:none">
+    <div class="sec-hdr">
+      <span class="id">/ NN</span>
+      <span class="t">further <em>dispatches</em></span>
+      <span class="meta">cat ./briefings/*</span>
+    </div>
+    <div class="briefs">
+      <a class="brief" href="presentation_v1.1.html">
+        <div class="brief-n">/a · deck</div>
+        <div class="brief-t">Hub Operations Suite</div>
+        <div class="brief-s">presentation_v1.1.html →</div>
+      </a>
+      <a class="brief" href="sort-training-platform.html">
+        <div class="brief-n">/b · brief</div>
+        <div class="brief-t">Sort Training Platform</div>
+        <div class="brief-s">sort-training-platform.html →</div>
+      </a>
+      <a class="brief" href="si_whitepaper_v2.2.html">
+        <div class="brief-n">/c · paper</div>
+        <div class="brief-t">Sort Intelligence</div>
+        <div class="brief-s">si_whitepaper_v2.2.html →</div>
+      </a>
+      <a class="brief" href="ltc_whitepaper_v1.0.html">
+        <div class="brief-n">/d · paper</div>
+        <div class="brief-t">LTC Mathematics</div>
+        <div class="brief-s">ltc_whitepaper_v1.0.html →</div>
+      </a>
+      <a class="brief" href="tracker_architecture_v2.11.html">
+        <div class="brief-n">/e · spec</div>
+        <div class="brief-t">Tracker Architecture</div>
+        <div class="brief-s">tracker_architecture_v2.11.html →</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOT ═══════════ -->
+  <footer class="foot">
+    <div>
+      <h5>operator</h5>
+      Rafael Almeida<br>
+      <a href="/cdn-cgi/l/email-protection#b1c3d0d7d0d4ddd0dddcd4d8d5d0f1c4c1c29fd2dedc"><span class="__cf_email__" data-cfemail="7c0e1d1a1d19101d10111915181d3c090c0f521f1311">[email&#160;protected]</span></a><br>
+      <a href="/cdn-cgi/l/email-protection#522837203d372a212620332612353f333b3e7c313d3f"><span class="__cf_email__" data-cfemail="d6acb3a4b9b3aea5a2a4b7a296b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a><br>
+      UPS CHEMA · Chelmsford, MA
+    </div>
+    <div>
+      <h5>related dispatches</h5>
+      <a href="index.html">← portfolio</a><br>
+      <a href="presentation_v1.1.html">/a · Hub Operations Suite</a><br>
+      <a href="si_whitepaper_v2.2.html">/c · Sort Intelligence</a><br>
+      <a href="ltc_whitepaper_v1.0.html">/d · LTC Mathematics</a><br>
+      <a href="tracker_architecture_v2.11.html">/e · Tracker Architecture</a>
+    </div>
+    <div style="text-align:right">
+      <h5 style="text-align:right">imprint</h5>
+      0xstrategies.com<br>
+      {{DOC_TYPE}} {{DOC_VERSION}} · {{DATE}}<br>
+      deployed · cloudflare pages
+    </div>
+    <div class="foot-sig">
+      <span>0xS · {{DOC_TITLE_UPPER}} · TRANSMISSION END</span>
+      <span class="ok">[ all systems converged ]</span>
+    </div>
+  </footer>
+
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>
