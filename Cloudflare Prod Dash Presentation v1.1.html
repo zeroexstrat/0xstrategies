@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0D1A12">
+<title>Hub Operations Suite — Presentation v1.1 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1A12;--bg-2:#142318;--bg-3:#1C2D20;--bg-4:#25382A;
+  --paper:#E8E0C7;--paper-2:#C5B98F;--paper-3:#908664;
+  --mute:#7A8F75;--rule:#2D4232;--rule-hi:#3F5A42;
+  --moss:#6B9A6E;--gold:#E5C260;--amber:#D9A441;--coral:#C56247;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:.005em}
+::selection{background:var(--gold);color:var(--bg)}
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+.slide{height:100vh;width:100vw;scroll-snap-align:start;position:relative;display:flex;flex-direction:column;padding:48px 64px 72px;overflow:hidden;background:var(--bg)}
+.slide.paper{background:var(--paper);color:var(--bg)}
+.slide.paper *{color-scheme:light}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+.slide:not(.paper)::before{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(229,194,96,.12),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+/* chrome */
+.s-top{display:flex;align-items:center;gap:16px;font-size:10.5px;letter-spacing:.06em;color:var(--paper-3);position:relative;z-index:2}
+.slide.paper .s-top{color:#56503E}
+.s-top .mark{display:flex;gap:6px;align-items:baseline}
+.s-top .px{color:var(--gold);font-weight:600;font-size:14px}
+.s-top .nm{color:var(--paper);font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-.012em}
+.slide.paper .s-top .nm{color:var(--bg)}
+.s-top .sep{color:var(--rule-hi)}
+.s-top .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.s-top .end .live{color:var(--moss)}
+.s-top .end .live::before{content:'●';margin-right:5px;animation:pulse 1.6s infinite}
+.s-top .badge{padding:3px 9px;border:1px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.s-num{position:absolute;bottom:28px;right:64px;font-size:10.5px;color:var(--mute);letter-spacing:.08em;z-index:2}
+.slide.paper .s-num{color:#87806B}
+.s-foot{position:absolute;bottom:28px;left:64px;right:120px;font-size:10.5px;color:var(--mute);letter-spacing:.04em;display:flex;gap:18px;flex-wrap:wrap;z-index:2}
+.slide.paper .s-foot{color:#87806B}
+
+/* body */
+.s-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;position:relative;z-index:2}
+.eyebrow{font-size:10.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:inline-flex;gap:10px;align-items:center}
+.eyebrow::before{content:'[';color:var(--gold)}
+.eyebrow::after{content:']';color:var(--gold)}
+.slide.paper .eyebrow{color:#A23E25}
+.s-h{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5.2vw,82px);line-height:1.02;letter-spacing:-.02em;max-width:1180px}
+.s-h em{color:var(--gold);font-style:italic;font-weight:400}
+.slide.paper .s-h em{color:#A23E25}
+.s-sub{font-family:var(--serif);font-size:clamp(17px,1.7vw,21px);font-style:italic;color:var(--paper-2);line-height:1.45;max-width:780px}
+.slide.paper .s-sub{color:#3D2820}
+
+/* progress + dots */
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0%;transition:width .35s ease;z-index:50}
+.dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:50}
+.dots .dot{width:7px;height:7px;border-radius:50%;background:rgba(232,224,199,.25);cursor:pointer;transition:.2s}
+.dots .dot.active{background:var(--gold);transform:scale(1.45)}
+
+/* slide-specific blocks */
+.cover-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:36px}
+.cover-meta dt{font-size:9.5px;color:var(--mute);letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px}
+.cover-meta dd{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.005em}
+.cover-meta dd .sub{display:block;font-family:var(--mono);font-size:10.5px;color:var(--paper-3);margin-top:2px;letter-spacing:.02em}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;flex:1}
+.two-col .L h2{font-family:var(--serif);font-size:clamp(36px,4.4vw,56px);font-weight:500;letter-spacing:-.016em;line-height:1.04}
+.two-col .L h2 em{color:var(--gold);font-style:italic;font-weight:400}
+.slide.paper .two-col .L h2 em{color:#A23E25}
+.two-col .R p{font-family:var(--serif);font-size:18px;line-height:1.65;color:var(--paper-2);margin-bottom:14px;max-width:540px}
+.slide.paper .two-col .R p{color:#3D2820}
+.two-col .R p strong{color:var(--paper)}
+.slide.paper .two-col .R p strong{color:var(--bg)}
+.quote{margin-top:24px;border-left:3px solid var(--gold);padding:18px 22px;background:var(--bg-2);font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.42;color:var(--paper);max-width:520px;position:relative}
+.slide.paper .quote{background:rgba(229,194,96,.14);color:var(--bg);border-left-color:#A23E25}
+.quote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--paper-3);letter-spacing:.1em;text-transform:uppercase;font-style:normal}
+.slide.paper .quote cite{color:#87806B}
+
+/* tools grid */
+.tools-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:14px}
+.tools-h h2{font-family:var(--serif);font-size:clamp(34px,4vw,48px);font-weight:500;letter-spacing:-.014em;line-height:1.04}
+.tools-h h2 em{color:var(--gold);font-style:italic;font-weight:400}
+.slide.paper .tools-h h2 em{color:#A23E25}
+.tools-h .meta{font-size:10.5px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1;max-height:560px}
+.slide.paper .tools-grid{background:#C8BFA5;border-color:#C8BFA5}
+.tool{background:var(--bg-2);padding:24px 22px;display:flex;flex-direction:column}
+.slide.paper .tool{background:#F4EFDD}
+.tool .id{font-size:10.5px;color:var(--gold);letter-spacing:.16em;font-weight:600;margin-bottom:6px;text-transform:uppercase}
+.slide.paper .tool .id{color:#A23E25}
+.tool .t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);letter-spacing:-.01em;line-height:1.15;margin-bottom:10px}
+.slide.paper .tool .t{color:var(--bg)}
+.tool .d{font-family:var(--serif);font-size:14.5px;line-height:1.55;color:var(--paper-2);flex:1}
+.slide.paper .tool .d{color:#3D2820}
+.tool .stk{font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.04em;margin-top:14px;padding-top:10px;border-top:1px solid var(--rule-hi)}
+.slide.paper .tool .stk{color:#87806B;border-top-color:#C8BFA5}
+
+/* constants slide */
+.const-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.const-h h2{font-family:var(--serif);font-size:clamp(40px,4.8vw,56px);font-weight:500;letter-spacing:-.014em;line-height:1.04}
+.const-h h2 em{color:var(--gold);font-style:italic;font-weight:400}
+.const-h .tag{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+.const-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1;max-height:400px}
+.cbox{background:var(--bg-2);padding:30px 26px;display:flex;flex-direction:column;gap:14px}
+.cbox .sym{font-family:var(--serif);font-style:italic;font-size:96px;color:var(--gold);line-height:.85;font-weight:400}
+.cbox .nm{font-family:var(--mono);font-size:11px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:auto}
+.cbox .d{font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--paper-2)}
+.const-foot{margin-top:24px;font-size:11.5px;color:var(--mute);letter-spacing:.04em;line-height:1.7}
+.const-foot strong{color:var(--gold)}
+
+/* outcomes (business case) */
+.outcomes-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:14px}
+.outcomes-h h2{font-family:var(--serif);font-size:clamp(36px,4.4vw,52px);font-weight:500;letter-spacing:-.014em;line-height:1.04}
+.outcomes-h h2 em{color:var(--gold);font-style:italic;font-weight:400}
+.slide.paper .outcomes-h h2 em{color:#A23E25}
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:22px}
+.slide.paper .statband{background:#C8BFA5;border-color:#C8BFA5}
+.sb{background:var(--bg-2);padding:22px}
+.slide.paper .sb{background:#F4EFDD}
+.sb .l{font-size:9.5px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.slide.paper .sb .l{color:#87806B}
+.sb .v{font-family:var(--serif);font-size:42px;font-weight:500;color:var(--paper);letter-spacing:-.02em;line-height:1}
+.slide.paper .sb .v{color:var(--bg)}
+.sb .v .u{font-family:var(--mono);font-size:14px;color:var(--paper-3);font-weight:400;margin-left:4px}
+.slide.paper .sb .v .u{color:#87806B}
+.sb .note{font-size:10.5px;color:var(--paper-2);margin-top:8px;letter-spacing:.02em}
+.slide.paper .sb .note{color:#3D2820}
+.outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1;max-height:300px}
+.slide.paper .outcomes-grid{background:#C8BFA5;border-color:#C8BFA5}
+.outcome{background:var(--bg-2);padding:22px 24px}
+.slide.paper .outcome{background:#F4EFDD}
+.outcome .tag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+.slide.paper .outcome .tag{color:#A23E25}
+.outcome h4{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);letter-spacing:-.01em;line-height:1.15;margin-bottom:10px}
+.slide.paper .outcome h4{color:var(--bg)}
+.outcome p{font-family:var(--serif);font-size:14px;line-height:1.6;color:var(--paper-2)}
+.slide.paper .outcome p{color:#3D2820}
+
+/* responsive */
+@media (max-width:900px){
+  .slide{padding:32px 24px 60px}
+  .two-col{grid-template-columns:1fr;gap:24px}
+  .tools-grid{grid-template-columns:1fr;grid-template-rows:none;max-height:none}
+  .const-grid{grid-template-columns:1fr 1fr;max-height:none}
+  .statband{grid-template-columns:1fr 1fr}
+  .outcomes-grid{grid-template-columns:1fr;max-height:none}
+  .s-foot{display:none}
+  .s-num{bottom:14px;right:24px}
+}
+@media (prefers-reduced-motion:reduce){
+  .slide::before,.s-top .live::before{animation:none !important}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="dots" id="dots"></div>
+
+<div class="deck" id="deck">
+
+<!-- ═══ 01 COVER ═══ -->
+<section class="slide" data-screen-label="01 Cover">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite — project presentation</span>
+    <div class="end"><span class="live">deployed</span><span class="badge">v1.1</span></div>
+  </div>
+  <div class="s-body">
+    <div class="eyebrow">a 28-month independent program · presentation v1.1</div>
+    <h1 class="s-h">A live operations <em>intelligence layer</em>, built one browser tab at a time.</h1>
+    <p class="s-sub">An overview of the Hub Operations Suite — Tracker, Dashboard, Container, Trend, Training — and the methodology behind every build at CHEMA Twilight.</p>
+    <dl class="cover-meta">
+      <div><dt>Author</dt><dd>Rafael Almeida<span class="sub">Operations Coordinator · Automation Developer</span></dd></div>
+      <div><dt>Station</dt><dd>UPS CHEMA Hub<span class="sub">Chelmsford, MA · Sept 2019 → present</span></dd></div>
+      <div><dt>Constraints</dt><dd>None of these were available<span class="sub">No team · no IT budget · no admin access</span></dd></div>
+    </dl>
+  </div>
+  <div class="s-foot">presentation v1.1 · ~14 min · 2026-05-17</div>
+  <div class="s-num">01 / 06</div>
+</section>
+
+<!-- ═══ 02 PROBLEM ═══ -->
+<section class="slide paper" data-screen-label="02 The problem">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite</span>
+    <div class="end"><span class="badge" style="border-color:#A23E25;color:#A23E25">02 · problem</span></div>
+  </div>
+  <div class="s-body">
+    <div class="two-col">
+      <div class="L">
+        <div class="eyebrow">where the program started</div>
+        <h2>I started where most operations people <em>stop</em>.</h2>
+      </div>
+      <div class="R">
+        <p>At the edge of what the data could tell me. The tracker existed. The dashboard existed. <strong>What didn't exist was anything that connected them to a question worth asking in real time.</strong></p>
+        <p>So I built it. Not with a team, not with IT support, not with a budget. With a terminal, an AI collaborator, and a specific enough understanding of the operation that I could tell the model exactly where the gaps were.</p>
+        <div class="quote">"No decision you make exists in isolation; no process you affect exists in isolation — the only difference is the boundaries of your system."<cite>UPS management talk · 2024-03-05</cite></div>
+      </div>
+    </div>
+  </div>
+  <div class="s-foot">CHEMA Twilight · Zone 3 · PD-09 through PD-12</div>
+  <div class="s-num">02 / 06</div>
+</section>
+
+<!-- ═══ 03 SYSTEM MAP ═══ -->
+<section class="slide" data-screen-label="03 System map">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite</span>
+    <div class="end"><span class="badge">03 · the system</span></div>
+  </div>
+  <div class="s-body">
+    <div class="tools-h">
+      <h2>Six tools. <em>One operational stack.</em></h2>
+      <span class="meta">A → F · in deployment order</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool"><span class="id">A · live</span><span class="t">Hub Operations Tracker</span><span class="d">Real-time belt-level monitor. Six embedded OR models on a 613-sort corpus. Full sort lifecycle in one HTML file.</span><span class="stk">html · js · python · idb</span></div>
+      <div class="tool"><span class="id">B · live</span><span class="t">KPI Presort Dashboard</span><span class="d">Eight KPI modules reconciling iGate ESR, SOR/TMS, CURE, SEAS across the full sort window.</span><span class="stk">html · js · chart.js</span></div>
+      <div class="tool"><span class="id">C · live</span><span class="t">Hub Ops Container</span><span class="d">Single-launch wrapper combining tracker and dashboard. One URL, both tools, base64 self-contained.</span><span class="stk">html · iframe · base64</span></div>
+      <div class="tool"><span class="id">D · live</span><span class="t">Sort Intelligence Master</span><span class="d">Standalone browser tool on the full 613-sort corpus. Per-employee Phase 2 PPH, zone analytics, borrow/loan risk.</span><span class="stk">html · sheetjs · chart.js</span></div>
+      <div class="tool"><span class="id">E · live</span><span class="t">Master Trend Analysis</span><span class="d">Eight-tab prediction app. 620-sort corpus. Trend forecasting, zone decomposition, OR model integration.</span><span class="stk">html · js · chart.js</span></div>
+      <div class="tool"><span class="id">F · live</span><span class="t">Sort Training Platform</span><span class="d">Browser-based sorter certification. 41,000 ZIP routing records. Three-tier access. Deployed May 2026.</span><span class="stk">html · js</span></div>
+    </div>
+  </div>
+  <div class="s-foot">all six tools · zero IT tickets · zero licensing cost</div>
+  <div class="s-num">03 / 06</div>
+</section>
+
+<!-- ═══ 04 CONSTANTS ═══ -->
+<section class="slide" data-screen-label="04 Constants">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite</span>
+    <div class="end"><span class="badge">04 · derived constants</span></div>
+  </div>
+  <div class="s-body">
+    <div class="const-h">
+      <h2>Four constants <em>govern the OR models</em>.</h2>
+      <span class="tag">κ · γ · ε · ρ — derived from 613 sorts</span>
+    </div>
+    <div class="const-grid">
+      <div class="cbox"><div class="sym">κ</div><div class="d">Each zone has its own day-of-week appetite. Mondays in Zone 3 are not Wednesdays. κ tells the staffing optimizer what tonight will demand.</div><div class="nm">kappa · zone load</div></div>
+      <div class="cbox"><div class="sym">γ</div><div class="d">PPH erodes through the sort week — not linearly. γ models the curve so forecasts don't assume Monday's pace on Friday.</div><div class="nm">gamma · weekly decay</div></div>
+      <div class="cbox"><div class="sym">ε</div><div class="d">Scanner-ID substitution corrupts iGate PPH silently. ε quantifies the iGate ↔ SOR identity drift so fidelity calls are evidence-based.</div><div class="nm">epsilon · scan drift</div></div>
+      <div class="cbox"><div class="sym">ρ</div><div class="d">Loaned sorters are a leading indicator of zone strain. ρ scores the density of borrow/loan events so DLI can pre-position labor.</div><div class="nm">rho · borrow risk</div></div>
+    </div>
+    <div class="const-foot">All four cross-validated across SOR/TMS and iGate/ESR independently. &nbsp;<strong>Not estimated. Derived, validated, formalized.</strong>&nbsp; Embedded as live parameters in the tracker's OR models.</div>
+  </div>
+  <div class="s-foot">corpus · 613 sorts · Dec 2023 – May 2026 · 81 MB · 7 data layers per sort</div>
+  <div class="s-num">04 / 06</div>
+</section>
+
+<!-- ═══ 05 BUSINESS CASE ═══ -->
+<section class="slide paper" data-screen-label="05 Business case">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite</span>
+    <div class="end"><span class="badge" style="border-color:#A23E25;color:#A23E25">05 · case</span></div>
+  </div>
+  <div class="s-body">
+    <div class="outcomes-h">
+      <h2>Built in-house. <em>Operational from day one.</em></h2>
+      <span class="meta" style="color:#87806B">zero licensing · zero install</span>
+    </div>
+    <div class="statband">
+      <div class="sb"><div class="l">corpus</div><div class="v">613<span class="u">sorts</span></div><div class="note">28 months · 81 MB</div></div>
+      <div class="sb"><div class="l">monograph</div><div class="v">97<span class="u">pp</span></div><div class="note">5 branches synthesized</div></div>
+      <div class="sb"><div class="l">tracker</div><div class="v">40+<span class="u">vers</span></div><div class="note">stable at v2.11</div></div>
+      <div class="sb"><div class="l">IT support</div><div class="v" style="color:#A23E25">0</div><div class="note">tickets opened</div></div>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome"><div class="tag">outcome 01</div><h4>Consistent certification</h4><p>Every sorter takes the same standardized test before handling live packages. Performance is measurable and comparable across all four aisles.</p></div>
+      <div class="outcome"><div class="tag">outcome 02</div><h4>Early intervention</h4><p>Supervisors identify struggling sorters before errors occur on the floor. Coaching is data-driven and targeted — not guesswork.</p></div>
+      <div class="outcome"><div class="tag">outcome 03</div><h4>Operational agility</h4><p>When routes change, admins update the truth table in the browser. Changes take effect immediately on all machines.</p></div>
+    </div>
+  </div>
+  <div class="s-foot">deployed at CHEMA Twilight · May 2026</div>
+  <div class="s-num">05 / 06</div>
+</section>
+
+<!-- ═══ 06 CLOSING ═══ -->
+<section class="slide" data-screen-label="06 Closing">
+  <div class="s-top">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span><span>Hub Operations Suite</span>
+    <div class="end"><span class="live">all systems converged</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center;align-items:center;text-align:center">
+    <div class="eyebrow">end of transmission</div>
+    <h1 class="s-h" style="text-align:center">Ready to <em>deploy</em>.</h1>
+    <p class="s-sub" style="text-align:center;margin-top:14px">The system is live and running at the Chelmsford facility.<br>The corpus grows by two sorts per week. The next branch is staged.</p>
+    <div style="margin-top:32px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
+      <a href="index.html" style="padding:12px 22px;border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all .15s">← back to portfolio</a>
+      <a href="tracker_architecture_v2.11.html" style="padding:12px 22px;border:1px solid var(--rule-hi);color:var(--paper-2);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;transition:all .15s">tracker architecture →</a>
+    </div>
+  </div>
+  <div class="s-foot">Rafael Almeida · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef9d8e898e8a838e83828a868b8eaf9a9f9cc18c8082">[email&#160;protected]</a> · 0xstrategies.com</div>
+  <div class="s-num">06 / 06</div>
+</section>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const deck=document.getElementById('deck');
+const slides=deck.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+const prog=document.getElementById('prog');
+slides.forEach((s,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>s.scrollIntoView({behavior:'smooth'});dotsEl.appendChild(d);});
+deck.addEventListener('scroll',()=>{const idx=Math.round(deck.scrollTop/window.innerHeight);dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));prog.style.width=(idx/(slides.length-1))*100+'%';},{passive:true});
+document.addEventListener('keydown',e=>{
+  const idx=Math.round(deck.scrollTop/window.innerHeight);
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();slides[Math.min(idx+1,slides.length-1)].scrollIntoView({behavior:'smooth'});}
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();slides[Math.max(idx-1,0)].scrollIntoView({behavior:'smooth'});}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  0xStrategies — Rafael Almeida
+  CHEMA Twilight, 2026 — 0xstrategies.com
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Rafael Almeida">
+<meta name="dc.creator" content="Rafael Almeida">
+<meta name="dc.coverage" content="CHEMA Twilight, 2026">
+<meta name="description" content="Rafael Almeida — Operations Coordinator, Automation Developer. 0xStrategies portfolio.">
+<title>0xStrategies — Rafael Almeida</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F4F0;--cream-dk:#EDEAE3;--border:#D8D3C8;
+  --terra:#C4622D;--terra-mid:#A04E22;
+  --aqua:#4A7C7E;--aqua-dk:#2E5E60;
+  --sage:#6B8C6B;
+  --ink:#1A1A18;--ink-mid:#3A3A35;--ink-lt:#5A5A54;
+  --muted:#9E9588;--annot:#B8B2A8;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --sw:272px;--r:8px;--rl:12px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6}
+.page-wrap{display:flex;min-height:100vh}
+
+/* sidebar */
+.sidebar{width:var(--sw);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:var(--cream-dk);border-right:1px solid var(--border);
+  padding:32px 20px 40px;display:flex;flex-direction:column;gap:18px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.s-wordmark{line-height:1;display:flex;flex-direction:row;align-items:baseline;gap:4px}
+.s-wm-prefix{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--aqua);
+  letter-spacing:-0.02em}
+.s-wm-brand{font-family:var(--serif);font-size:32px;font-weight:700;color:var(--terra);
+  letter-spacing:-0.02em;line-height:1.0}
+.s-tagline{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:0.4px;margin-top:6px}
+.s-div{height:1px;background:var(--border);flex-shrink:0}
+.s-lbl{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-lt);font-family:var(--mono);margin-bottom:9px}
+.s-name{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-0.1px}
+.s-role{font-size:11.5px;color:var(--ink-lt);line-height:1.5;margin-top:2px}
+.role-prefix{display:none}
+.s-org{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+.s-about{font-size:12px;color:var(--ink-lt);line-height:1.65}
+.s-nav{display:flex;flex-direction:column;gap:1px}
+.nav-a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;
+  font-size:12px;color:var(--ink-lt);text-decoration:none;transition:background 0.12s}
+.nav-a:hover{background:var(--cream);color:var(--ink)}
+.nav-a.active{background:var(--cream);color:var(--terra);font-weight:500}
+.ndot{width:4px;height:4px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.12s}
+.nav-a.active .ndot{background:var(--terra)}
+.s-edu{font-size:11.5px;color:var(--ink-lt);line-height:1.6}
+.s-edu strong{color:var(--ink);font-weight:500}
+.stk-wrap{display:flex;flex-wrap:wrap;gap:4px}
+.stk{background:rgba(74,124,126,0.06);border:1px solid rgba(74,124,126,0.22);color:var(--aqua);
+  font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:3px}
+.brief-list{display:flex;flex-direction:column;gap:6px}
+.brief-a{display:block;background:var(--cream);border:1px solid var(--border);border-radius:var(--r);
+  padding:8px 10px;text-decoration:none;transition:all 0.15s}
+.brief-a:hover{border-color:var(--aqua);background:rgba(74,124,126,0.04)}
+.brief-a:hover .brief-nm{color:var(--aqua)}
+.brief-nm{font-size:12px;font-weight:500;color:var(--ink);transition:color 0.15s}
+.brief-sub{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.s-contact{font-size:11px;color:var(--muted);line-height:1.7}
+.s-contact a{color:var(--aqua);text-decoration:none}
+.s-contact a:hover{color:var(--aqua-dk)}
+.s-foot{margin-top:auto;font-size:10px;font-family:var(--mono);color:var(--annot);
+  line-height:1.7;padding-top:8px;border-top:1px solid var(--border)}
+
+/* main */
+.main{flex:1;min-width:0;padding:56px 52px 100px;max-width:900px}
+.sec{margin-bottom:68px}
+.sec-anchor{scroll-margin-top:40px}
+.eyebrow{font-size:9px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--aqua);font-family:var(--mono);margin-bottom:8px}
+.sec-h{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);
+  letter-spacing:-0.3px;line-height:1.15;margin-bottom:22px}
+
+/* hero */
+.hero-bio{font-size:15px;color:var(--ink-lt);line-height:1.8;max-width:600px;margin-bottom:24px}
+.corpus-bridge{font-size:13.5px;color:var(--ink-mid);line-height:1.8;max-width:600px;
+  padding:18px 22px;border-left:2px solid var(--aqua);
+  background:rgba(74,124,126,0.04);border-radius:0 var(--r) var(--r) 0}
+
+/* lattice */
+.lattice-wrap{background:#1A1A18;border-radius:var(--rl);overflow:hidden}
+.lattice-wrap video{width:100%;display:block}
+.lattice-cap{padding:22px 26px 26px}
+.lattice-cap p{font-size:13px;color:rgba(245,244,240,0.52);line-height:1.82;margin-bottom:12px}
+.lattice-cap p:last-child{margin-bottom:0;font-size:13.5px;color:var(--sage);font-style:italic;font-weight:700}
+
+/* capability cards */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.cap-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:18px 18px 16px}
+.cap-title{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-0.1px;margin-bottom:7px;
+  display:flex;align-items:center;gap:8px}
+.cap-title::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--terra);flex-shrink:0}
+.cap-card:nth-child(2n) .cap-title::before{background:var(--aqua)}
+.cap-card:nth-child(3n) .cap-title::before{background:var(--sage)}
+.cap-desc{font-size:12px;color:var(--ink-lt);line-height:1.72}
+
+/* how i work */
+.how-para{font-size:14px;color:var(--ink-mid);line-height:1.85;max-width:600px;margin-bottom:16px}
+.pull-q{margin-top:28px;padding:26px 30px;background:var(--ink);border-radius:var(--rl);
+  border-left:3px solid var(--aqua)}
+.pull-q-text{font-family:var(--serif);font-size:19px;color:#F5F4F0;line-height:1.4;letter-spacing:-0.2px}
+.pull-q-attr{font-size:10.5px;font-family:var(--mono);color:rgba(107,140,107,0.7);margin-top:12px}
+
+/* projects */
+.proj-entry{padding:18px 0;border-bottom:1px solid var(--border)}
+.proj-entry:first-child{border-top:1px solid var(--border)}
+.proj-eh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px}
+.proj-nm{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-0.1px}
+.proj-badges{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.bv{font-family:var(--mono);font-size:10px;color:var(--aqua);background:#EEF4F4;
+  border:1px solid #C0D8D8;padding:2px 7px;border-radius:3px}
+.bs{font-size:9px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;
+  font-family:var(--mono);padding:2px 7px;border-radius:3px}
+.proj-stk{font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:5px}
+.proj-desc{font-size:13px;color:var(--ink-lt);line-height:1.65}
+
+/* background */
+.bg-blk{margin-bottom:28px}
+.bg-title{font-size:12px;font-weight:600;color:var(--ink);letter-spacing:0.1px;
+  margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(74,124,126,0.3)}
+.bg-ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.bg-ul li{font-size:13px;color:var(--ink-lt);line-height:1.65;padding-left:16px;position:relative}
+.bg-ul li::before{content:'›';position:absolute;left:0;color:var(--terra);font-weight:600}
+.stats-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.sc{background:#fff;border:1px solid var(--border);border-radius:var(--r);
+  padding:14px 12px;text-align:center}
+.sv{font-size:20px;font-weight:600;color:var(--terra);letter-spacing:-0.5px;font-family:var(--mono)}
+.sl{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.comp-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.comp{background:var(--cream-dk);border:1px solid var(--border);color:var(--ink-lt);
+  font-size:11px;padding:4px 10px;border-radius:4px}
+
+/* historical path */
+.hist-chapter{padding:28px 0;border-bottom:1px solid var(--border);scroll-margin-top:40px}
+.hist-chapter:first-child{border-top:1px solid var(--border)}
+.hist-ch-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--terra);margin-bottom:6px}
+.hist-ch-label.aqua{color:var(--aqua)}
+.hist-ch-label.sage{color:var(--sage)}
+.hist-ch-title{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink);
+  margin-bottom:14px;line-height:1.25;letter-spacing:-0.01em}
+.hist-chapter p{font-size:13.5px;color:var(--ink-lt);line-height:1.82;margin-bottom:12px}
+.hist-chapter p:last-child{margin-bottom:0}
+.bio-col{margin-top:28px;font-size:12px;color:var(--muted);line-height:1.7;
+  border-top:1px solid rgba(74,124,126,0.25);padding-top:20px}
+/* project badge gap */
+.proj-entry-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px}
+.proj-entry-name{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-0.1px}
+.proj-entry-badges{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.badge-ver{font-family:var(--mono);font-size:10px;color:var(--aqua);background:#EEF4F4;
+  border:1px solid #C0D8D8;padding:2px 7px;border-radius:3px;text-decoration:none}
+a.badge-ver:hover{border-color:var(--aqua)}
+.badge-status{font-size:9px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;
+  font-family:var(--mono);padding:2px 7px;border-radius:3px}
+.proj-entry-stack{font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:5px}
+.proj-entry-desc{font-size:13px;color:var(--ink-lt);line-height:1.65}
+
+/* pdf modal */
+.pdf-modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,24,0.72);
+  z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.pdf-modal-overlay.open{display:flex}
+.pdf-modal{background:#fff;border-radius:10px;overflow:hidden;
+  width:min(900px,94vw);height:90vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(26,26,24,0.3)}
+.pdf-modal-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--cream2)}
+.pdf-modal-title{font-size:13px;font-weight:600;color:var(--ink);font-family:var(--mono)}
+.pdf-modal-close{width:28px;height:28px;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:4px;
+  color:var(--muted);font-size:18px;line-height:1;transition:all .15s}
+.pdf-modal-close:hover{background:var(--cream3);color:var(--ink)}
+.pdf-modal iframe{flex:1;border:none;width:100%;display:block}
+
+/* ── responsive ────────────────────────────────────────────── */
+
+/* iPad (portrait + landscape) */
+@media(max-width:1024px){
+  :root{--sw:220px}
+  .main{padding:48px 36px 80px}
+}
+
+/* Phone */
+@media(max-width:767px){
+  .page-wrap{flex-direction:column}
+  .sidebar{
+    width:100%;height:auto;position:static;
+    border-right:none;border-bottom:1px solid var(--border);
+    padding:20px 20px 16px;flex-direction:row;flex-wrap:wrap;gap:0;
+    overflow:visible
+  }
+  .s-head{padding:0;margin-bottom:16px;width:100%;border-bottom:none}
+  .s-div{display:none}
+  .s-meta,.s-about-blk,.s-session-blk,.s-edu,.s-contact-blk,.s-foot{display:none}
+  .s-name-blk{display:none}
+  .s-nav{
+    display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;
+    width:100%;margin-top:10px
+  }
+  .nav-a{
+    padding:5px 10px;border-radius:20px;font-size:11px;
+    border:1px solid var(--border);border-left:none
+  }
+  .nav-a.active{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .ndot{display:none}
+  .s-lbl{display:none}
+  .s-wordmark,.s-tagline{display:block}
+  .brief-list,.s-about,.s-edu,.s-contact,.s-foot,.stk-wrap,.s-org{display:none}
+  .s-identity{margin-left:auto;text-align:right}
+  .s-name{font-size:12px;font-weight:600}
+  .s-role{display:block;font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:0.4px;line-height:1.6;margin-top:3px}
+  .role-prefix{display:inline}
+  .main{padding:28px 18px 60px;max-width:100%}
+  .cap-grid{grid-template-columns:1fr}
+  .stats-g{grid-template-columns:repeat(2,1fr)}
+  .proj-entry-badges{flex-wrap:wrap}
+  .lattice-wrap video{border-radius:0}
+  .sec-h{font-size:22px}
+  .bio-container,.two-col{padding:0}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div>
+    <div class="s-wordmark">
+      <span class="s-wm-prefix">0x</span>
+      <span class="s-wm-brand">Strategies</span>
+    </div>
+    <div class="s-tagline">manage by design, not by default</div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div class="s-identity">
+    <div class="s-name">Rafael Almeida</div>
+    <div class="s-role"><span class="role-prefix">UPS </span>Operations Coordinator<br>Automation Developer</div>
+    <div class="s-org">UPS CHEMA Hub &middot; Sept 2019&ndash;Present<br>Chelmsford, MA</div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">About</div>
+    <div class="s-about">The data was always there. What I brought was the organization, the visualization, and the analytics layer to make it readable in real time.</div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Navigate</div>
+    <nav class="s-nav">
+      <a class="nav-a active" href="#lattice"><span class="ndot"></span>Lattice</a>
+      <a class="nav-a" href="#methodology"><span class="ndot"></span>Architecture</a>
+      <a class="nav-a" href="#projects"><span class="ndot"></span>Builds</a>
+      <a class="nav-a" href="#background"><span class="ndot"></span>Resume</a>
+      <a class="nav-a" href="#history"><span class="ndot"></span>Origin</a>
+    </nav>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Briefings</div>
+    <div class="brief-list">
+      <a class="brief-a" href="../hub-operation-suite/presentation_v1.1.html" target="_blank">
+        <div class="brief-nm">Hub Operations Suite</div>
+        <div class="brief-sub">presentation_v1.1.html &rarr;</div>
+      </a>
+      <a class="brief-a" href="#" onclick="openPdfModal('ups-sort-training-platform.pdf','Sort Training Platform');return false;">
+        <div class="brief-nm">Sort Training Platform</div>
+        <div class="brief-sub">UPS Sort Training Platform.pdf &rarr;</div>
+      </a>
+      <a class="brief-a" href="si_whitepaper_v2.2.html" target="_blank">
+        <div class="brief-nm">Sort Intelligence</div>
+        <div class="brief-sub">si_whitepaper_v2.2.html &rarr;</div>
+      </a>
+      <a class="brief-a" href="ltc_whitepaper_v1.0.html" target="_blank">
+        <div class="brief-nm">LTC Mathematics</div>
+        <div class="brief-sub">ltc_whitepaper_v1.0.html &rarr;</div>
+      </a>
+      <a class="brief-a" href="tracker_architecture_v2.11.html" target="_blank">
+        <div class="brief-nm">Tracker Architecture</div>
+        <div class="brief-sub">tracker_architecture_v2.11.html &rarr;</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Stack</div>
+    <div class="stk-wrap">
+      <span class="stk">Python</span><span class="stk">JavaScript</span><span class="stk">HTML/CSS</span>
+      <span class="stk">SQLite</span><span class="stk">LangGraph</span><span class="stk">Chart.js</span>
+      <span class="stk">IndexedDB</span><span class="stk">Tailscale</span><span class="stk">Claude API</span>
+      <span class="stk">ReportLab</span><span class="stk">pandas</span><span class="stk">Ollama</span>
+    </div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Education</div>
+    <div class="s-edu">
+      <strong>B.S. Physics</strong> &middot; Minor: Mathematics<br>
+      University of Texas at Austin &middot; 2017<br>
+      GPA 3.3 &middot; Math Alliance Scholar<br>
+      <span style="font-size:10.5px;color:var(--muted)">2014 Field of Dreams Conference, Mesa AZ</span>
+    </div>
+  </div>
+
+  <div class="s-div"></div>
+
+  <div>
+    <div class="s-lbl">Contact</div>
+    <div class="s-contact">
+      <a href="mailto:rafaelalmeida@ups.com">rafaelalmeida@ups.com</a><br>
+      <a href="mailto:zeroexstrat@gmail.com">zeroexstrat@gmail.com</a>
+    </div>
+  </div>
+
+  <div class="s-foot">
+    Generated 2026-05-17 02:31<br>
+    0xstrategies.com
+  </div>
+
+</aside>
+
+<!-- ══ MAIN ═════════════════════════════════════════════════════ -->
+<main class="main">
+
+<!-- ─ INTRO ────────────────────────────────────────────────────── -->
+<div class="sec">
+  <p class="hero-bio">I started where most operations people stop &mdash; at the edge of what the data could tell me. The tracker existed. The dashboard existed. What didn&rsquo;t exist was anything that connected them to a question worth asking in real time.<br><br>So I built it. Not with a team, not with IT support, not with a budget. With a terminal, an AI collaborator, and a specific enough understanding of the operation that I could tell the model exactly where the gaps were.</p>
+  <div class="corpus-bridge">
+    This isn&rsquo;t a collection of tools &mdash; it&rsquo;s a methodology for building under constraints that don&rsquo;t support building. No IT budget. No admin access. No dedicated development time. Every component designed, built, tested, and deployed on my own, with a quality system running alongside from day one. The constraint became the architecture.
+  </div>
+</div>
+
+<!-- ─ THE LATTICE ──────────────────────────────────────────────── -->
+<div class="sec sec-anchor" id="lattice">
+  <div class="eyebrow">Knowledge Graph</div>
+  <h2 class="sec-h">The Lattice</h2>
+  <div class="lattice-wrap">
+    <video controls playsinline>
+      <source src="lattice.mp4" type="video/mp4">
+    </video>
+    <div class="lattice-cap">
+      <p>Every node is something the system chose to keep &mdash; a fact, a boundary, a decision that held. They accumulate across sessions. Edges form between them not by declaration but by proximity: two pieces of information become connected when the system learns they belong near each other. What you see rendered as light is that structure.</p>
+      <p>When a query arrives, the system walks it &mdash; finding what&rsquo;s close, pulling what&rsquo;s relevant, surfacing the part of the graph most likely to ground the answer in what actually happened on the floor rather than what the model assumes. The walk isn&rsquo;t random. It converges.</p>
+      <p>What you are watching is the becoming of understanding. The moment knowledge holds information in shape.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─ METHODOLOGY ─────────────────────────────────────────────── -->
+<div class="sec sec-anchor" id="methodology">
+  <div class="eyebrow">Technical Architecture</div>
+  <h2 class="sec-h">The System</h2>
+  <div class="cap-grid">
+    <div class="cap-card">
+      <div class="cap-title">Self-Correcting Development</div>
+      <div class="cap-desc">Every architectural decision starts with a root-cause diagnosis, not a symptom fix. 38 documented self-backtracks in the record &mdash; each one named before any code changed.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-title">Persistent AI Memory</div>
+      <div class="cap-desc">Two tiers: SQLite + FTS5 for fast retrieval, LangGraph postmortem pipeline that turns every session into structured, queryable knowledge. 875+ memories across 40+ sessions. It doesn&rsquo;t start fresh &mdash; it picks up where it left off.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-title">Semantic + Keyword Retrieval</div>
+      <div class="cap-desc">Three-stage RAG pipeline: SPECTER2 semantic embeddings, tier re-ranking (exception &rarr; operational &rarr; learned &rarr; constant), keyword supplement triggered by a content-coverage gate. Built to beat embedding-layer collapse on domain-specific terminology.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-title">Autoresearch Loop</div>
+      <div class="cap-desc">A research cycle that runs without direction &mdash; scores each iteration, finds open gaps, generates candidate hypotheses, queues them for the next session. A 20-cycle overnight run measurably compressed the open research surface.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-title">Multi-Branch Convergence</div>
+      <div class="cap-desc">Five research branches that each audit the others before anything reaches the unified state. Fixed-point iteration &mdash; convergence is the condition, not the assumption. The 97-page unified opus is the current convergent state across all five.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-title">Operational Constant Derivation</div>
+      <div class="cap-desc">&kappa;, &gamma;, &epsilon;, &rho; &mdash; four structural constants pulled from 613 sorts of empirical data, cross-validated across two independent measurement systems, embedded as live parameters in the tracker&rsquo;s OR models. Not estimated. Derived, validated, formalized.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px">
+    <div class="eyebrow">Approach</div>
+    <h2 class="sec-h">How I Work</h2>
+    <p class="how-para">I name the exact problem. Not &ldquo;the data is unreliable&rdquo; &mdash; but &ldquo;scanner ID substitution corrupts iGate PPH silently, and there&rsquo;s no surface indicator unless you cross-reference the SOR employee summary against the sort window to see who was where and for how long.&rdquo; That&rsquo;s what makes solutions exact rather than approximate.</p>
+    <p class="how-para">I don&rsquo;t stop at solving. I build infrastructure around the solution so the next one is faster. The tracker needed a corpus. The corpus needed analysis tooling. The analysis needed a research framework. The framework needed a quality system. Each layer compounds &mdash; the system now is the product of that, not of any single build decision.</p>
+    <p class="how-para">The AI collaboration is structured. Post-mortem quality scoring after every milestone. Mandatory self-backtracking before any fix. Persistent memory so decisions from six weeks ago are still in context. I didn&rsquo;t build an autocomplete. I built a thinking partner with accountability, continuity, and a defined role in the research program.</p>
+    <div class="pull-q">
+      <div class="pull-q-text">&ldquo;No decision you make exists in isolation; no process you affect exists in isolation &mdash; the only difference is the boundaries of your system.&rdquo;</div>
+      <div class="pull-q-attr">Rafael Almeida &middot; from a talk presented to UPS management team, March 5, 2024</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─ PROJECTS ─────────────────────────────────────────────────── -->
+<div class="sec sec-anchor" id="projects">
+  <div class="eyebrow">Projects</div>
+  <h2 class="sec-h">What I've Built</h2>
+  <div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Hub Operations Tracker</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · python · idb</div><div class="proj-entry-desc">Six embedded OR models running on a 613-sort corpus. Full sort lifecycle — Upload, Intel, Hub, Timeline, DOP, History — in a single HTML file. 6,200+ lines. IDB v4 persistence.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">KPI Presort Dashboard</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · chart.js</div><div class="proj-entry-desc">Real-time operations view for Twilight sort. Eight KPI modules reconciling iGate ESR, SOR/TMS, and CURE across the full sort window.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Hub Ops Container</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · iframe · base64</div><div class="proj-entry-desc">Single-launch wrapper combining tracker and dashboard in one URL. iframe + base64 architecture with container-level footer.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Sort Intelligence Master</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · sheetjs · chart.js</div><div class="proj-entry-desc">Standalone browser tool on the full 613-sort corpus. Per-employee Phase 2 PPH at parity, zone analytics, borrow/loan risk scoring. No install required.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">Master Trend Analysis</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js · chart.js</div><div class="proj-entry-desc">Eight-tab prediction and analysis app. 620-sort corpus. Trend forecasting, zone decomposition, OR model integration.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">UPS Sort Training Platform</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">html · js</div><div class="proj-entry-desc">Browser-based sorter certification system. 41,000 ZIP routing records. Three-tier access: Sorter / Supervisor / Admin. Eight-tab supervisor analytics dashboard. Zero licensing cost — deployed at CHEMA May 2026.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">CHEMA Analytics Program</div><div class="proj-entry-badges"><span class="badge-status" style="color:#6B8C6B;background:#EEF4EE">research</span></div></div><div class="proj-entry-stack">markdown · python · latex</div><div class="proj-entry-desc">97-page unified research monograph. Five independent analytical branches — A through D plus Sort Intelligence — merged into one self-referential opus. All proofs inline, no external citations for the math.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">AI Memory System</div><div class="proj-entry-badges"><span class="badge-status" style="color:#4A7C7E;background:#EEF4F4">live</span></div></div><div class="proj-entry-stack">python · sqlite · fts5 · langgraph</div><div class="proj-entry-desc">SQLite + FTS5 knowledge store with LangGraph postmortem pipeline. 875+ memories, 40+ sessions, full architectural continuity across all work.</div></div><div class="proj-entry"><div class="proj-entry-header"><div class="proj-entry-name">chema-qwen RAG</div><div class="proj-entry-badges"><span class="badge-status" style="color:#6B8C6B;background:#EEF4EE">research</span></div></div><div class="proj-entry-stack">python · ollama · chromadb</div><div class="proj-entry-desc">QLoRA fine-tuned Qwen2.5-7B on 1,018 CHEMA-specific training pairs. Three-stage retrieval: SPECTER2 semantic + tier re-rank + keyword supplement with content-coverage gate. Runs locally via Ollama.</div></div>
+</div>
+
+<!-- ─ BACKGROUND ───────────────────────────────────────────────── -->
+<div class="sec sec-anchor" id="background">
+  <div class="eyebrow">Background</div>
+  <h2 class="sec-h">Experience &amp; Credentials</h2>
+
+  <div class="bg-blk">
+    <div class="bg-title">Program Statistics</div>
+    <div class="stats-g">
+      <div class="sc"><div class="sv">613</div><div class="sl">sorts in corpus</div></div>
+      <div class="sc"><div class="sv">97</div><div class="sl">page monograph</div></div>
+      <div class="sc"><div class="sv">40+</div><div class="sl">tracker versions</div></div>
+      <div class="sc"><div class="sv">0</div><div class="sl">IT support</div></div>
+      <div class="sc"><div class="sv">28mo</div><div class="sl">operational data</div></div>
+      <div class="sc"><div class="sv">6</div><div class="sl">OR models embedded</div></div>
+      <div class="sc"><div class="sv">4</div><div class="sl">UPS data systems</div></div>
+      <div class="sc"><div class="sv">875+</div><div class="sl">AI memories</div></div>
+    </div>
+  </div>
+
+  <div class="bg-blk">
+    <div class="bg-title">Operations Supervisor &mdash; UPS CHEMA Hub &middot; September 2019&ndash;Present</div>
+    <ul class="bg-ul">
+      <li>Identified a critical gap in real-time operational intelligence and independently designed, built, and deployed a full analytics suite &mdash; no IT support, no administrative access, no external guidance &mdash; using AI-assisted development throughout.</li>
+      <li>Applied generative AI as a structured development partner: multi-session workflows with post-mortem quality scoring, a custom AI memory system (SQLite + FTS5 + LangGraph) for persistent context, and directed AI to resolve every infrastructure blocker independently.</li>
+      <li>Delivered the Hub Operations Suite end-to-end: Tracker (v1.0&rarr;v4.0, 40+ versions, 6,200+ lines), KPI Dashboard, and a multi-iframe Container application. Full lifecycle: problem identification &rarr; design &rarr; build &rarr; test &rarr; deploy &rarr; iterate.</li>
+      <li>Built a 613-sort operational corpus (81 MB, 7 data layers per sort) and embedded 6 OR models: M/M/c queue for sort load modeling, LP-Lite staffing optimizer, &kappa;(DOW) zone coefficients, &gamma; weekly decay, Phase Engine, and Destination Load Intelligence.</li>
+      <li>Engineered a multi-source data pipeline reconciling four UPS operational systems &mdash; SOR/TMS, iGate/ESR, SEAS, and CURE &mdash; resolving cross-source identity conflicts and exposing data fidelity gaps traceable to specific operational behaviors.</li>
+      <li>Derived and validated four structural operational constants (&kappa;, &gamma;, &epsilon;, &rho;) from the corpus; formalized results into a 97-page self-referential research monograph spanning five analytical branches &mdash; all proofs and derivations inline, no external citations for the math.</li>
+      <li>Manages department resources for maximum output, accuracy, and efficiency; delivers orientation, skills training, and coaching; implements personal development plans and evaluations for department personnel.</li>
+    </ul>
+  </div>
+
+  <div class="bg-blk">
+    <div class="bg-title">Research Assistant &mdash; UT El Paso (2014) &amp; UT Austin (2016&ndash;17)</div>
+    <ul class="bg-ul">
+      <li>Ran neutron-star simulations on supercomputer cluster at UTEP &mdash; <a href="https://arxiv.org/abs/1208.4793v1" target="_blank" style="color:var(--aqua)">arxiv.org/abs/1208.4793v1</a></li>
+      <li>Optimized SEM tip-building procedure at UT Austin, raising construction success rate from 78% to 94% (+20.5% relative).</li>
+    </ul>
+  </div>
+
+  <div class="bg-blk">
+    <div class="bg-title">Core Competencies</div>
+    <div class="comp-wrap">
+      <span class="comp">Prompt Engineering</span><span class="comp">Generative AI Workflows</span>
+      <span class="comp">AI Memory Architecture</span><span class="comp">Full-Stack Development</span>
+      <span class="comp">Data Pipeline Design</span><span class="comp">Operations Research Modeling</span>
+      <span class="comp">Statistical Modeling</span><span class="comp">Operational Analytics</span>
+      <span class="comp">Independent Execution</span><span class="comp">Self-Correcting Practice</span>
+      <span class="comp">End-to-End Delivery</span><span class="comp">Technical Documentation</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─ HISTORICAL PATH ──────────────────────────────────────────── -->
+<div class="sec sec-anchor" id="history">
+  <div class="eyebrow">Historical Path</div>
+  <h2 class="sec-h">How It Was Built</h2>
+  <p style="font-size:13px;color:var(--ink-lt);line-height:1.7;margin-bottom:32px;max-width:560px">
+    A technical narrative of the 0xStrategies program &mdash; from the first Excel tracker through the research program, the memory architecture, and the local intelligence layer. Written in sequence. All version numbers and dates are sourced from verified records.
+  </p>
+  
+<div class="hist-chapter" id="hist-origin">
+  <div class="hist-ch-label">Chapter I · April 2026</div>
+  <div class="hist-ch-title">Origin — Excel, PowerQuery, and the Limits of the Tool</div>
+  <p>It started with a practical problem. As an area supervisor for Zone 3 (PD-09 through PD-12) at the CHEMA Twilight Hub, I had already built a personal tracker in Excel &mdash; belt-level PPH, borrow/loan events, a running picture of my zone&rsquo;s performance through a sort. It worked. I shared it with peers so the operation could use it collectively. But it had a ceiling: it carried history without being able to do anything with it. No cross-sort analytics. No trend visibility. You could see tonight, but you couldn&rsquo;t see what tonight was becoming part of &mdash; so nothing about the operation could stop being a surprise. And as the data grew, PowerQuery started hitting storage and latency walls. The tool I needed couldn&rsquo;t be built inside the tool I was using.</p>
+  <p>The move to HTML was pragmatic. A browser doesn't have storage ceilings. JavaScript doesn't stall on pivot recalculation. IndexedDB can hold a sort history indefinitely. What started as a platform migration quickly became something larger — because once you remove the constraints of the spreadsheet, the question of what you can build changes.</p>
+</div>
+
+<div class="hist-chapter" id="hist-dashboard">
+  <div class="hist-ch-label">Chapter II · April 18–28, 2026</div>
+  <div class="hist-ch-title">The Dashboard and the Tracker Emerge Together</div>
+  <p>On April 18, 2026, the first HTML build began. A conversation with my operations manager about producing a post-sort report crystallized the direction: rather than a static report, build a live dashboard — something that could surface the KPIs that matter before, during, and after the sort, in one view, without opening five different exports manually. That idea and the tracker idea merged immediately. They were the same problem from two angles: one asking "what is happening right now," the other asking "how does tonight compare to every night before it."</p>
+  <p>The first deployed tool was the KPI Presort Dashboard (April 28, 2026) — eight KPI modules reconciling iGate ESR scan data, SOR headcount, CURE destination load files, and SEAS service exception reports. It didn't just display numbers. It cross-referenced them. A volume figure that didn't reconcile between SOR and SEAS was a fidelity signal, not a display artifact. That distinction — between a number and what the number means — became the architectural premise of everything that followed.</p>
+</div>
+
+<div class="hist-chapter" id="hist-tracker">
+  <div class="hist-ch-label">Chapter III · May 2026</div>
+  <div class="hist-ch-title">The Tracker — 40 Versions, 6,200 Lines, One File</div>
+  <p>The tracker evolved from the same codebase as the dashboard, growing from a real-time belt monitor into a full analytical engine. Version 1 read iGate ESR exports and displayed belt-level PPH with conditional color formatting. By version 4.0, it had six embedded OR models, a four-phase operational model, a DOP calculator, a Timeline module, a History module with cross-sort trends, and IDB v4 persistence keeping every sort in local storage indefinitely.</p>
+  <p>Forty-plus versions across roughly three weeks. Each version was a response to something that broke in operation: a null reference that silently crashed the project renderer, a scroll-guard that let wind-down PPH contaminate the diagnostic baseline, an LP-Lite that overcapitalized available labor. The self-backtrack discipline — no fix without a named root cause first — kept each iteration honest. The architecture memo now serves as a living map of where things live and why they're there.</p>
+</div>
+
+<div class="hist-chapter" id="hist-container">
+  <div class="hist-ch-label">Chapter IV · May 2026</div>
+  <div class="hist-ch-title">The Container — One URL, Both Tools</div>
+  <p>The dashboard and tracker were separate HTML files, opened separately, maintained separately. The Container solved the operational friction of that split by wrapping both into a single iframe architecture: one URL, both tools, no installation, no sync issues between versions. The base64 embedding approach meant the container could carry both tools as self-contained payloads — a deployment decision that required no IT ticket, no server, no dependency management. You open one file and the operation is there.</p>
+  <p>The Container reached v4.9. The rename from "capsule" to "container" (v3.2) reflected a maturation in how I was thinking about the architecture — not a single artifact, but a runtime environment with its own footer, its own versioning, and its own responsibility boundary separate from the tools it hosted.</p>
+</div>
+
+<div class="hist-chapter" id="hist-mta">
+  <div class="hist-ch-label">Chapter V · May 2026</div>
+  <div class="hist-ch-title">Master Trend Analysis — From Real-Time to Predictive</div>
+  <p>The tracker answered questions about tonight. Master Trend Analysis was built to answer questions about structure — what patterns hold across sorts, what changes over time, what can be predicted before the sort begins. The tool runs on a 620-sort corpus and has eight tabs: prediction, zone decomposition, OR model integration, borrow/loan analytics, trend forecasting, and freight-profile analysis. It is the closest thing to a district-level analytics layer built from a single facility's data.</p>
+  <p>The corpus itself — 81 MB of unified sort history spanning December 2023 through May 2026 — is the foundation. Twenty-nine of thirty validation sorts reconcile between SOR volume and SEAS totals within rounding tolerance. Three sorts exhibit scan efficiency above 100%, which disproved an assumption I had been carrying about iGate data bounds. Correcting that assumption cascaded through every downstream fidelity calculation. That kind of correction — finding that a foundational assumption was wrong from the data itself — is what makes the corpus valuable beyond any individual query against it.</p>
+</div>
+
+<div class="hist-chapter" id="hist-research">
+  <div class="hist-ch-label aqua">Chapter VI · Ongoing</div>
+  <div class="hist-ch-title">Research Formalization — Four Branches at Paper Quality</div>
+  <p>At some point the operational questions became research questions. Not because the operation stopped mattering, but because the patterns being uncovered — zone load coefficients, PPH decay constants, fidelity distortion mechanisms, the three-layer scan attribution chain — were general enough to document formally. Four research branches emerged and developed in parallel: Branch A (Hub Operations Mathematical Framework), Branch B (Hub Operations Digital Twin), Branch C (Purposeful Systems in Hub Operations), and Branch D (Unified Framework for Hub Operations Analytics), plus Sort Intelligence as a standalone track.</p>
+  <p>Each branch is internally consistent, cites verifiable operational data, and carries honest confidence intervals. The self-backtrack discipline from the tracker development carried into the research: 38 documented corrections across the program, each with a named failure mode before any revision. The most significant involved the loader scan attribution chain — a correction that changed the mechanistic claim in every branch simultaneously and required synchronized updates across all five documents in one session.</p>
+</div>
+
+<div class="hist-chapter" id="hist-branching">
+  <div class="hist-ch-label aqua">Chapter VII · Ongoing</div>
+  <div class="hist-ch-title">Branching Methodology — Fixed-Point Iteration as Research Structure</div>
+  <p>The four-branch research structure is not an organizational convenience. Mathematically, it behaves like a fixed-point iteration: each branch refines the shared model until convergence, with cross-branch corrections propagating forward rather than backward. The sequence A → B → C → D is equivalent to ADMM or Dykstra projections over a convex constraint set — each branch projects the current understanding onto its own domain, and the sequence converges when no branch has unresolved contradictions with the others.</p>
+  <p>This formalization has a practical consequence: a pre-branch proposal is a lookahead step, not a commitment. If the lookahead reveals that a new branch direction would require backtracking in an existing branch, the cost of the branch is visible before any work is done. The methodology turns what could be an undisciplined expansion of scope into a structured convergence problem with a measurable stopping criterion.</p>
+</div>
+
+<div class="hist-chapter" id="hist-memory">
+  <div class="hist-ch-label aqua">Chapter VIII · Ongoing</div>
+  <div class="hist-ch-title">Memory Architecture — Continuity Across 40+ Sessions</div>
+  <p>Building across 40+ sessions with an AI collaborator that starts fresh each time is a continuity problem. The solution that emerged is a two-tier memory system: a SQLite + FTS5 knowledge store for fast retrieval of structured facts (operational constants, design decisions, corrected assumptions, project state), and a LangGraph postmortem pipeline that converts every session into a structured record — scored, classified, and pushed into the knowledge graph as queryable nodes.</p>
+  <p>875+ memories accumulated across the program. The postmortem pipeline runs at session end: it synthesizes what happened, scores the session against research objectives, identifies open gaps, and commits the result as a permanent record. The knowledge graph holds three node types — CONSTANT (empirically derived values), DECISION (architectural choices with documented rationale), and FINDING (verified operational facts). The system doesn't start fresh. It starts from where it left off, with the same architecture decisions and the same corrected assumptions in context that were present when they were made.</p>
+</div>
+
+<div class="hist-chapter" id="hist-opus">
+  <div class="hist-ch-label">Chapter IX · May 2026</div>
+  <div class="hist-ch-title">Unified Opus — One Self-Referential Monograph</div>
+  <p>The five research branches — A, B, C, D, and Sort Intelligence — were consolidated into a single document: <em>hub_ops_unified_opus_v5.0.md</em>, 97 pages. Not a summary of the branches but a synthesis: all proofs inline, all cross-references inside the body, no external citations for the mathematics. The document is self-referential in the precise sense — every claim it makes about the hub derives from data or reasoning contained within it. The unified opus is the current canonical state of the research program.</p>
+  <p>Eleven parts plus appendices. The final section closes with the same operational premise that started the whole program: that the difference between a supervisor who observes the sort and a supervisor who understands it is the quality of the signal they're reading when they make a decision. The research program exists to close that gap.</p>
+</div>
+
+<div class="hist-chapter" id="hist-intelligence">
+  <div class="hist-ch-label aqua">Chapter X · Ongoing</div>
+  <div class="hist-ch-title">Local Intelligence — Knowledge Graph, RAG, and chema-qwen</div>
+  <p>The knowledge graph stores what the program knows. The RAG pipeline makes it queryable in natural language. chema-qwen makes it answerable by a model fine-tuned specifically on CHEMA operational context. The three layers are distinct: the KG holds structured facts; the retrieval system (SPECTER2 semantic + tier re-rank + keyword supplement with a content coverage gate) surfaces the right nodes for a given query; the local model — QLoRA fine-tuned Qwen2.5-7B on 1,018 CHEMA-specific training pairs, quantized to Q4_K_M at 4.4 GB — answers questions grounded in what was retrieved.</p>
+  <p>The practical target is a supervisor who can ask "why is Zone 3 low on Mondays" and receive an answer grounded in 613 sorts of empirical data, not a generic response. The retrieval pipeline exposed a significant failure mode along the way: SPECTER2's embeddings collapse domain-specific technical terms (SLIC codes, belt designations, PPH ranges) to near-identical vectors, causing irrelevant nodes to score 1.000 for entity queries. The fix — tier-based re-ranking with a content coverage check — is now in place. Verification of end-to-end accuracy continues.</p>
+</div>
+
+<div class="hist-chapter" id="hist-swarm">
+  <div class="hist-ch-label sage">Chapter XI · Next</div>
+  <div class="hist-ch-title">Agentic Swarm — Not Yet Built</div>
+  <p>The next architectural direction is a multi-agent research system: a swarm of specialized agents, each responsible for one branch of the research program, coordinated by an orchestration layer that routes queries, manages branch convergence, and surfaces inter-branch conflicts automatically. The mathematical framework for this already exists in the branching methodology — the fixed-point iteration model maps directly onto a multi-agent coordination protocol. The technical prerequisites (local model, knowledge graph, retrieval pipeline) are either built or in verification.</p>
+  <p>What the swarm adds is scale without fragmentation. Today, maintaining consistency across five research branches requires manual cross-referencing in every session. An agentic system where each branch agent holds its own context but communicates through a shared convergence protocol would make that consistency structural rather than procedural. It is the next chapter — not yet written.</p>
+</div>
+  <div class="bio-col">
+    <span style="font-family:var(--mono);font-size:10px;display:block;margin-top:8px;color:var(--muted)">
+    Last updated: 2026-05-17 02:31 &middot; Rafael Almeida &middot; 0xStrategies</span>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+const _navAs = document.querySelectorAll('.nav-a');
+const _secs  = ['lattice','methodology','projects','background','history'];
+function _updNav(){
+  let cur = _secs[0];
+  _secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=120)cur=id;});
+  // bottom-of-page guard: force last section active when fully scrolled
+  if((window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 80)
+    cur = _secs[_secs.length - 1];
+  _navAs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+}
+window.addEventListener('scroll',_updNav,{passive:true});
+_updNav();
+
+// PDF modal
+const _pdfOverlay = document.getElementById('pdf-modal-overlay');
+const _pdfFrame   = document.getElementById('pdf-modal-frame');
+const _pdfTitle   = document.getElementById('pdf-modal-title');
+function openPdfModal(src, title){
+  _pdfFrame.src = src;
+  _pdfTitle.textContent = title;
+  _pdfOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePdfModal(){
+  _pdfOverlay.classList.remove('open');
+  _pdfFrame.src = '';
+  document.body.style.overflow = '';
+}
+_pdfOverlay.addEventListener('click', function(e){
+  if(e.target === _pdfOverlay) closePdfModal();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closePdfModal();
+});
+</script>
+
+<!-- PDF modal -->
+<div class="pdf-modal-overlay" id="pdf-modal-overlay">
+  <div class="pdf-modal">
+    <div class="pdf-modal-bar">
+      <span class="pdf-modal-title" id="pdf-modal-title"></span>
+      <button class="pdf-modal-close" onclick="closePdfModal()" aria-label="Close">&times;</button>
+    </div>
+    <iframe id="pdf-modal-frame" src="" title="PDF viewer"></iframe>
+  </div>
+</div>
+
+</body>
+</html>

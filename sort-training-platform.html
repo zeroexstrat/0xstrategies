@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0D1A12">
+<meta name="description" content="UPS Sort Training Platform — browser-based certification and analytics system for package sorting. 41,000 ZIP routing records, 16 destination belts, 4 sort aisles. Deployed at CHEMA Twilight, May 2026.">
+<title>Sort Training Platform · Brief — 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═════════════════════════════════════════════════════════════
+   Sort Training Platform · Brief
+   Hub Control aesthetic — companion to 0xstrategies.com
+   ═════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0D1A12;--bg-2:#142318;--bg-3:#1C2D20;--bg-4:#25382A;
+  --paper:#E8E0C7;--paper-2:#C5B98F;--paper-3:#908664;
+  --mute:#7A8F75;--mute-2:#5C6B58;
+  --rule:#2D4232;--rule-lt:#1F2D23;--rule-hi:#3F5A42;
+  --forest-l:#5A8060;--moss:#6B9A6E;
+  --gold:#E5C260;--gold-d:#B5961F;
+  --amber:#D9A441;--coral:#C56247;--rust:#A14A2E;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",monospace;
+  --gut:40px;
+}
+
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+
+body{
+  background-image:
+    linear-gradient(to right, rgba(90,128,96,.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(90,128,96,.04) 1px, transparent 1px),
+    radial-gradient(circle at 15% 0%, rgba(229,194,96,.04) 0%, transparent 50%),
+    radial-gradient(circle at 85% 100%, rgba(197,98,71,.04) 0%, transparent 50%);
+  background-size:48px 48px, 48px 48px, 100% 100%, 100% 100%;
+  background-attachment:fixed
+}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--gold)}50%{opacity:.4;box-shadow:0 0 2px var(--gold)}}
+body::before{content:'';position:fixed;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(229,194,96,.18),transparent);pointer-events:none;animation:scan 10s linear infinite;z-index:1}
+
+a{color:inherit;text-decoration:none}
+.page{max-width:1280px;margin:0 auto;padding:0 var(--gut) 80px;position:relative;z-index:2}
+
+/* ── doc bar (sticky top) ── */
+.doc-bar{
+  display:flex;align-items:center;gap:18px;
+  padding:12px 0;border-bottom:1px solid var(--rule);
+  font-size:10.5px;letter-spacing:.06em;color:var(--paper-3);
+  position:sticky;top:0;z-index:50;
+  background:rgba(13,26,18,.92);backdrop-filter:blur(8px)
+}
+.doc-bar .inner{display:flex;align-items:center;gap:18px;padding:0 var(--gut);max-width:1280px;margin:0 auto;width:100%}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--mute-2)}
+.doc-bar .crumb{color:var(--paper-2)}
+.doc-bar .crumb a{color:var(--paper-3)}
+.doc-bar .crumb a:hover{color:var(--gold)}
+.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live::before{content:'●';color:var(--moss);margin-right:6px;animation:pulse 1.6s ease-in-out infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .15s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── cover ── */
+.cover{padding:54px 0 48px;border-bottom:1px solid var(--rule);position:relative}
+.eyebrow{font-size:10.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;display:inline-flex;gap:10px;align-items:center}
+.eyebrow::before{content:'[';color:var(--gold)}
+.eyebrow::after{content:']';color:var(--gold)}
+.cover h1{font-family:var(--serif);font-weight:500;font-size:clamp(36px,5vw,58px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);max-width:880px}
+.cover h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.cover .sub{font-family:var(--serif);font-size:clamp(17px,2vw,20px);font-style:italic;color:var(--paper-2);line-height:1.45;max-width:740px;margin-top:18px}
+.cover .doc-id{position:absolute;top:54px;right:0;font-size:9.5px;color:var(--mute);letter-spacing:.18em;text-transform:uppercase;text-align:right;line-height:1.7}
+.cover .doc-id .v{color:var(--gold);font-weight:600}
+
+.cover-meta{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  padding-top:32px;margin-top:32px;border-top:1px solid var(--rule)
+}
+.cover-meta dt{font-size:9.5px;color:var(--mute);letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+.cover-meta dd{color:var(--paper);font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:-.005em;line-height:1.4}
+.cover-meta dd .sub{display:block;font-family:var(--mono);font-size:10.5px;color:var(--paper-3);font-weight:400;margin-top:2px;letter-spacing:.02em}
+
+/* ── section anatomy ── */
+section.sec{padding:52px 0;border-bottom:1px solid var(--rule);scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi);flex-wrap:wrap}
+.sec-hdr .id{font-size:11px;color:var(--gold);letter-spacing:.16em;font-weight:600;padding:4px 10px;border:1px solid var(--gold);text-transform:uppercase;flex-shrink:0}
+.sec-hdr .t{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:500;letter-spacing:-.013em;line-height:1.05;color:var(--paper)}
+.sec-hdr .t em{font-style:italic;color:var(--gold);font-weight:400}
+.sec-hdr .meta{margin-left:auto;font-size:10.5px;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+.sec-hdr .meta .ok{color:var(--moss)}
+
+.prose{font-size:13.5px;line-height:1.78;color:var(--paper-2);max-width:780px}
+.prose p{margin-bottom:14px}
+.prose strong{color:var(--paper);font-weight:600}
+.prose em{font-style:italic;color:var(--gold);font-weight:500}
+.prose code{font-family:var(--mono);font-size:12.5px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+/* ── challenge: 3 problem panels ── */
+.challenge{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.ch{background:var(--bg-2);padding:24px;position:relative}
+.ch .tag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:8px}
+.ch .tag::before{content:'';width:8px;height:8px;background:var(--coral)}
+.ch h3{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.008em;color:var(--paper);margin-bottom:12px;line-height:1.2}
+.ch p{font-size:13px;line-height:1.7;color:var(--paper-2)}
+
+/* ── built: 5 properties ── */
+.built{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.built-card{background:var(--bg-2);padding:22px 20px}
+.built-card .icon{width:40px;height:40px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;font-weight:600;margin-bottom:14px}
+.built-card h4{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.008em;color:var(--paper);margin-bottom:8px;line-height:1.15}
+.built-card p{font-size:11.5px;line-height:1.6;color:var(--paper-2)}
+
+/* ── quiz showcase (sorter view) ── */
+.quiz{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:18px;align-items:start}
+.quiz-mock{background:var(--bg-2);border:1px solid var(--rule);padding:20px;position:relative}
+.quiz-mock::before,.quiz-mock::after{content:'';position:absolute;width:18px;height:18px;border:2px solid var(--gold);pointer-events:none}
+.quiz-mock::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.quiz-mock::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.quiz-mock .bar{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:14px}
+.quiz-mock .bar .live{color:var(--moss)}
+.quiz-mock .bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s ease-in-out infinite}
+
+/* ── ups label mock ── */
+.label{background:var(--paper);color:var(--bg);padding:14px;font-family:var(--mono);font-size:10px;line-height:1.5;border:1px solid var(--bg);margin-bottom:14px}
+.label .ltop{display:flex;justify-content:space-between;border-bottom:2px solid var(--bg);padding-bottom:6px;margin-bottom:6px}
+.label .ltop .lr{font-weight:700;font-size:11px;letter-spacing:.04em}
+.label .lblock{margin-bottom:6px}
+.label .lblock .k{font-size:8px;color:var(--mute-2);text-transform:uppercase;letter-spacing:.08em}
+.label .lblock .v{color:var(--bg);font-size:11px;font-weight:500}
+.label .ship{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:9.5px}
+.label .ship .lblock{margin-bottom:0}
+.label .codeblock{margin-top:8px;padding-top:8px;border-top:1px dashed var(--mute-2);display:flex;justify-content:space-between;font-weight:700}
+.label .codeblock .big{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:.04em;line-height:1}
+.label .barcode{margin-top:6px;height:24px;background:repeating-linear-gradient(90deg,var(--bg) 0,var(--bg) 2px,transparent 2px,transparent 3px,var(--bg) 3px,var(--bg) 5px,transparent 5px,transparent 6px,var(--bg) 6px,var(--bg) 7px,transparent 7px,transparent 9px,var(--bg) 9px,var(--bg) 11px,transparent 11px,transparent 12px)}
+
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.choice{padding:12px 14px;background:var(--bg-3);border:1px solid var(--rule-hi);display:flex;align-items:center;gap:12px;font-size:11px;color:var(--paper-2);transition:all .15s;cursor:default}
+.choice:hover{border-color:var(--gold);color:var(--gold)}
+.choice .k{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:1px solid var(--paper-3);font-size:10px;font-weight:600;color:var(--paper-2);flex-shrink:0}
+.choice:hover .k{border-color:var(--gold);color:var(--gold)}
+.choice .belt{font-family:var(--mono);font-weight:600;color:var(--paper);font-size:13px;letter-spacing:.04em}
+
+.quiz-mock .score{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:10.5px;color:var(--paper-3);letter-spacing:.06em}
+.quiz-mock .score b{color:var(--gold);font-weight:600}
+
+.quiz-info h3{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.01em;color:var(--paper);line-height:1.15;margin-bottom:14px}
+.quiz-info h3 em{color:var(--gold);font-style:italic;font-weight:400}
+.quiz-info p{font-size:13.5px;line-height:1.78;color:var(--paper-2);margin-bottom:12px}
+.quiz-info p strong{color:var(--paper);font-weight:600}
+.quiz-info p em{color:var(--gold);font-style:italic;font-weight:500}
+.quiz-info p code{font-family:var(--mono);font-size:12.5px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.grade{padding:10px 12px;background:var(--bg-2);border:1px solid var(--rule);font-size:11px}
+.grade .gn{font-size:9px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.grade .gv{font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:-.005em;color:var(--paper)}
+.grade.g1 .gv{color:var(--moss)}
+.grade.g2 .gv{color:var(--amber)}
+.grade.g3 .gv{color:var(--coral)}
+
+/* ── three roles ── */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.role{background:var(--bg-2);padding:24px 22px}
+.role .tag{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;display:block;margin-bottom:6px}
+.role h4{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.1;color:var(--paper);margin-bottom:10px}
+.role h4 .num{font-family:var(--mono);font-size:14px;color:var(--gold);font-weight:600;margin-right:8px;vertical-align:baseline}
+.role .auth{font-size:10.5px;letter-spacing:.06em;color:var(--paper-3);margin-bottom:14px;padding:6px 10px;background:var(--bg);border:1px solid var(--rule-hi);display:inline-block}
+.role .auth b{color:var(--gold);font-weight:500}
+.role ul{list-style:none;font-size:12px;color:var(--paper-2);line-height:1.85;letter-spacing:.005em}
+.role ul li{padding-left:14px;position:relative;margin-bottom:2px}
+.role ul li::before{content:'▸';position:absolute;left:0;color:var(--gold);font-size:10px;top:0}
+.role ul li strong{color:var(--paper);font-weight:500}
+
+/* ── analytics grid (8-tab) ── */
+.adash{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.atab{background:var(--bg-2);padding:18px 18px}
+.atab .n{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.14em;font-weight:600;margin-bottom:4px}
+.atab h5{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--paper);letter-spacing:-.008em;line-height:1.15;margin-bottom:6px}
+.atab p{font-size:11.5px;line-height:1.6;color:var(--paper-2);letter-spacing:.005em}
+
+/* ── stat band ── */
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.sb{background:var(--bg-2);padding:22px 20px}
+.sb .l{font-size:9.5px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.sb .v{font-family:var(--serif);font-size:38px;font-weight:500;color:var(--paper);letter-spacing:-.02em;line-height:1}
+.sb .v .u{font-family:var(--mono);font-size:13px;color:var(--paper-3);font-weight:400;margin-left:4px}
+.sb .note{font-size:10.5px;color:var(--paper-2);margin-top:8px;letter-spacing:.02em}
+
+/* ── deploy steps ── */
+.deploy{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.dstep{background:var(--bg-2);padding:20px 18px;position:relative}
+.dstep .n{font-family:var(--serif);font-size:42px;font-weight:500;color:var(--gold);line-height:.9;letter-spacing:-.02em;margin-bottom:10px}
+.dstep h5{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--paper);letter-spacing:-.005em;line-height:1.2;margin-bottom:8px}
+.dstep p{font-size:11px;line-height:1.6;color:var(--paper-2)}
+.dstep code{font-family:var(--mono);font-size:10.5px;color:var(--gold);background:var(--bg);padding:1px 5px;border:1px solid var(--rule-hi)}
+
+.dnote{margin-top:14px;padding:14px 18px;background:var(--bg-2);border-left:3px solid var(--moss);font-size:12px;color:var(--paper-2);line-height:1.7;max-width:780px}
+.dnote .tag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--moss);font-weight:600;display:block;margin-bottom:4px}
+.dnote strong{color:var(--paper)}
+
+/* ── outcomes (business case) ── */
+.outcomes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+.outcome{background:var(--bg-2);padding:24px}
+.outcome .tag{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.outcome .tag::before{content:'';width:8px;height:8px;background:var(--gold)}
+.outcome h4{font-family:var(--serif);font-size:19px;font-weight:500;letter-spacing:-.008em;color:var(--paper);margin-bottom:10px;line-height:1.2}
+.outcome p{font-size:12.5px;line-height:1.7;color:var(--paper-2)}
+
+/* ── download card ── */
+.dl{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:24px 28px;background:var(--bg-2);border:1px solid var(--gold);margin-top:18px;position:relative}
+.dl::before,.dl::after{content:'';position:absolute;width:18px;height:18px;border:2px solid var(--gold);pointer-events:none}
+.dl::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.dl::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.dl .l{font-size:10px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.dl h3{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);letter-spacing:-.01em;line-height:1.15;margin-bottom:6px}
+.dl p{font-size:12.5px;color:var(--paper-2);line-height:1.6}
+.dl-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;background:var(--gold);color:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;transition:transform .15s,background .15s;border:1px solid var(--gold)}
+.dl-btn:hover{background:var(--paper);transform:translateY(-1px)}
+.dl-btn .arr{transition:transform .2s}
+.dl-btn:hover .arr{transform:translateX(3px)}
+
+/* ── foot ── */
+.foot{padding:32px 0 0;font-size:11px;color:var(--paper-2);line-height:1.75;border-top:1px solid var(--rule);margin-top:36px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px}
+.foot h5{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+.foot a{color:var(--paper);border-bottom:1px solid var(--rule-hi)}
+.foot a:hover{color:var(--gold);border-color:var(--gold)}
+.foot-sig{margin-top:24px;padding-top:18px;border-top:1px solid var(--rule-lt);grid-column:1/-1;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:10px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase}
+.foot-sig .ok{color:var(--moss)}
+
+/* ═════════════════════════════════════════════════════════
+   RESPONSIVE
+═════════════════════════════════════════════════════════ */
+@media (max-width:1024px){
+  :root{--gut:28px}
+  .cover-meta{grid-template-columns:repeat(2,1fr);gap:20px 32px}
+  .challenge{grid-template-columns:1fr}
+  .built{grid-template-columns:repeat(2,1fr)}
+  .quiz{grid-template-columns:1fr;gap:24px}
+  .roles{grid-template-columns:1fr}
+  .adash{grid-template-columns:repeat(2,1fr)}
+  .statband{grid-template-columns:repeat(4,1fr)}
+  .deploy{grid-template-columns:repeat(2,1fr)}
+  .outcomes{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  :root{--gut:18px}
+  body::before{display:none}
+  body{background-attachment:scroll}
+
+  .doc-bar{padding:10px 0;flex-wrap:wrap;gap:10px}
+  .doc-bar .crumb{font-size:10px}
+  .doc-bar .crumb a{display:none}
+  .doc-bar .end{margin-left:auto}
+
+  .cover{padding:32px 0 28px}
+  .cover .doc-id{position:static;text-align:left;margin-bottom:16px}
+  .cover-meta{grid-template-columns:1fr 1fr;gap:16px 18px;padding-top:24px;margin-top:24px}
+
+  section.sec{padding:36px 0}
+  .sec-hdr{gap:12px;margin-bottom:20px}
+  .sec-hdr .id{padding:3px 8px;font-size:10px}
+  .sec-hdr .meta{flex-basis:100%;margin-left:0;font-size:10px}
+
+  .built{grid-template-columns:1fr}
+  .adash{grid-template-columns:1fr}
+  .statband{grid-template-columns:repeat(2,1fr)}
+  .sb .v{font-size:32px}
+  .deploy{grid-template-columns:1fr}
+  .grades{grid-template-columns:1fr}
+
+  .dl{grid-template-columns:1fr;gap:16px;padding:20px}
+  .dl-btn{justify-content:center;padding:12px 20px}
+
+  .foot{grid-template-columns:1fr;gap:20px}
+  .foot div[style*="text-align:right"]{text-align:left !important}
+  .foot div[style*="text-align:right"] h5{text-align:left !important}
+}
+@media (prefers-reduced-motion:reduce){
+  body::before,.doc-bar .live::before,.quiz-mock .bar .live::before{animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════ DOC BAR ═════════ -->
+<div class="doc-bar">
+  <div class="inner">
+    <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+    <span class="sep">·</span>
+    <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">sort training platform</span></span>
+    <div class="end">
+      <span class="live">deployed · CHEMA · May 2026</span>
+      <a class="back" href="index.html">← back</a>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ═════════ COVER ═════════ -->
+  <header class="cover">
+    <div class="doc-id">
+      dispatch / b<br>
+      <span class="v">0xS-006</span><br>
+      brief · v1.0
+    </div>
+    <div class="eyebrow">dispatch · b · sort training platform</div>
+    <h1>A browser-based <em>certification and analytics system</em> for package sorting.</h1>
+    <p class="sub">A standardized way to certify every sorter before they handle live packages — and the first time supervisors have data on which sorters are struggling, which belts cause the most errors, and which ZIP codes generate the most confusion.</p>
+
+    <dl class="cover-meta">
+      <div><dt>Artifact</dt><dd>0xS-006<span class="sub">Sort Training Platform</span></dd></div>
+      <div><dt>Status</dt><dd>Deployed<span class="sub">CHEMA · May 2026 · live</span></dd></div>
+      <div><dt>Scope</dt><dd>41,000 ZIPs · 16 belts<span class="sub">4 sort aisles · 3-role access</span></dd></div>
+      <div><dt>Stack</dt><dd>HTML · JavaScript<span class="sub">offline-first · zero licensing</span></dd></div>
+    </dl>
+  </header>
+
+  <!-- ═════════ 01 · THE CHALLENGE ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 01</span>
+      <span class="t">the <em>challenge</em></span>
+      <span class="meta">why this exists</span>
+    </div>
+
+    <div class="challenge">
+      <div class="ch">
+        <div class="tag">no standard training</div>
+        <h3>Sorters learn belt assignments informally.</h3>
+        <p>There is no consistent method to verify knowledge before someone handles live packages on the floor. New hires absorb whatever the person standing next to them happens to know.</p>
+      </div>
+      <div class="ch">
+        <div class="tag">missorts are costly</div>
+        <h3>Every error has a direct dollar cost.</h3>
+        <p>A misrouted package requires manual reprocessing, delays the recipient, and increases the chance of damage in transit. The cost compounds — not just per error, but per error multiplied by hours of downstream disruption.</p>
+      </div>
+      <div class="ch">
+        <div class="tag">no supervisor visibility</div>
+        <h3>Supervisors had no data to act on.</h3>
+        <p>No data on which sorters are struggling, which belts cause the most errors, or which ZIP codes generate the most confusion. Coaching was based on instinct rather than evidence — and rarely targeted the people who actually needed it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 02 · WHAT I BUILT ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 02</span>
+      <span class="t">what I <em>built</em></span>
+      <span class="meta">5 properties</span>
+    </div>
+
+    <div class="prose" style="margin-bottom:8px">
+      <p>One artifact. Three roles. Five non-negotiable properties — chosen to make the platform <strong>deployable today</strong>, not pending an IT roadmap.</p>
+    </div>
+
+    <div class="built">
+      <div class="built-card">
+        <div class="icon">⌘</div>
+        <h4>Browser-based</h4>
+        <p>Runs in Chrome or Edge. No installation, no app store, no IT ticket required.</p>
+      </div>
+      <div class="built-card">
+        <div class="icon">⊘</div>
+        <h4>Fully offline</h4>
+        <p>No internet connection needed. All 41,000 ZIP routing records load locally in the browser.</p>
+      </div>
+      <div class="built-card">
+        <div class="icon">⇄</div>
+        <h4>Shared-drive sync</h4>
+        <p>Point the app at a network folder once. Every supervisor machine sees the same live data.</p>
+      </div>
+      <div class="built-card">
+        <div class="icon">⌖</div>
+        <h4>Three-tier access</h4>
+        <p>Sorter / Supervisor / Admin. Each sees only what they need — nothing more.</p>
+      </div>
+      <div class="built-card">
+        <div class="icon">$0</div>
+        <h4>Zero licensing</h4>
+        <p>Built entirely in-house. No subscriptions, no cloud fees, no vendor dependency.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 03 · THE QUIZ ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 03</span>
+      <span class="t">the <em>quiz</em> — what every sorter sees</span>
+      <span class="meta">tier 01 · primary surface</span>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-mock">
+        <div class="bar">
+          <span>quiz · session_01 · q_27</span>
+          <span class="live">live</span>
+        </div>
+
+        <div class="label">
+          <div class="ltop">
+            <span>UPS GROUND</span>
+            <span class="lr">1Z 999 W4Y 03 9876 5432</span>
+          </div>
+          <div class="ship">
+            <div class="lblock"><div class="k">from</div><div class="v">SHIPPING DEPT<br>2400 OLDE OXFORD VLY RD<br>LANGHORNE PA 19047</div></div>
+            <div class="lblock"><div class="k">to</div><div class="v">M. PATTERSON<br>14 SUMMIT AVE<br>AKRON OH 44303</div></div>
+          </div>
+          <div class="lblock" style="margin-top:8px"><div class="k">weight · service</div><div class="v">4 LBS · GROUND</div></div>
+          <div class="codeblock">
+            <span>ROUTING</span>
+            <span class="big">OH 443-03</span>
+          </div>
+          <div class="barcode"></div>
+        </div>
+
+        <div class="choices">
+          <div class="choice"><span class="k">1</span><span class="belt">BELT 04</span></div>
+          <div class="choice"><span class="k">2</span><span class="belt">BELT 11</span></div>
+          <div class="choice"><span class="k">3</span><span class="belt">BELT 07</span></div>
+          <div class="choice"><span class="k">4</span><span class="belt">BELT 13</span></div>
+        </div>
+
+        <div class="score">
+          <span>answered <b>27</b></span>
+          <span>correct <b>24</b></span>
+          <span>accuracy <b style="color:var(--moss)">88.9%</b></span>
+        </div>
+      </div>
+
+      <div class="quiz-info">
+        <h3>Pick the correct <em>destination belt</em>.</h3>
+        <p>A randomized UPS shipping label appears. The sorter reads the routing code from the label's service bar — <code>OH 443-03</code> for the ZIP <code>44303</code>, where <strong>443</strong> is the first three digits of the ZIP and <strong>03</strong> is the last two — and chooses the correct destination belt from <strong>four gold tiles</strong>.</p>
+        <p>Distractors aren't random. They're drawn from <em>confusable neighboring belts</em>, so a correct answer reflects real routing knowledge rather than process of elimination.</p>
+        <p>Sender, recipient, address, weight, and tracking number all randomize per question. The sorter never sees the same label twice in a session.</p>
+        <p>Keys <code>1</code>–<code>4</code> select an answer. <code>Space</code> or <code>Enter</code> advances. <strong>No mouse required.</strong> The sorter can answer at floor pace — every interaction is keyboard-native.</p>
+
+        <p style="margin-top:18px;margin-bottom:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)">end-of-session grade</p>
+        <div class="grades">
+          <div class="grade g1"><div class="gn">tier 1</div><div class="gv">Proficient</div></div>
+          <div class="grade g2"><div class="gn">tier 2</div><div class="gv">Developing</div></div>
+          <div class="grade g3"><div class="gn">tier 3</div><div class="gv">Needs Coaching</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 04 · THREE ROLES ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 04</span>
+      <span class="t">three roles, <em>one system</em></span>
+      <span class="meta">access by employee ID + password</span>
+    </div>
+
+    <div class="prose">
+      <p>Access is controlled by employee ID against the roster, with a shared password per role. Each role sees only what it needs — the sorter never sees analytics, the supervisor never sees the admin panel, and the admin doesn't waste their day on the quiz interface.</p>
+    </div>
+
+    <div class="roles">
+      <div class="role">
+        <span class="tag">role 01</span>
+        <h4><span class="num">→</span>Sorter</h4>
+        <div class="auth"><b>auth:</b> employee ID only — must be on roster</div>
+        <ul>
+          <li>sees the <strong>quiz only</strong> — nothing else</li>
+          <li>realistic UPS labels to identify</li>
+          <li>4 belt choices per question · keyboard shortcuts</li>
+          <li>running score and accuracy displayed</li>
+          <li>end-of-session grade report</li>
+        </ul>
+      </div>
+      <div class="role">
+        <span class="tag">role 02</span>
+        <h4><span class="num">→</span>Supervisor</h4>
+        <div class="auth"><b>auth:</b> shared supervisor password</div>
+        <ul>
+          <li>full <strong>analytics dashboard</strong> (8 tabs)</li>
+          <li>belt error rates and trend data</li>
+          <li>sort aisle leaderboards</li>
+          <li>routing overlay management</li>
+          <li>sorter flag review and escalation</li>
+        </ul>
+      </div>
+      <div class="role">
+        <span class="tag">role 03</span>
+        <h4><span class="num">→</span>Admin</h4>
+        <div class="auth"><b>auth:</b> employee ID + admin password</div>
+        <ul>
+          <li>grant or revoke <strong>supervisor access</strong></li>
+          <li>edit the 41,000-ZIP truth table live</li>
+          <li>configure quiz weighting per state</li>
+          <li>system health and data export</li>
+          <li>change all system passwords</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 05 · SUPERVISOR DASHBOARD ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 05</span>
+      <span class="t">supervisor <em>dashboard</em></span>
+      <span class="meta">8 tabs · real-time · per-sorter audit</span>
+    </div>
+
+    <div class="prose" style="margin-bottom:8px">
+      <p>The supervisor's tier is where most of the operational value lives. <strong>Eight tabs</strong>, each answering a different question that used to require walking the belts. Data refreshes as sorters complete quiz sessions — and <em>every answer ever submitted</em> is stored and reviewable, per sorter, across a rolling 7-day accuracy trend.</p>
+    </div>
+
+    <div class="adash">
+      <div class="atab"><div class="n">01</div><h5>Overview</h5><p>Real-time team accuracy, top problem belts, and sorters needing attention — all in one tab. The first thing the supervisor opens at the start of shift.</p></div>
+      <div class="atab"><div class="n">02</div><h5>Belt Stats</h5><p>Every belt ranked worst-to-best by error rate. Click any belt to drill in: which sorters miss it, how often, and which wrong belt they chose instead.</p></div>
+      <div class="atab"><div class="n">03</div><h5>Sorters</h5><p>Individual drilldown: accuracy over time, per-belt performance table, top missort patterns, aisle rank. Every answer ever submitted, in one view.</p></div>
+      <div class="atab"><div class="n">04</div><h5>Sort Aisles</h5><p>Aisle-level leaderboards. Compare the four aisles head-to-head on accuracy, completion, and certification readiness.</p></div>
+      <div class="atab"><div class="n">05</div><h5>Missort Matrix</h5><p>A grid showing which belts get confused with which other belts. The diagonal is correct routing; off-diagonal cells reveal the actual error patterns.</p></div>
+      <div class="atab"><div class="n">06</div><h5>Overlays</h5><p>Routing overlay management — apply temporary routing changes (peak season rebinds, belt closures) and audit when they were in effect.</p></div>
+      <div class="atab"><div class="n">07</div><h5>Roster</h5><p>Who is enrolled, who is active, who is certified, who has lapsed. Drives quiz eligibility and supervisor coaching priorities.</p></div>
+      <div class="atab"><div class="n">08</div><h5>Flags</h5><p>Sorter flag review and escalation — anomalies the system surfaced for human judgment. Resolve, escalate, or annotate; the trail persists.</p></div>
+    </div>
+  </section>
+
+  <!-- ═════════ 06 · BUSINESS CASE ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 06</span>
+      <span class="t">business <em>case</em></span>
+      <span class="meta">built in-house · operational from day one</span>
+    </div>
+
+    <div class="statband">
+      <div class="sb"><div class="l">routing table</div><div class="v">41<span class="u">k ZIPs</span></div><div class="note">full service area</div></div>
+      <div class="sb"><div class="l">destination belts</div><div class="v">16</div><div class="note">covered &amp; ranked</div></div>
+      <div class="sb"><div class="l">sort aisles</div><div class="v">4</div><div class="note">leaderboard tracked</div></div>
+      <div class="sb"><div class="l">licensing cost</div><div class="v" style="color:var(--coral)">$0</div><div class="note">no cloud fees</div></div>
+    </div>
+
+    <div class="outcomes">
+      <div class="outcome">
+        <div class="tag">outcome 01</div>
+        <h4>Consistent certification</h4>
+        <p>Every sorter takes the same standardized test before handling live packages. Performance is measurable and comparable across all four aisles — no more &quot;who trained whom&quot; debates.</p>
+      </div>
+      <div class="outcome">
+        <div class="tag">outcome 02</div>
+        <h4>Early intervention</h4>
+        <p>Supervisors identify struggling sorters <em>before</em> errors occur on the floor. Coaching is data-driven and targeted — not guesswork. The Belt Stats tab tells the supervisor exactly which conversations to have.</p>
+      </div>
+      <div class="outcome">
+        <div class="tag">outcome 03</div>
+        <h4>Operational agility</h4>
+        <p>When routes change, admins update the truth table in the browser. Changes take effect immediately on all machines — no retraining sessions, no PDF reprints, no cohort regression.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 07 · DEPLOYMENT ═════════ -->
+  <section class="sec">
+    <div class="sec-hdr">
+      <span class="id">/ 07</span>
+      <span class="t">deployment — <em>no IT department required</em></span>
+      <span class="meta">5 steps · shared network drive</span>
+    </div>
+
+    <div class="prose" style="margin-bottom:8px">
+      <p>The whole platform is a folder of static files. Drop it on a network drive every supervisor machine can reach, open <code>index.html</code> in a browser, point at the shared-data folder once — and the system is live across the facility.</p>
+    </div>
+
+    <div class="deploy">
+      <div class="dstep">
+        <div class="n">01</div>
+        <h5>Copy project folder</h5>
+        <p>Copy the project folder to a shared network drive that every supervisor machine can see.</p>
+      </div>
+      <div class="dstep">
+        <div class="n">02</div>
+        <h5>Open in browser</h5>
+        <p>Each supervisor machine opens <code>index.html</code> in Chrome or Edge. No install step.</p>
+      </div>
+      <div class="dstep">
+        <div class="n">03</div>
+        <h5>Point at shared data</h5>
+        <p>On first launch, point the app at the <code>shared-data/</code> folder. Once per machine.</p>
+      </div>
+      <div class="dstep">
+        <div class="n">04</div>
+        <h5>Auto-sync</h5>
+        <p>All sort events, overlays, and roster data sync automatically across every machine.</p>
+      </div>
+      <div class="dstep">
+        <div class="n">05</div>
+        <h5>Sorters sign in</h5>
+        <p>Sorters log in with their employee ID. No account creation, no onboarding flow.</p>
+      </div>
+    </div>
+
+    <div class="dnote">
+      <span class="tag">[ deployed ]</span>
+      The system is live and running at the <strong>Chelmsford facility (CHEMA Twilight)</strong> as of May 2026. Every machine reads and writes the same shared files; the supervisor dashboard becomes the primary cohort-readiness signal for the certification window.
+    </div>
+  </section>
+
+  <!-- ═════════ 08 · ORIGINAL ARTIFACT ═════════ -->
+  <section class="sec" style="border-bottom:none">
+    <div class="sec-hdr">
+      <span class="id">/ 08</span>
+      <span class="t">original <em>artifact</em></span>
+      <span class="meta">project pdf · 12 slides</span>
+    </div>
+
+    <div class="dl">
+      <div>
+        <div class="l">artifact · 0xS-006-pdf</div>
+        <h3>UPS Sort Training Platform — project deck</h3>
+        <p>The 12-slide project document as presented internally. Includes mockups of the landing page, the quiz, the supervisor dashboard tabs, and the admin panel.</p>
+      </div>
+      <a class="dl-btn" href="ups-sort-training-platform.pdf" target="_blank" rel="noopener">
+        <span>open PDF</span><span class="arr">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═════════ FOOT ═════════ -->
+  <footer class="foot">
+    <div>
+      <h5>operator</h5>
+      Rafael Almeida<br>
+      <a href="/cdn-cgi/l/email-protection#1c6e7d7a7d79707d70717975787d5c696c6f327f7371"><span class="__cf_email__" data-cfemail="3b495a5d5a5e575a57565e525f5a7b4e4b4815585456">[email&#160;protected]</span></a><br>
+      UPS CHEMA · Chelmsford, MA
+    </div>
+    <div>
+      <h5>related dispatches</h5>
+      <a href="presentation_v1.1.html">/a · Hub Operations Suite</a><br>
+      <a href="si_whitepaper_v2.2.html">/c · Sort Intelligence</a><br>
+      <a href="ltc_whitepaper_v1.0.html">/d · LTC Mathematics</a><br>
+      <a href="tracker_architecture_v2.11.html">/e · Tracker Architecture</a>
+    </div>
+    <div style="text-align:right">
+      <h5 style="text-align:right">imprint</h5>
+      0xstrategies.com<br>
+      brief v1.0 · 2026-05-17<br>
+      <a href="index.html">← back to portfolio</a>
+    </div>
+    <div class="foot-sig">
+      <span>0xS-006 · DISPATCH B · SORT TRAINING PLATFORM</span>
+      <span class="ok">[ deployed · CHEMA · may 2026 ]</span>
+    </div>
+  </footer>
+
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

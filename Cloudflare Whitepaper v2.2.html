@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0D1A12">
+<title>Sort Intelligence — Whitepaper v2.2 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1A12;--bg-2:#142318;--bg-3:#1C2D20;--panel:#0F1F15;
+  --paper:#E8E0C7;--paper-2:#C5B98F;--paper-3:#908664;
+  --mute:#7A8F75;--rule:#2D4232;--rule-hi:#3F5A42;
+  --moss:#6B9A6E;--gold:#E5C260;--amber:#D9A441;--coral:#C56247;--plum:#8B6BAE;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(90,128,96,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(90,128,96,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(229,194,96,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(13,26,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(197,98,71,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'SELF-BACKTRACK ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">sort intelligence</span></span>
+  <div class="end"><span class="live">verified · v2.2</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · c · whitepaper</div>
+      <div class="doc-t">Sort <em>Intelligence</em></div>
+      <div class="doc-s">si_whitepaper · v2.2</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>2.2</dd><dt>updated</dt><dd>2026-05-12</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">verified</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>Fidelity cascade</a>
+      <a href="#s2"><span class="n">/ 02</span>Operational constants</a>
+      <a href="#s3"><span class="n">/ 03</span>Phase ladder</a>
+      <a href="#s4"><span class="n">/ 04</span>Scan attribution chain</a>
+      <a href="#s5"><span class="n">/ 05</span>Open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">corpus</div>
+      <dl><dt>sorts</dt><dd>613</dd><dt>window</dt><dd>28 mo</dd><dt>size</dt><dd>81 MB</dd><dt>validated</dt><dd>29 / 30</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ si whitepaper · v2.2 · sort intelligence ]</div>
+      <h1>Sort <em>Intelligence</em> — operational constants, fidelity, and the three-role scan chain.</h1>
+      <p class="doc-sub">A formalization of the empirical structure recovered from 613 sorts of CHEMA Twilight operations. The constants are derived, not estimated. The fidelity cascade runs top to bottom. The scan attribution chain is finally explicit.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">Sort Intelligence formalizes the operational substrate the tracker runs on. <strong>Four constants</strong> ($\kappa$, $\gamma$, $\varepsilon$, $\rho$) are derived from the 613-sort corpus and cross-validated across two independent measurement systems. The <strong>fidelity cascade</strong> runs in four levels — method, routing, load, service — with each level's failures originating one tier higher. The <strong>three-role scan chain</strong> — sorters route by color, pick-offs redirect by ZIP, only loaders scan — resolves what was previously attributed to data noise as <em>operational structure</em>.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>The <em>fidelity cascade</em></h2></div>
+      <p>The fidelity cascade runs top to bottom. Each level's failures originate at the level above it:</p>
+      <table class="tbl">
+        <thead><tr><th>level</th><th>discipline</th><th>measure</th><th>origin</th></tr></thead>
+        <tbody>
+          <tr><td>L0</td><td>OJS method compliance</td><td>GEMS #1760 (95% threshold)</td><td>training method</td></tr>
+          <tr><td>L1</td><td>Routing accuracy</td><td>ZIP-to-belt correctness</td><td>certification (LTC)</td></tr>
+          <tr><td>L2</td><td>Load accuracy</td><td>SEAS misload rate</td><td>L1 failure</td></tr>
+          <tr><td>L3</td><td>Service failure rate</td><td>LIB · SFR per 10K packages</td><td>L2 failure</td></tr>
+        </tbody>
+      </table>
+      <p>Missorts and LIBs are <strong>Level 3 consequences</strong>. They originate at Level 1 — whether the sorter knows where the package goes before touching it. LTC (Label Training Certification) addresses Level 1 explicitly; GEMS #1760 addresses Level 0; the Sort Intelligence framework binds them together with empirical fidelity measurements at L2 and L3.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>Operational <em>constants</em></h2></div>
+      <p>Four structural constants are derived from the corpus. Each is cross-validated across SOR/TMS and iGate/ESR independently, and embedded as a live parameter in the tracker's OR models.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">κ</div><div class="d">Zone × day-of-week load coefficient. Anchors the staffing optimizer.</div><div class="nm">kappa(DOW)</div><div class="v">Z3 Mon 0.413 · Fri 0.322</div></div>
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly PPH decay constant. Models the curve across the sort week.</div><div class="nm">gamma</div><div class="v">γ = 0.958</div></div>
+        <div class="const"><div class="sym">ε</div><div class="d">Scan attribution error. Quantifies iGate ↔ SOR identity drift.</div><div class="nm">epsilon</div><div class="v">σ = 0.03</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">Borrow / loan risk density. Drives the DLI layer.</div><div class="nm">rho</div><div class="v">ρ = 0.509</div></div>
+      </div>
+
+      <div class="math-block">
+        <span class="label">// eq. 2.1 — staffing optimizer with κ</span>
+        $$ \text{staff}^*_z(t) = \arg\min_n \sum_{d \in \text{DOW}} \kappa_z(d) \cdot \text{volume}_z(d, t) \cdot n^{-1} + \lambda \cdot n $$
+      </div>
+
+      <p>The full derivation of each constant from the corpus — including the regression methodology, confidence intervals, and the cross-validation protocol — appears in the unified opus (Parts III–V, <code>hub_ops_unified_opus_v5.3.md</code>).</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>The <em>phase ladder</em></h2></div>
+      <p>Intra-sort behavior follows a four-phase structure keyed to elapsed-volume fraction, not clock time. The ladder is empirically derived from belt-level PPH trajectories across 613 sorts.</p>
+      <table class="tbl">
+        <thead><tr><th>phase</th><th>elapsed vol</th><th>character</th><th>OR model</th></tr></thead>
+        <tbody>
+          <tr><td>Φ1 ramp-up</td><td>0 → 0.18</td><td>Loaders staging; PPH below steady-state.</td><td>M/M/c with empty-queue boundary</td></tr>
+          <tr><td>Φ2 steady</td><td>0.18 → 0.72</td><td>The window where κ applies cleanly. The PPH plateau.</td><td>LP-Lite staffing optimizer</td></tr>
+          <tr><td>Φ3 decay</td><td>0.72 → 0.94</td><td>γ decay dominates; volume tails. Sorters reassigned.</td><td>γ × phase curve</td></tr>
+          <tr><td>Φ4 wind-down</td><td>0.94 → 1.0</td><td>Phase-engine boundary. Excluded from PPH baseline.</td><td>scroll-guard exclusion</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>The three-role <em>scan attribution chain</em></h2></div>
+      <p>This was the most consequential self-backtrack in the program. Earlier whitepaper drafts attributed scan behavior to pick-offs. <strong>Pick-offs don't scan.</strong> The correction propagated through every PPH calculation in every branch in one session.</p>
+
+      <table class="tbl">
+        <thead><tr><th>role</th><th>routing mechanism</th><th>scans?</th></tr></thead>
+        <tbody>
+          <tr><td>Sorter</td><td>Routes by color (visual cue on package label).</td><td>No</td></tr>
+          <tr><td>Pick-off</td><td>Redirects by ZIP to chutes — no scanner at the chute.</td><td>No</td></tr>
+          <tr><td>Loader</td><td>Inside trailers. Only role with a scanner attached to identity.</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+
+      <p>The implication: <strong>every iGate PPH figure is loader PPH</strong>, always. Sorter and pick-off performance is invisible to iGate; it surfaces only through downstream effects — misloads (L2) and service failures (L3). This is the central fidelity proposition of Sort Intelligence: the scan stream measures one role; the operational outcome reflects three.</p>
+
+      <div class="bt-callout">v1.3–v1.6 attributed scan behavior to pick-offs. The error propagated across five whitepaper branches before it was caught. Correction documented 2026-05-12. Synchronized updates across all five documents in one session.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
