@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0D1A12">
+<meta name="theme-color" content="#F4F6F9">
 <meta name="description" content="UPS Sort Training Platform — browser-based certification and analytics system for package sorting. 41,000 ZIP routing records, 16 destination belts, 4 sort aisles. Deployed at CHEMA Twilight, May 2026.">
 <title>Sort Training Platform · Brief — 0xStrategies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,13 +18,13 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg:#0D1A12;--bg-2:#142318;--bg-3:#1C2D20;--bg-4:#25382A;
-  --paper:#E8E0C7;--paper-2:#C5B98F;--paper-3:#908664;
-  --mute:#7A8F75;--mute-2:#5C6B58;
-  --rule:#2D4232;--rule-lt:#1F2D23;--rule-hi:#3F5A42;
-  --forest-l:#5A8060;--moss:#6B9A6E;
-  --gold:#E5C260;--gold-d:#B5961F;
-  --amber:#D9A441;--coral:#C56247;--rust:#A14A2E;
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--bg-4:#E2E7EE;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--mute-2:#8A94A2;
+  --rule:#DBE0E7;--rule-lt:#ECEFF3;--rule-hi:#C8D0DA;
+  --forest-l:#5FB89E;--moss:#3DAE8E;
+  --gold:#BC6A4D;--gold-d:#934126;
+  --amber:#C18B3C;--coral:#BC6A4D;--rust:#934126;
   --serif:"Newsreader",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",monospace;
   --gut:40px;
@@ -35,16 +35,16 @@ html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-s
 
 body{
   background-image:
-    linear-gradient(to right, rgba(90,128,96,.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(90,128,96,.04) 1px, transparent 1px),
-    radial-gradient(circle at 15% 0%, rgba(229,194,96,.04) 0%, transparent 50%),
-    radial-gradient(circle at 85% 100%, rgba(197,98,71,.04) 0%, transparent 50%);
+    linear-gradient(to right, rgba(30,58,95,.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.04) 1px, transparent 1px),
+    radial-gradient(circle at 15% 0%, rgba(188,106,77,.04) 0%, transparent 50%),
+    radial-gradient(circle at 85% 100%, rgba(188,106,77,.04) 0%, transparent 50%);
   background-size:48px 48px, 48px 48px, 100% 100%, 100% 100%;
   background-attachment:fixed
 }
 @keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
 @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--gold)}50%{opacity:.4;box-shadow:0 0 2px var(--gold)}}
-body::before{content:'';position:fixed;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(229,194,96,.18),transparent);pointer-events:none;animation:scan 10s linear infinite;z-index:1}
+body::before{content:'';position:fixed;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.18),transparent);pointer-events:none;animation:scan 10s linear infinite;z-index:1}
 
 a{color:inherit;text-decoration:none}
 .page{max-width:1280px;margin:0 auto;padding:0 var(--gut) 80px;position:relative;z-index:2}
@@ -55,7 +55,7 @@ a{color:inherit;text-decoration:none}
   padding:12px 0;border-bottom:1px solid var(--rule);
   font-size:10.5px;letter-spacing:.06em;color:var(--paper-3);
   position:sticky;top:0;z-index:50;
-  background:rgba(13,26,18,.92);backdrop-filter:blur(8px)
+  background:rgba(244,246,249,.92);backdrop-filter:blur(8px)
 }
 .doc-bar .inner{display:flex;align-items:center;gap:18px;padding:0 var(--gut);max-width:1280px;margin:0 auto;width:100%}
 .doc-bar .mark{display:flex;gap:6px;align-items:baseline}
@@ -288,6 +288,23 @@ section.sec{padding:52px 0;border-bottom:1px solid var(--rule);scroll-margin-top
 @media (prefers-reduced-motion:reduce){
   body::before,.doc-bar .live::before,.quiz-mock .bar .live::before{animation:none !important}
 }
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+/* keep the UPS label mock as light paper with dark ink (it must look printed, not inverted) */
+.label{background:#FFFFFF !important;color:#16243A !important;border-color:#C8D0DA !important}
+.label .ltop{border-bottom-color:#16243A !important}
+.label .lblock .v{color:#16243A !important}
+.label .codeblock{border-top-color:#8A94A2 !important}
+.label .barcode{background:repeating-linear-gradient(90deg,#16243A 0,#16243A 2px,transparent 2px,transparent 3px,#16243A 3px,#16243A 5px,transparent 5px,transparent 6px,#16243A 6px,#16243A 7px,transparent 7px,transparent 9px,#16243A 9px,#16243A 11px,transparent 11px,transparent 12px) !important}
 </style>
 </head>
 <body>

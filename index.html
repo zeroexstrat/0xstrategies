@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0D1A12">
+  <meta name="theme-color" content="#F4F6F9">
   <meta name="description"
     content="Rafael Almeida — Operations Coordinator & Automation Developer. 0xStrategies portfolio: tracker, dashboard, AI memory, research monograph, and the methodology behind a 28-month independent program at UPS CHEMA Hub.">
   <meta name="author" content="Rafael Almeida">
@@ -29,26 +29,26 @@
     }
 
     :root {
-      --bg: #0D1A12;
-      --bg-2: #142318;
-      --bg-3: #1C2D20;
-      --bg-4: #25382A;
-      --panel: #0F1F15;
-      --paper: #E8E0C7;
-      --paper-2: #C5B98F;
-      --paper-3: #908664;
-      --mute: #7A8F75;
-      --mute-2: #5C6B58;
-      --rule: #2D4232;
-      --rule-lt: #1F2D23;
-      --rule-hi: #3F5A42;
-      --forest-l: #5A8060;
-      --moss: #6B9A6E;
-      --gold: #E5C260;
-      --gold-d: #B5961F;
-      --amber: #D9A441;
-      --coral: #C56247;
-      --rust: #A14A2E;
+      --bg: #F4F6F9;
+      --bg-2: #FFFFFF;
+      --bg-3: #ECEFF3;
+      --bg-4: #E2E7EE;
+      --panel: #FFFFFF;
+      --paper: #16243A;
+      --paper-2: #34465C;
+      --paper-3: #5A6878;
+      --mute: #5A6878;
+      --mute-2: #8A94A2;
+      --rule: #DBE0E7;
+      --rule-lt: #ECEFF3;
+      --rule-hi: #C8D0DA;
+      --forest-l: #5FB89E;
+      --moss: #3DAE8E;
+      --gold: #BC6A4D;
+      --gold-d: #934126;
+      --amber: #C18B3C;
+      --coral: #BC6A4D;
+      --rust: #934126;
       --serif: "Newsreader", Georgia, serif;
       --mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
       --gut: 40px;
@@ -74,10 +74,10 @@
 
     body {
       background-image:
-        linear-gradient(to right, rgba(90, 128, 96, .04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(90, 128, 96, .04) 1px, transparent 1px),
-        radial-gradient(circle at 15% 0%, rgba(229, 194, 96, .04) 0%, transparent 50%),
-        radial-gradient(circle at 85% 100%, rgba(197, 98, 71, .04) 0%, transparent 50%);
+        linear-gradient(to right, rgba(30, 58, 95, .04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 58, 95, .04) 1px, transparent 1px),
+        radial-gradient(circle at 15% 0%, rgba(188, 106, 77, .04) 0%, transparent 50%),
+        radial-gradient(circle at 85% 100%, rgba(188, 106, 77, .04) 0%, transparent 50%);
       background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
       background-attachment: fixed;
     }
@@ -138,7 +138,7 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(to right, transparent, rgba(229, 194, 96, .18), transparent);
+      background: linear-gradient(to right, transparent, rgba(188, 106, 77, .18), transparent);
       pointer-events: none;
       animation: scan 10s linear infinite;
       z-index: 1
@@ -530,7 +530,7 @@
       background: var(--bg);
       z-index: 10;
       backdrop-filter: blur(8px);
-      background-color: rgba(13, 26, 18, .92)
+      background-color: rgba(244, 246, 249, .92)
     }
 
     .nav::-webkit-scrollbar {
@@ -703,7 +703,7 @@
       color: var(--gold);
       letter-spacing: .14em;
       z-index: 2;
-      background: rgba(13, 26, 18, .7);
+      background: rgba(244, 246, 249, .7);
       padding: 3px 8px;
       border-left: 2px solid var(--gold)
     }
@@ -716,7 +716,7 @@
       color: var(--coral);
       letter-spacing: .14em;
       z-index: 2;
-      background: rgba(13, 26, 18, .7);
+      background: rgba(244, 246, 249, .7);
       padding: 3px 8px
     }
 
@@ -878,7 +878,7 @@
       font-size: 9px;
       color: var(--moss);
       letter-spacing: .14em;
-      background: rgba(107, 154, 110, .1);
+      background: rgba(61, 174, 142, .1);
       border: 1px solid var(--moss);
       padding: 1px 6px;
       text-transform: uppercase
@@ -949,7 +949,7 @@
       border: 1px solid var(--moss);
       padding: 2px 7px;
       text-transform: uppercase;
-      background: rgba(107, 154, 110, .1);
+      background: rgba(61, 174, 142, .1);
       white-space: nowrap
     }
 
@@ -1175,13 +1175,13 @@
     .mtable .pri.live {
       color: var(--moss);
       border-color: var(--moss);
-      background: rgba(107, 154, 110, .08)
+      background: rgba(61, 174, 142, .08)
     }
 
     .mtable .pri.res {
       color: var(--amber);
       border-color: var(--amber);
-      background: rgba(217, 164, 65, .08)
+      background: rgba(193, 139, 60, .08)
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -1866,6 +1866,17 @@
       }
     }
   </style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
 </head>
 
 <body>
@@ -1914,24 +1925,24 @@
             <path id="circletext" d="M 60 60 m -48 0 a 48 48 0 1 1 96 0 a 48 48 0 1 1 -96 0" />
           </defs>
           <g class="patch-spin" style="transform-origin:60px 60px">
-            <circle cx="60" cy="60" r="56" fill="none" stroke="#E5C260" stroke-width="1" />
-            <circle cx="60" cy="60" r="48" fill="none" stroke="#E5C260" stroke-width=".4" />
-            <text font-family="JetBrains Mono" font-size="7" fill="#E5C260" letter-spacing="3">
+            <circle cx="60" cy="60" r="56" fill="none" stroke="#BC6A4D" stroke-width="1" />
+            <circle cx="60" cy="60" r="48" fill="none" stroke="#BC6A4D" stroke-width=".4" />
+            <text font-family="JetBrains Mono" font-size="7" fill="#BC6A4D" letter-spacing="3">
               <textPath href="#circletext">0XSTRATEGIES · CHEMA TWILIGHT · MANAGE BY DESIGN · </textPath>
             </text>
           </g>
-          <circle cx="60" cy="60" r="34" fill="none" stroke="#E5C260" stroke-width=".5" stroke-dasharray="2,2" />
-          <circle cx="60" cy="60" r="26" fill="#142318" stroke="#5A8060" stroke-width=".4" />
-          <text x="60" y="65" text-anchor="middle" font-family="JetBrains Mono" font-size="20" fill="#E5C260"
+          <circle cx="60" cy="60" r="34" fill="none" stroke="#BC6A4D" stroke-width=".5" stroke-dasharray="2,2" />
+          <circle cx="60" cy="60" r="26" fill="#FFFFFF" stroke="#5FB89E" stroke-width=".4" />
+          <text x="60" y="65" text-anchor="middle" font-family="JetBrains Mono" font-size="20" fill="#BC6A4D"
             font-weight="700">0x</text>
-          <line x1="60" y1="22" x2="60" y2="32" stroke="#E5C260" stroke-width="1" />
-          <line x1="60" y1="88" x2="60" y2="98" stroke="#E5C260" stroke-width="1" />
-          <line x1="22" y1="60" x2="32" y2="60" stroke="#E5C260" stroke-width="1" />
-          <line x1="88" y1="60" x2="98" y2="60" stroke="#E5C260" stroke-width="1" />
-          <circle cx="60" cy="38" r="1.5" fill="#C56247" />
-          <circle cx="82" cy="60" r="1.5" fill="#6B9A6E" />
-          <circle cx="60" cy="82" r="1.5" fill="#C56247" />
-          <circle cx="38" cy="60" r="1.5" fill="#6B9A6E" />
+          <line x1="60" y1="22" x2="60" y2="32" stroke="#BC6A4D" stroke-width="1" />
+          <line x1="60" y1="88" x2="60" y2="98" stroke="#BC6A4D" stroke-width="1" />
+          <line x1="22" y1="60" x2="32" y2="60" stroke="#BC6A4D" stroke-width="1" />
+          <line x1="88" y1="60" x2="98" y2="60" stroke="#BC6A4D" stroke-width="1" />
+          <circle cx="60" cy="38" r="1.5" fill="#BC6A4D" />
+          <circle cx="82" cy="60" r="1.5" fill="#3DAE8E" />
+          <circle cx="60" cy="82" r="1.5" fill="#BC6A4D" />
+          <circle cx="38" cy="60" r="1.5" fill="#3DAE8E" />
         </svg>
       </div>
       <div class="mast-id">

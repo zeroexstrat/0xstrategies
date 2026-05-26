@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0D1A12">
+<meta name="theme-color" content="#F4F6F9">
 <title>LTC — Mathematical Abstractions · v1.0 · 0xStrategies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,10 +12,10 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0D1A12;--bg-2:#142318;--bg-3:#1C2D20;--panel:#0F1F15;
-  --paper:#E8E0C7;--paper-2:#C5B98F;--paper-3:#908664;
-  --mute:#7A8F75;--rule:#2D4232;--rule-hi:#3F5A42;
-  --moss:#6B9A6E;--gold:#E5C260;--amber:#D9A441;--coral:#C56247;--plum:#8B6BAE;
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
   --serif:"Newsreader",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --sw:280px;
@@ -25,20 +25,20 @@ html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-s
 a{color:inherit;text-decoration:none}
 body{
   background-image:
-    linear-gradient(to right,rgba(90,128,96,.04) 1px,transparent 1px),
-    linear-gradient(to bottom,rgba(90,128,96,.04) 1px,transparent 1px);
+    linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);
   background-size:48px 48px;background-attachment:fixed
 }
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
-body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(229,194,96,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
 
 /* doc-bar */
 .doc-bar{
   position:fixed;top:0;left:0;right:0;z-index:30;
   display:flex;align-items:center;gap:18px;padding:12px 28px;
-  background:rgba(13,26,18,.92);backdrop-filter:blur(8px);
+  background:rgba(244,246,249,.92);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)
 }
 .doc-bar .mark{display:flex;gap:6px;align-items:baseline}
@@ -113,7 +113,7 @@ body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;backgro
 .math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
 .math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
 
-.open-problem{background:rgba(139,107,174,.06);border-left:3px solid var(--plum);padding:14px 18px;margin:16px 0;font-size:13.5px}
+.open-problem{background:rgba(126,107,168,.06);border-left:3px solid var(--plum);padding:14px 18px;margin:16px 0;font-size:13.5px}
 .op-tag{font-size:9.5px;color:var(--plum);letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;font-weight:600;font-family:var(--mono)}
 .open-problem p{margin:0;font-size:14px;color:var(--paper-2);line-height:1.65}
 
@@ -147,6 +147,17 @@ table.tbl tr:hover td{background:var(--bg-2)}
 @media (prefers-reduced-motion:reduce){
   body::before,.doc-bar .live::before{animation:none !important}
 }
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
 </style>
 </head>
 <body>
