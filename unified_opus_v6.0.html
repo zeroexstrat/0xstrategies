@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Hub Ops Unified Opus — v6.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">unified opus</span></span>
+  <div class="end"><span class="live">rigor-applied · v6.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · Ω · master synthesis</div>
+      <div class="doc-t">Unified <em>Opus</em></div>
+      <div class="doc-s">hub_ops · opus · v6.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>6.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>A synthesis, not a unification</a>
+      <a href="#s2"><span class="n">/ 02</span>The constants contract</a>
+      <a href="#s3"><span class="n">/ 03</span>The three-role chain</a>
+      <a href="#s4"><span class="n">/ 04</span>PPH as a definitional identity</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">corpus</div>
+      <dl><dt>branches</dt><dd>A–D + SI</dd><dt>sorts</dt><dd>613</dd><dt>γ basis</dt><dd>254-sort</dd><dt>κ basis</dt><dd>SEAS yr</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ hub_ops · unified opus · v6.0 · rigor-applied ]</div>
+      <h1>Hub Ops Unified <em>Opus</em> — a synthesis of four research branches for one hub.</h1>
+      <p class="doc-sub">The master consolidation of the CHEMA Twilight Sort Intelligence program: Branches A–D plus SI placed side by side under one ratified constants contract. It is a synthesis-by-juxtaposition — coherent and cross-referenced, but honestly not a formal unification.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">The UPS Chelmsford Hub (SLIC 0189, CHEMA) runs a Twilight package sort each weekday from 18:00 to 22:00 — roughly 100,000 packages across three sequential roles, producing a multi-source data stream (iGate / SOR / SEAS / CURE / TMS / OJS / LTC). This opus is the v6.0 synthesis of <strong>five parallel research branches</strong> built to interpret that stream. Its load-bearing claims: only loaders generate iGate PPH (<em>the three-role chain</em>); <strong>four structural constants</strong> ($\kappa$, $\gamma$, $\varepsilon$, $\rho$) govern the sort, pinned to <code>metric_contract.json</code>; and iGate is the canonical scanner-truth instrument while SEAS bundles CCHIL volume under PD-09. This is a <em>synthesis-by-juxtaposition</em>, <strong>not a formal unification</strong> — the §19 EKF-marginalization bridge that prior versions advanced as the connective theorem is retracted. The connective tissue is design intent and shared calibration, not a proven identity.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>A <em>synthesis</em>, not a unification</h2></div>
+      <p>This monograph places four research branches — A (mathematical framework), B (digital shadow), C (purposeful systems), D (synthesis under common constants) — plus the Sort Intelligence (SI) and Label Training Certification (LTC) bodies side by side under one ratified set of constants, reconciles their contradictions, and cross-references their results. It is research-grade in the operational sense: every load-bearing claim is traceable to a measured empirical anchor, a contractual operational document (OJS GEMS #1760), or a clearly-flagged open problem, and carries a version-origin tag so a future reader can audit the trail.</p>
+      <p>What it explicitly does <strong>not</strong> claim is a single formal object that derives all four branches as special cases. Earlier versions advanced the §19 EKF-marginalization theorem as the formal bridge "unifying" the operational baseline (Part II) and the idealized digital shadow (Part III). That theorem is <strong>unproven and false in general</strong> — a marginal covariance is not "strictly larger" than the projected sub-block — and has been <strong>retracted to a conjecture</strong>. With its keystone gone, the honest description is <em>juxtaposition</em>: the parts are coherent and consistent, but the connective tissue is design intent and shared calibration, not a proven identity. The "self-referential / already-complete" framing of prior versions is removed.</p>
+      <p>A weaker, defensible sense of coherence does hold: every load-bearing claim is cross-referenced to its definition or theorem within the opus, so a coordinator can trace any tracker number back to the equation that produced it. The version lineage itself is described — <em>as an analogy, not a derivation</em> — using the backtrack-then-regenerate pattern of Yang et al. (2025), <em>Step Back to Leap Forward</em> (arXiv:2502.04404), offered as an organizing metaphor only.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>The <em>constants</em> contract</h2></div>
+      <p>Four structural constants govern the Twilight sort. Each is pinned to a single source of truth, <code>metric_contract.json</code>; where the body text reproduces an older derivation value it is labelled historical lineage and is not canonical. $\gamma$ takes exactly one value — <strong>0.982</strong> — everywhere in this document.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">κ</div><div class="d">Zone-3 (PD-09–12) share of PD-belt outbound. A DOW-indexed vector on the SEAS basis, not a scalar. Anchors the staffing optimizer.</div><div class="nm">kappa_Z3(DOW)</div><div class="v">Mon 0.413 · Fri 0.322</div></div>
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly Mon→Fri volume decay, recalibrated on the full 254-sort corpus (Fri/Mon 0.9297; Friday ≈ 93% of Monday).</div><div class="nm">gamma</div><div class="v">γ = 0.982 ± 0.010</div></div>
+        <div class="const"><div class="sym">ε</div><div class="d">Hub-vs-SOR schema offset. DOW-flat with high week-to-week noise (σ ≈ 0.030) — "no monotone trend," not a tight constant.</div><div class="nm">epsilon_schema</div><div class="v">ε ≈ 0.04 flat</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">PD-belt share of total iGate Hub scan volume — a volume share, not a correlation (corrected from 0.65).</div><div class="nm">rho_PD/Hub</div><div class="v">ρ = 0.509 ± 0.025</div></div>
+      </div>
+
+      <p>The $\kappa_{Z_3}$ vector on the SEAS basis runs Mon 0.413 · Tue 0.395 · Wed 0.385 · Thu 0.380 · Fri 0.322 (full-year mean $\approx 0.368 \pm 0.014$). The <strong>iGate basis</strong> sits $\approx 0.04$–$0.06$ lower at every phase ($\approx 0.31$–$0.33$; the historical "0.311"); the two bases differ by the <strong>CCHIL → PD-09 attribution rule</strong> — SEAS bundles all CCHIL volume / misload / LIB under PD-09 while iGate distributes by physical scanner location — <em>not</em> by phase scope.</p>
+      <p>Alongside the four structural constants, the canonical hub PPH is $\Pi_\text{SOR} \approx 120.3$ (the un-ratified six-week 124.1 is superseded), with the associated <strong>cost field</strong> $c = 1/\Pi$ — the per-package paid-labor cost the pre-sort plan minimizes when it converts a volume forecast into planned paid hours ($H = c \cdot V = V/\Pi$).</p>
+
+      <div class="math-block">
+        <span class="label">// eq. 2.1 — canonical hub PPH and the operational cost field</span>
+        $$ \Pi^{\text{SOR}} := \frac{V_{\text{Hub,Actual}}}{H_{\text{Worked,Hub}}} \approx 120.3, \qquad c := \frac{1}{\Pi} \;\;\Big(=\tfrac{60}{\Pi}\text{ paid-min/pkg} \approx 0.499\Big) $$
+      </div>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>The <em>three-role</em> chain</h2></div>
+      <p>The single most consequential operational fact for the analytical framework is the role decomposition of the outbound operation. Three roles execute the package path; <strong>each has zero scanning overlap with the next</strong>; the iGate PPH metric attaches to exactly one of the three.</p>
+      <table class="tbl">
+        <thead><tr><th>role</th><th>routing mechanism</th><th>compliance signal</th><th>scans?</th></tr></thead>
+        <tbody>
+          <tr><td>Sorter (L1)</td><td>Routes by SLIC + exception to a color-coded belt (hand-to-surface).</td><td>missort rate (recycled volume)</td><td>No</td></tr>
+          <tr><td>Pick-off (L2)</td><td>Secondary sort by ZIP within the SLIC group: chute 1 / chute 2 / let-it-ride.</td><td>misload rate</td><td>No</td></tr>
+          <tr><td>Loader (L3)</td><td>Inside the trailer; scans the bay-door ULD, then "scan one, load one."</td><td>iGate PPH + FidelityScore</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+      <p>The implication: <strong>every iGate PPH figure is loader PPH</strong>, always. Sorter and pick-off performance is invisible to iGate — it surfaces only downstream, as missorts (L1), misloads (L2), and service failures. The contractual confirmation comes from a different angle than observation: the <code>sorter-ojs</code> (111 methods) and <code>pickoff-ojs</code> (87 methods) certification sheets contain <em>zero scanning methods</em>, while the loader sheet (168 methods) makes the bay-door ULD scan mandatory under Method #20. Any framework claim that treats sorter or pick-off behavior as a scanning-compliance problem is structurally wrong.</p>
+      <p>Each role carries a knowledge layer certified by the LTC quiz — sort-chart knowledge (L1), ZIP-exception routing (L2), scan discipline (L3) — with all three bound together by OJS GEMS Code #1760.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>PPH as a <em>definitional identity</em></h2></div>
+      <p>Part IV writes the observed PPH of a loader as the product of a physical-capacity floor and a residual split into two latent coefficients — commitment $c_j$ and alignment $\pi_j$:</p>
+
+      <div class="math-block">
+        <span class="label">// def. 4.1 — PPH purposeful decomposition (a definitional identity, no predictive content)</span>
+        $$ \Pi_j(t) = \Pi_j^\infty \cdot F_j(t) \cdot c_j(t) \cdot \pi_j(t), \qquad c_j\pi_j := \frac{\Pi_j}{\Pi_j^\infty F_j} $$
+      </div>
+
+      <p>This is a <strong>bookkeeping identity, not a falsifiable model</strong>. Because $c_j$ and $\pi_j$ are latent and <em>back-solved</em> — defined so the equation holds — any observed $\Pi_j$ is consistent with it by construction. The decomposition has <strong>no predictive content</strong>: making it predictive would require an independent estimator for $c_j$ or $\pi_j$ from observable data, which does not exist. Earlier versions stated this as a "theorem" (PPH as Purposeful Projection) and asserted independence of the multiplicative effects; both are removed. It is retained only as a <em>vocabulary</em> for talking about where unexplained PPH variance might sit — capacity vs commitment vs alignment — not as an estimator. The Marcus/Diana "worked examples" are now explicitly illustrative back-solves, not measurements.</p>
+      <p>One sharp caveat closes the section: the latent commitment multiplier $c_j$ here is <strong>distinct</strong> from the operational cost field $c = 1/\Pi$ of §02. The latter is a real per-package paid-labor cost used in forecasting; the former is a behavioral bookkeeping coefficient. They share a letter and nothing else.</p>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v6.0 supersedes v5.7, v5.7_kappa-conformance, and v6.0-ds, reconciling all three into one authoritative head under a conservative rule: unproven flagship claims are <strong>retracted or demoted with a one-line reason, not re-proven</strong>. What changed: $\gamma$ resolved to one value (<strong>0.982</strong>) everywhere, the stale 0.958/0.938 figures kept as labelled lineage only; the §13.5-vs-§14.2 $\kappa$ contradiction resolved by demoting the "gradient-invariant zone share" theorem to a within-DOW conditional Proposition and naming the SEAS-vs-iGate denominator; $\Pi_\text{SOR}$ pinned to 120.3 with $c = 1/\Pi$ defined.</p>
+      <p>The keystone correction: the <strong>§19 marginalization theorem was retracted to a conjecture</strong> — it was the only claimed formal bridge unifying Parts II–III, so the "unified / self-referential" framing was dropped and the opus reframed as a <em>synthesis-by-juxtaposition</em>. Inherited theorem demotions from the cleaned branch heads followed: <strong>Jam-Breaker → conditional Proposition</strong> (the "Δ>1 whenever H_jam>0 OR V_gap>0" claim is algebraically false), <strong>Nash equilibrium → descriptive cost-ratio heuristic</strong> (there is no game; the supervisor has no payoff or strategy space), and the <strong>~300-dim EKF migration-value RMSE numbers removed</strong> (the model was never built). Citations and statistics were fixed: Yang 2025 corrected to <em>Step Back to Leap Forward</em> and re-scoped as analogy; the Hackman "35–45% of variance" figure cut as unverifiable false precision; decorative mathematics (dependent type theory, category theory, Brouwer) removed — the validated <strong>ZIP ultrametric kept</strong>.</p>
+      <p>Honestly disclosed open items: the proposed EKF remains <strong>uninstantiated</strong> (the marginalization relation survives only as a conditional conjecture); $\kappa_{Z_1}$ and $\kappa_{Z_2}$ are still <strong>uncomputed</strong>, so the zone-share collapse is established for Z3 only; the full SEAS–iGate gap is "consistent with" the CCHIL rule, not yet "fully explained by" a matched-sort recomputation; and $\varepsilon_\text{schema}$ is retained as a "constant" with the caveat that $\sigma/\text{mean} \approx 0.77$.</p>
+
+      <div class="bt-callout">Rigor reconciliation applied 2026-05-31. Supersedes v5.7, v5.7_kappa-conformance, and v6.0-ds, reconciled into one head. Constants conformed to <code>metric_contract.json</code> (γ = 0.982; κ_Z3 DOW vector; ρ = 0.509; Π_SOR ≈ 120.3, c = 1/Π). This is a synthesis-by-juxtaposition and an internal operations-research brief — not a formal unification and not a peer-reviewed paper. It states what is proved, what is empirical, what is a model, and what is retracted, each with a reason.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

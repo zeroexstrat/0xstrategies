@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Hub Ops Unified Framework (Synthesis) — v5.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">unified framework</span></span>
+  <div class="end"><span class="live">rigor-applied · v5.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · d · whitepaper</div>
+      <div class="doc-t">Cross-Branch <em>Synthesis</em></div>
+      <div class="doc-s">hub_ops · unified · v5.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>5.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>Synthesis, not unification</a>
+      <a href="#s2"><span class="n">/ 02</span>CURE × PD coupling</a>
+      <a href="#s3"><span class="n">/ 03</span>The fidelity ceiling</a>
+      <a href="#s4"><span class="n">/ 04</span>Operational constants</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">corpus</div>
+      <dl><dt>sorts</dt><dd>30 + 100</dd><dt>year</dt><dd>16 SEAS</dd><dt>branches</dt><dd>A · B · C · D</dd><dt>contract</dt><dd>metric_v1</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ branch d · unified framework · v5.0 · rigor-applied ]</div>
+      <h1>Cross-Branch <em>Synthesis</em> — consolidating four lines of theory into one consistent reference.</h1>
+      <p class="doc-sub">Branch D juxtaposes the mathematical framework, the digital shadow, and the purposeful-systems branches, checks them for mutual consistency, and names the integration gaps. It is a synthesis — not a formal unification. Every constant is reconciled to one source of truth.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">Branch D is the canonical <strong>cross-branch synthesis</strong> of the CHEMA Twilight program: Branch A (mathematical framework), Branch B (digital shadow), and Branch C (purposeful systems). Each branch developed along a single line of theory and is individually usable; none, on its own, closes the loop from raw data architecture through theory to tool specification. This head <em>juxtaposes</em> them, verifies they do not contradict, and reconciles every named constant to <code>metric_contract.json</code>. The empirical anchor is a 30-sort end-of-sort corpus plus a 100-snapshot intra-sort iGate corpus, with year-scale validation from 16 SEAS Hub Monthly files and 9 dated iGate Hub Summaries. The v5.0 head is rigor-audited: the internal $\gamma$ / $\kappa$ self-contradictions are resolved, the document is honestly relabeled a <strong>synthesis</strong> rather than a unification, and <code>adj_factor = 9200</code> is demoted from a claimed structural constant to a fitted scaling factor. The formal unification of A/B/C remains an open research direction.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>Synthesis, <em>not unification</em></h2></div>
+      <p>Branches A, B, and C each developed along a single line of theory. Branch A formalizes the mathematical structure; Branch B builds the digital shadow / state model; Branch C specifies the purposeful-systems objective. Each is individually usable, and none, on its own, closes the loop from raw data architecture — what the coordinator's screen actually shows — through theory, to a concrete tool specification for the tracker.</p>
+      <p>Branch D <strong>juxtaposes</strong> the three, checks them for mutual consistency, and names the integration gaps. It does <strong>not</strong> formally unify them. There is no proof here that A's constraints imply B's state model, that B's state feeds C's objective, or that C's objective determines operational choices. The prior heads called this work a "unification"; v5.0 honestly relabels it a <em>synthesis by juxtaposition</em>, in keeping with how the data actually supports it.</p>
+      <p>The contribution is therefore <strong>readability, traceability, and constants coherence</strong>: one coherent narrative replacing four sequential patches (v4.0 → v4.1 → v4.1.1 → v4.1.2), with every Session 19 correction applied inline and every named constant tied to a single source of truth. The data-bearing content is unchanged from the v4.1.2 endpoint.</p>
+      <div class="bt-callout">The formal cross-branch unification — demonstrating how A constrains B, B feeds C, and C directs operations — is <strong>not</strong> demonstrated in this document. It is named explicitly as an open research direction. Until it is closed, this head remains a synthesis, not a unification.</div>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>CURE × PD <em>coupling</em></h2></div>
+      <p>The Loading Bottleneck Regime (Branch B) describes a condition in which the rate-limiting step is dock-side, not floor-side: above some utilization, increasing scan rate fails to increase throughput because trailer loading creates back-pressure. Branch D makes this computable by joining CURE destination utilization to the LTC ZIP→belt truth table, producing a per-zone dock-pressure score. The belts are partitioned into coordinator zones — Zone 1 (PD-01…04), Zone 2 (PD-05…08), Zone 3 (PD-09…12), plus Smalls Sort and Air.</p>
+      <div class="math-block">
+        <span class="label">// def 4.1 — zone dock pressure</span>
+        $$ P_{Z_i} = \frac{\sum_{d:\ B(d) \subseteq Z_i} U_d \cdot V_d}{\sum_{d:\ B(d) \subseteq Z_i} V_d} $$
+      </div>
+      <p>where $B(d)$ is the CURE-to-belt function, $U_d$ destination $d$'s utilization, and $V_d$ its loaded volume. v5.0 states the construction as a <strong>definition plus a falsifiable empirical hypothesis</strong>, not a theorem: when $P_{Z_i}$ exceeds the Twilight cap $U_T^\text{cap} = 0.85$, the bottleneck for $Z_i$ is <em>hypothesized</em> to be dock-side, so the correct response is dock-side intervention (trailer sequencing, door availability, early release of full trailers). Prior heads stated this as a theorem whose "proof" merely restated the definition and then asserted the conclusion; the causal claim was never derived or tested, so it is demoted.</p>
+      <p>A worked operator correction: <strong>L.L. Bean</strong> (SLIC 0432) showed CURE utilization of 88–98% and was earlier placed in Zone 3. Session 19 ground truth re-anchors it to <strong>Zone 2</strong> (PD-05, Bottom Red, bay 116), reached via Smalls Sort → RNC bags → the two Smalls Sort Primary Feed belts → sort aisle. The 88–98% is bag-weighted cube utilization, which CURE weights differently than loose cube. The coupling mechanism still applies — but the zone is $Z_2$, mediated by smalls-sort bag throughput.</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>The <em>fidelity ceiling</em></h2></div>
+      <p>Quality propagates through three measurement layers, each measuring a different manifestation of the same upstream cause. <strong>Level 1 — Routing Knowledge (LTC):</strong> the Label Training Certification quiz measures whether an employee can correctly assign a ZIP to a belt; let $\bar{\rho}$ be the workforce routing accuracy. <strong>Level 2 — Load Accuracy (SEAS):</strong> wrong routing puts a package on the wrong trailer — a misload regardless of loader scan discipline. <strong>Level 3 — Service Failure (SFR):</strong> HUB DERIVED LIB per 10,000 PD packages.</p>
+      <div class="math-block">
+        <span class="label">// claim 5.1 — fidelity ceiling (structural hypothesis)</span>
+        $$ \mathcal{F} \;\lesssim\; \bar{\rho} \cdot (1 - \varepsilon_\text{struct}) $$
+      </div>
+      <p>where $\varepsilon_\text{struct}$ is a structural misload floor independent of routing knowledge (damage, label obscurement, outages), empirically $\approx 0.01$–$0.02$ at CHEMA (asserted, not yet sourced to a counted table). This was stated as a hard-bound theorem in prior heads. v5.0 demotes it to <strong>Claim 5.1, a structural hypothesis</strong>: the prior "proof" never justified the <em>product</em> form (no step warrants multiplying the two loss channels rather than subtracting), and it mixed two distinct employee populations — sorters'/pick-offs' quiz accuracy and loaders' FidelityScore — with no stated linking assumption. No new proof is offered; the missing independence/uniformity assumptions and the role-population mismatch are flagged as the reason it is not a theorem.</p>
+      <p>The operational implication survives the demotion: monitoring LIB and misload frequency without LTC accuracy is reading Level 3 without Level 1. When SFR is elevated, the diagnostic question is not "was the sort rushed?" but "do the sorters on this belt know their routes?" — high quiz accuracy with elevated SFR is a staffing or physical signal; low quiz accuracy with elevated SFR is a training signal.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>Operational <em>constants</em></h2></div>
+      <p>A small set of quantities anchors pre-sort planning and live diagnostics. The 30-sort + 100-snapshot pass and the contract reconciliation revised them: $\gamma$ recalibrated at full-corpus scale; $\varepsilon_\text{schema}$ retired from constant status to a small empirical measurement; $\rho_\text{PD/Hub}$ corrected by 22%; $\kappa_{9\text{-}12}$ established as a DOW-indexed vector with a named basis. All values match <code>metric_contract.json</code>.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">κ</div><div class="d">Zone 9–12 (operator "Zone 3") share. A DOW-indexed vector on the SEAS basis — not a flat scalar.</div><div class="nm">kappa_Z3 (DOW)</div><div class="v">Mon 0.413 → Fri 0.322</div></div>
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly geometric volume decay, recalibrated on the full 254-sort corpus. Friday ≈ 93% of Monday.</div><div class="nm">gamma</div><div class="v">γ = 0.982 ± 0.010</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">PD-belt share of total iGate Hub scan volume — a volume share, corrected down from 0.65.</div><div class="nm">rho_PD/Hub</div><div class="v">ρ = 0.509 ± 0.025</div></div>
+        <div class="const"><div class="sym">Π</div><div class="d">SOR productivity index (packages per paid hour, building basis), with cost field $c = 1/\Pi$.</div><div class="nm">Pi_SOR · c</div><div class="v">Π ≈ 120.3 · c = 1/Π</div></div>
+      </div>
+
+      <p>The canonical $\kappa_{Z3}$ on the SEAS basis is Mon 0.413 · Tue 0.395 · Wed 0.385 · Thu 0.380 · Fri 0.322, full-year mean <strong>0.368 ± 0.014</strong> (16 SEAS Hub Monthly files, Jan 2025 → Apr 2026). The <strong>iGate basis</strong> sits ~0.04–0.06 lower at every phase (≈ <strong>0.31–0.33</strong>; the historical "0.311" is the iGate-basis summary). The two differ by the <strong>CCHIL → PD-09 attribution rule</strong> — SEAS bundles all CCHIL volume under the single PD-09 row, while iGate distributes it by physical scanner — not by phase scope. The tracker exposes both with a <code>cchil_distribution: SEAS|iGate</code> toggle. The other anchors: $U_T^\text{cap} = 0.85$ (a Twilight-scope cap derived from a mean of per-sort maxima, with a stated caveat that it is not a measured onset point); $\bar{\varepsilon}_\text{schema} \approx 0.04$ DOW-flat (an empirical measurement, not a structural invariant).</p>
+
+      <div class="bt-callout"><code>adj_factor = 9200</code> is <strong>not</strong> one of the named structural constants. It is a fitted/derived scaling factor — almost certainly a hard-coded loader default (<code>build_ground_truth.py</code> subtracts a fixed non-scannable allowance of 9200). Its near-zero variance reflects that it is a code constant, not a discovered invariant of the physical building. The earlier "fifth structural constant" promotion (based on three identical integer-rounded values) is retracted.</div>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v5.0 reconciles three prior documents — <code>v4.17</code>, <code>v4.17_kappa-conformance</code>, and <code>cross_branch_synthesis_v5.0-ds</code> — into one authoritative Branch D reference, and applies the Branch-D rigor audit (whose verdict on the prior head was Reject / blocker). What changed: the primary blocker — the internal $\gamma$ self-contradiction, where the header banner said 0.982 while §6.2, the summary table, and the glossary said 0.958 — is <strong>resolved</strong>, with $\gamma = 0.982$ everywhere (0.958/0.938 retained only as explicitly-labeled historical lineage). $\kappa$ is corrected to the contract definition (a DOW-indexed vector on the SEAS basis) rather than the backwards-labeled flat scalars. The document is relabeled <strong>"synthesis"</strong> rather than "unification." <code>adj_factor = 9200</code> is <strong>demoted</strong> to a fitted scaling factor. The tautology-theorems are demoted (CURE×PD → definition + falsifiable hypothesis; Fidelity Ceiling → structural claim; phase-aware $\kappa_z$ → stratification observation), conservatively, with no new proofs. The self-certifying <strong>autoresearch appendix is removed</strong> in full. The external citation is corrected and demoted: Yang et al. (2025), <em>Step Back to Leap Forward: Self-Backtracking for Boosting Reasoning of Language Models</em> (arXiv:2502.04404), is treated as a borrowed term/analogy only, not a load-bearing methodology.</p>
+      <p>Honestly disclosed open items (carried, not resolved here): the v3.6 avgPPH 166→188.6→155 trajectory is still not reproducible from any directly-derivable PPH metric in the corpus, so SOR PPH (Actual, 115–128) is canonical for the live tracker and the 166–188 series carries a "definition pending" badge; $\alpha_\text{CURE}$ remains a single-snapshot tilt with no validated variance band; the $U_T^\text{cap} = 0.85$ threshold is a summary statistic (mean of per-sort maxima), not a measured saturation/bottleneck-onset point, and should be re-grounded; and the formal cross-branch unification — how A constrains B, B feeds C, and C directs operations — is <strong>not</strong> demonstrated and remains an open research direction.</p>
+
+      <div class="bt-callout">Rigor audit applied 2026-05-31. Supersedes v4.17, v4.17_kappa-conformance, and cross_branch_synthesis_v5.0-ds, reconciled into one head; consolidates v4.0–v4.1.2. Constants conformed to <code>metric_contract.json</code> (γ = 0.982; κ_Z3 DOW vector on SEAS basis; ρ = 0.509; Π_SOR ≈ 120.3, c = 1/Π). This is an internal operations-research and career brief, not a peer-reviewed paper — it states the sample size behind its numbers and the uncertainty around them, and it names what it does not prove.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

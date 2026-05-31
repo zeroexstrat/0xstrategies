@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Hub Ops Digital Twin (Shadow) — v3.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">digital twin</span></span>
+  <div class="end"><span class="live">rigor-applied · v3.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · b · whitepaper</div>
+      <div class="doc-t">Digital <em>Shadow</em></div>
+      <div class="doc-s">hub_ops · twin · v3.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>3.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>The idealized model</a>
+      <a href="#s2"><span class="n">/ 02</span>The proposed ~300-dim EKF</a>
+      <a href="#s3"><span class="n">/ 03</span>Observable layers</a>
+      <a href="#s4"><span class="n">/ 04</span>Operational constants</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">model status</div>
+      <dl><dt>filter</dt><dd>proposed</dd><dt>instances</dt><dd>0 (unbuilt)</dd><dt>perf claims</dt><dd>none</dd><dt>branch</dt><dd>B · shadow</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ hub_ops digital twin · v3.0 · rigor-applied ]</div>
+      <h1>Hub Operations Digital <em>Shadow</em> — a proposed multi-layer model, paired with validated findings.</h1>
+      <p class="doc-sub">A view of the Chelmsford Twilight sort as the projection of a much richer dynamical system onto the observable iGate/SOR subspace. The richer model — the ~300-dimensional EKF — is a proposed architecture, never instantiated. No performance number is claimed for it. What is claimed is a small set of operational findings drawn from real corpus data.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">Branch A (v1.4) models the sort as a closed iGate/SOR subsystem. Branch B asks the complementary question: if all relevant upstream data existed in real time, what would the complete model look like? The answer is a <strong>multi-layer dynamical system</strong> — external arrival, environmental, physical-infrastructure, package-composition, and human-factors layers, plus outward CURE/SEAS extensions — of approximate dimension 300, which the architecture proposes to track with an Extended Kalman Filter. <strong>This EKF has not been instantiated, fit, or run.</strong> No transition functions, observation models, Jacobians, or noise covariances are specified numerically; accordingly the paper makes <em>no performance claim</em> for it — no RMSE figures, no per-sensor value estimates, no accuracy numbers anywhere. The model is named a <em>digital shadow</em>, not a twin: an unbuilt model cannot honestly be called a running, synchronized twin. What v3.0 does contribute, on real data, is the validated findings of §11–§16 and the constants pinned to <code>metric_contract.json</code>.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>The <em>idealized model</em></h2></div>
+      <p>Every quantity v1.4 predicts — PPH trajectories, staffing needs, sort-quality scores — is determined not only by what happens inside the building but by what is approaching it. A feeder delayed on I-495 by a winter storm delivers its pieces late, the inbound ramp compresses, induction spikes, jam probability rises. The closed-system model sees none of this until the packages are on the belt; it infers external dynamics from their internal consequences, after the fact. That is not a failure of v1.4 — under present sensor coverage, the closed-system model is the correct model for the data that exist.</p>
+      <p>v3.0 develops the complementary view as a <strong>proposed, unbuilt digital shadow</strong>: a continuously-updated high-fidelity simulation that <em>would</em> ingest sensor data across layers that feed causally into sort dynamics before they ever surface in iGate. A digital <em>twin</em> is a running, continuously-synchronized model of a physical system. The model in this paper has never been instantiated. Calling it a twin would overstate it — so it is named a <strong>shadow</strong>, a model that would shadow the physical sort once built. The filename stays in the <code>digital_twin</code> lineage for archival continuity; the body language is "shadow" / "proposed model" throughout.</p>
+      <p>Informally, v1.4 is the closed iGate/SOR subsystem and the proposed model is a superset. It is <em>tempting</em> to say v1.4 is "the marginal" of the full filter, and earlier versions stated that as a theorem. That theorem is retracted (§05); the relation survives only as a conjecture under stated, unverified assumptions. v3.0 does not revise v1.4; it positions v1.4 as the validated, deployed model and the multi-layer shadow as a proposal.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>The proposed <em>~300-dim EKF</em></h2></div>
+      <p><strong>The ~300-dimensional EKF "digital twin" was never built, fit, or run.</strong> What follows is a <em>proposed architecture</em> — a design target, not a validated implementation. The concrete specification of state-transition functions, observation models, Jacobians, and noise covariances is not provided and has not been calibrated. <strong>No performance number is claimed for it anywhere</strong>: there are no RMSE figures, no per-sensor value estimates, and no accuracy numbers in this paper.</p>
+      <p>The complete state at time $t$ stacks the latent upstream layers on top of the v1.4 operational state $\mathbf{x}_\text{ops}(t)$, which is its observable projection onto the iGate/SOR subspace:</p>
+
+      <div class="math-block">
+        <span class="label">// design — proposed full state vector (not instantiated)</span>
+        $$\mathbf{X}(t) = \bigl[\mathbf{x}_\text{ext},\, \mathbf{x}_\text{env},\, \mathbf{x}_\text{infra},\, \mathbf{x}_\text{pkg},\, \mathbf{x}_\text{human},\, \mathbf{x}_\text{CURE},\, \mathbf{x}_\text{SEAS},\, \mathbf{x}_\text{ops}\bigr]$$
+      </div>
+
+      <p>With Chelmsford parameters (≈20 feeders, ≈30 belt segments, ≈120 chutes, ≈8 zones, ≈40 sorters, ≈100 destination lanes, three CURE×ZIP aggregation zones), the dimension count sums to approximately 300. <strong>This is a back-of-envelope sum of proposed layer sizes, not an instantiated state vector</strong> — no 300 named, ordered components are written down, and no filter has been run on them. The architecture proposes to track this state with an Extended Kalman Filter; the recursion below is the textbook EKF, reproduced for completeness as <em>design, not result</em>:</p>
+
+      <div class="math-block">
+        <span class="label">// design — proposed EKF recursion (terms unspecified numerically)</span>
+        $$ \hat{\mathbf{X}}(t{+}\delta t \mid t) = \mathbf{f}\bigl(\hat{\mathbf{X}}(t \mid t), \mathbf{u}(t)\bigr), \qquad \mathbf{P}(t{+}\delta t \mid t) = \mathbf{F}_t\, \mathbf{P}(t \mid t)\, \mathbf{F}_t^\top + \mathbf{Q}_t $$
+        $$ \mathbf{K}(t) = \mathbf{P}\,\mathbf{H}_t^\top \bigl(\mathbf{H}_t \mathbf{P}\, \mathbf{H}_t^\top + \mathbf{R}(t)\bigr)^{-1}, \quad \hat{\mathbf{X}}(t \mid t) = \hat{\mathbf{X}}(t \mid t{-}1) + \mathbf{K}(t)\bigl(\mathbf{z}(t) - \mathbf{h}(\hat{\mathbf{X}})\bigr) $$
+      </div>
+
+      <p>None of $\mathbf{f}, \mathbf{F}_t, \mathbf{Q}_t, \mathbf{h}, \mathbf{H}_t, \mathbf{R}(t)$ is specified. The migration roadmap from v1.4 to the full filter lists, for each candidate increment, only the data source it <em>would</em> require and a qualitative complexity tier (SOR push → minimal; belt telemetry → low; ORION manifests / feeder GPS → medium; weather + traffic + full EKF → high). It contains <strong>no RMSE column</strong>: the earlier 5–8% … 20–30% figures were invented — no EKF was built, so no RMSE could have been measured — and have been removed.</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>Observable <em>layers</em></h2></div>
+      <p>The proposed shadow adds five upstream layers that feed causally into sort dynamics before they appear in iGate, plus three outward layers. Each row names the data source it <em>would</em> require — none of these sensors is currently integrated. Where a layer is unbuilt, the paper says so; it does not claim the layer's value.</p>
+      <table class="tbl">
+        <thead><tr><th>layer</th><th>proposed data source</th><th>causal role · status</th></tr></thead>
+        <tbody>
+          <tr><td>External arrival</td><td>Feeder GPS, P-car GPS, ORION manifests</td><td>Volume, timing, phasing of inbound flow — <em>not integrated</em></td></tr>
+          <tr><td>Environmental</td><td>NOAA / NWS, HERE / Waze, DOT incident feeds</td><td>Feeder ETA modulation, road delay — <em>NOAA pull is cheapest candidate</em></td></tr>
+          <tr><td>Physical infra</td><td>Belt-speed sensors, induction counters, chute load cells</td><td>Throughput ceiling, jam probability, back-pressure — <em>not integrated</em></td></tr>
+          <tr><td>Pkg composition</td><td>SLIC manifests, vision dims, smalls-bag scans</td><td>Belt-capacity consumption, zone load — <em>not integrated</em></td></tr>
+          <tr><td>Human factors</td><td>Time-on-task, break records, experience history</td><td>Effective PPH vs fatigue / experience — <em>not integrated</em></td></tr>
+          <tr><td>CURE outbound</td><td>CURE Main Data export ($t{+}24$h)</td><td>Dock utilization → loading bottleneck — <em>validated findings §11</em></td></tr>
+          <tr><td>SEAS comp.</td><td>SEAS Hub / Employee Summary</td><td>Smalls composition, misload / LIB counts — <em>validated findings §12</em></td></tr>
+          <tr><td>LIB surface</td><td>SEAS LIB roll-up</td><td>Sort-end correction signal — <em>proposed correction only</em></td></tr>
+        </tbody>
+      </table>
+      <p>Because CURE/SEAS data arrive at $t{+}24$h — incompatible with a 15-minute synchronous update — they would feed correction of the <em>previous</em> sort's trajectory, not real-time state, until asynchronous schemes (out-of-sequence measurement, fixed-lag smoothers) are implemented. The induction ceiling is the cleanest single-sensor target: an induction-rate counter plus a main-belt-speed feed would let the tracker compute the buffer clear-time as a sort-end push estimate — a proposed capability, not a deployed one.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>Operational <em>constants</em></h2></div>
+      <p>The validated findings — the part of this paper that rests on real data — are governed by a single source of truth, <code>metric_contract.json</code>. Four constants anchor the model; all carry stated uncertainty.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly geometric volume decay. Full 254-sort corpus recalibration; Friday ≈ 93% of Monday.</div><div class="nm">gamma_weekly</div><div class="v">γ = 0.982 ± 0.010</div></div>
+        <div class="const"><div class="sym">κ</div><div class="d">Zone 9-12 share — a DOW-indexed vector on the SEAS basis, not a flat invariant.</div><div class="nm">kappa(DOW)</div><div class="v">Mon 0.413 · Fri 0.322</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">PD-belt share of total iGate Hub volume — a volume share, not a correlation.</div><div class="nm">rho_PD/Hub</div><div class="v">ρ = 0.509 ± 0.025</div></div>
+        <div class="const"><div class="sym">Π</div><div class="d">Building PPH; cost-per-piece $c = 1/\Pi$. Paid hours = volume ÷ plan PPH.</div><div class="nm">Pi_SOR · c</div><div class="v">Π ≈ 120.3 · c = 1/Π</div></div>
+      </div>
+
+      <p><strong>γ = 0.982.</strong> v2.1 stated γ ≈ 0.938 from the single steepest week; the 6-week mean was 0.958; the full 254-sort corpus recalibration gives the canonical <strong>γ = 0.982 ± 0.010</strong> (Fri/Mon ratio 0.9297; $\gamma = 0.9297^{1/4}$). Each step widened the window — the full year is gentler than any short window. At γ = 0.982, $\hat{V}_\text{Fri}/V_\text{Mon} = 0.982^4 \approx 0.93$: Friday is <em>not meaningfully light</em>, so the old "Friday looks light — cut a head" advice (built on the stale steep γ) is operationally wrong and corrected here.</p>
+      <p><strong>κ as a DOW vector.</strong> The Zone 9-12 share (coordinator's Zone 3 = PD-9…PD-12) is not a flat invariant. On the SEAS basis it runs Mon 0.413 · Tue 0.403 · Wed 0.374 · Thu 0.357 · Fri 0.322 (full-year mean 0.368 ± 0.014). The iGate basis sits ≈0.04–0.06 lower at every phase (≈0.31–0.33 — this is what the historical "0.311" measured on a 5-sort window). The two bases differ by the <strong>CCHIL → PD-09 attribution rule</strong> — SEAS bundles all CCHIL volume onto the PD-09 row while iGate distributes by physical scanner location — <em>not</em> by phase scope; that mechanism is stated as a hypothesis still pending the closing arithmetic. The ≈9 pp Mon→Fri swing means zone-share forecasts must use the DOW value, not a flat constant.</p>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v3.0 reconciles the audited canonical head, the κ DOW-vector revision, and the DeepSeek revision (which first renamed twin → shadow) into one authoritative head, under a <strong>conservative</strong> theorem-handling decision: unproven flagship claims are retracted or demoted with a one-line reason, not re-proven; the unbuilt model is re-framed, not built.</p>
+      <p>What changed: the <strong>~300-dim EKF was relabeled a proposed architecture</strong> and every invented performance number was removed (the migration-table RMSE-reduction percentages, the "value of each new sensor stream" quantification, all implied per-sensor RMSE deltas). The <strong>"missing sensors" unfalsifiability deflection was deleted</strong> — the old closing line ("the gap is not a gap in understanding, it is a gap in sensor coverage; the understanding is already complete") is replaced by a falsifiable target: the model earns the name "validated" only if an instantiated filter, on held-out sorts it was not fit to, beats the current DOP single-point projection by a pre-registered margin with reported error bars. <strong>Theorem 8.1 (EKF marginalization) was retracted</strong> — marginalizing latent states out of a coupled nonlinear EKF does not in general yield a Kalman filter on the sub-block with merely inflated $Q$, and the old "proof" defined its own noise term as itself; it survives only as Conjecture 8.1 under explicit, unverified hypotheses with no derivation attempted. The N=2–3 autoresearch appendix was excised in full; mislabeled "theorems" (volume forecast, delay cascade, effective PPH, LIB decay, the ∂SQS/∂λ threshold) were demoted to definitions / identities / observations; constants were pinned to <code>metric_contract.json</code>.</p>
+      <p>Honestly disclosed limits, carried forward: the proposed EKF has <strong>no instantiation</strong> — either a minimal filter is built and validated on held-out sorts, or the model remains a design proposal, and this paper takes the latter, honest stance. The CCHIL level-shift mechanism is a hypothesis (the redistribute-on-same-sorts arithmetic has not been performed; the two bases were measured on different corpora/periods). The §5.3 jam-hazard parameters and the Weibull duration form are unestimated placeholders. The heat-degradation slope is an office-cognitive-work figure flagged for domain transfer. The session-log dates are placeholders pending a true collection log.</p>
+
+      <div class="bt-callout">Rigor audit applied 2026-05-31. Supersedes v2.13, v2.13_kappa-conformance, and digital_shadow_v3.0-ds, reconciled into one head. The ~300-dim EKF is a PROPOSED, UNBUILT architecture — no RMSE, no per-sensor value, no accuracy figure is claimed for it. Constants conformed to <code>metric_contract.json</code> (γ = 0.982; κ_Z3 DOW-vector on SEAS basis; ρ = 0.509; Π_SOR ≈ 120.3, c = 1/Π). This is an internal operations-research and career brief, not a peer-reviewed paper.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

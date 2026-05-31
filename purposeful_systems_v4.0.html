@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Hub Ops Purposeful Systems — v4.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">purposeful systems</span></span>
+  <div class="end"><span class="live">rigor-applied · v4.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · c · whitepaper</div>
+      <div class="doc-t">Purposeful <em>Systems</em></div>
+      <div class="doc-s">hub_ops · purposeful · v4.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>4.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>Purposeful systems framing</a>
+      <a href="#s2"><span class="n">/ 02</span>The emergence principle</a>
+      <a href="#s3"><span class="n">/ 03</span>Scan compliance — a descriptive model</a>
+      <a href="#s4"><span class="n">/ 04</span>Zone social potential Φz</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">branch</div>
+      <dl><dt>theory</dt><dd>behavioral</dd><dd>+ structural</dd><dt>anchor</dt><dd>AUDIT_v2</dd><dt>basis</dt><dd>Ackoff/Emery</dd><dt>siblings</dt><dd>A · B · D</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ hub ops · purposeful systems · v4.0 · rigor-applied ]</div>
+      <h1>Purposeful <em>Systems</em> — why people do what they do on the floor.</h1>
+      <p class="doc-sub">A behavioral and structural position paper grounding the Chelmsford hub in Ackoff and Emery's purposeful-systems theory. The hub is not only a machine processing packages — it is a purposeful social system of purposeful individuals. The mechanistic view answers what is happening; this branch asks why.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">The v1.4 and v2.0 frameworks model the sort as a physical and informational system — correct, powerful, and incomplete. They answer <em>what is happening</em>, not <em>why people are doing what they are doing</em>. v4.0 grounds hub operations in the <strong>purposeful systems theory</strong> of Ackoff and Emery (1972): individuals can select ends, not only means, and their purposes may align, conflict, or stay orthogonal to the collective. The framework's load-bearing content is honestly bounded. Its <strong>one valid formal result</strong> is the reductionist-fallacy proposition (a law-of-total-variance argument). The <strong>Emergence Gap</strong> is a hypothesis, not a theorem. The scan-compliance result is a <strong>descriptive cost-ratio model</strong>, not a Nash equilibrium — there is no game. This head is rigor-audited: false theorems are demoted, decorative abstraction is removed, and constants conform to <code>metric_contract.json</code>.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>Purposeful systems <em>framing</em></h2></div>
+      <p>In 1972 Russell Ackoff and Fred Emery published <em>On Purposeful Systems</em>. Their central distinction: a <strong>purposeful system</strong> can pursue different goals <strong>under constant conditions</strong> — it selects ends as well as means, not merely means to a fixed end. That is stronger than goal-seeking, which varies means toward a goal fixed by design. The distinction maps directly onto the floor.</p>
+      <table class="tbl">
+        <thead><tr><th>entity</th><th>system type (capability)</th><th>chooses ends?</th></tr></thead>
+        <tbody>
+          <tr><td>iGate scanner, SOR</td><td>State-maintaining</td><td>No</td></tr>
+          <tr><td>Belt (auto-speed)</td><td>Goal-seeking — varies means</td><td>No</td></tr>
+          <tr><td>DOP Calculator</td><td>Multi-goal-seeking — selects among preset goals</td><td>Limited</td></tr>
+          <tr><td>Loader / sorter</td><td>Purposeful — selects ends</td><td>Yes</td></tr>
+          <tr><td>Hub Coordinator</td><td>Ideal-seeking — pursues asymptotic ideals</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+      <p>A conveyor belt is goal-seeking: the means adapt, the goal is fixed. A loader is <strong>purposeful</strong> — they choose how they scan and whether to pursue the system's fidelity goal at all. The coordinator is <strong>ideal-seeking</strong>: zero missorts, perfect fidelity, optimal staffing — never fully attained, continuously shaping decisions. The table classifies <em>behavioral capability</em>, not job performance; "compliant / engaged / expert" are observations within that capability, not falsifiable system-type assignments. The taxonomy is an organizing lens, not a measurement instrument — stated plainly so unobservable typing is never presented as an empirical claim.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>The <em>emergence principle</em> — a hypothesis</h2></div>
+      <p>The central operational thesis of this branch: an individual loader's PPH is, in part, a measurement of the system acting through that person, so hub throughput is not simply the sum of isolated individual performances. The <strong>Emergence Gap</strong> is defined as the difference between actual throughput and the reductionist (sum-of-individuals) estimate:</p>
+
+      <div class="math-block">
+        <span class="label">// def 6.3 — emergence gap</span>
+        $$ \mathcal{E}(t) = T_\text{actual}(t) - \hat{T}_\text{reduct}(t) = \sum_{j\neq k}\Gamma_{jk}(t) + \Xi_z(t) $$
+      </div>
+
+      <p>It is essential to be honest about status. Because $\mathcal{E}$ is <em>defined</em> as actual minus reductionist, the statement "$\mathcal{E}\neq 0$" merely says the reductionist model has error — true of any imperfect model, not a derivable theorem. So the proposition that the gap is non-zero <strong>and operationally significant</strong> (large, sign-predictable from social conditions, inestimable from individual data alone) is stated as <strong>Hypothesis 6.1</strong>, requiring zone-level data the project does not yet have. Prior versions presented this as a theorem with a proof that cited a now-retracted compliance equilibrium and appealed to authority; that proof is withdrawn.</p>
+
+      <p>The one piece of this part that carries a valid proof is <strong>Proposition 9.1</strong> (the reductionist fallacy): by the law of total variance, a model that also observes zone-level conditions weakly reduces RMSE versus one using individual data alone. Its honest scope is modest — it is the generic statement that <em>any</em> informative regressor weakly reduces error; it says nothing specific to emergence and holds only <strong>if</strong> the social covariate actually carries information about $\mathcal{E}$. It is not a deep result; it is the rigorous floor under the Emergence Principle, and the rest of the part is explicitly hypothesis.</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>Scan compliance — a <em>descriptive model</em></h2></div>
+      <p>Each loader's scanning-compliance choice is modelled as a <strong>single-agent decision</strong> under a fixed, exogenous supervisory monitoring rate $\bar{p}$. The binary effort has a precise contractual referent: $e_j=1$ means following OJS Loader Methods #30, #33, and #7 — scan the bay-door ULD before entering, scan every package ("scan one, load one"), and log on with one's own correct employee ID. A continuous-effort relaxation (effort read as a long-run compliance rate) yields a descriptive cost-ratio relation:</p>
+
+      <div class="math-block">
+        <span class="label">// behavioral model 2.1 — cost-ratio compliance (descriptive, not an equilibrium)</span>
+        $$ e_j \;\approx\; \frac{\kappa_{\text{int}}}{\,s + d\,}\cdot \bar{p} $$
+      </div>
+
+      <p><strong>This is not a Nash equilibrium and not a game.</strong> The supervisor has no payoff function and no strategy space, and $\bar{p}$ is a fixed parameter — there is no second player to best-respond to. Prior versions (including v4.0-ds) labelled the closed form a "Nash equilibrium" / "mixed-strategy equilibrium"; that claim is <strong>retracted</strong>. The relation is offered only as a <em>descriptive heuristic</em> for an aggregated compliance rate: compliance rises with monitoring $\bar{p}$ and with the intervention-cost-to-friction ratio $\kappa_{\text{int}}/(s+d)$. The parameters are illustrative; no equilibrium is computed or verified, and the reading is directional, not a calibrated prediction.</p>
+
+      <p>The useful corollary is a <strong>design</strong> one, stated as a structural conjecture: OJS supervision plausibly acts on this ratio by lowering the discomfort term $d$ (its methods are engineered to minimize physical strain), so when methods are internalized, compliant scanning is less effortful and the heuristic expects higher compliance <em>without</em> raising monitoring. When OJS practice degrades, $d$ rises, and a FidelityScore drop then reflects worsening method internalization rather than worsening intent — indicating OJS refresh over more monitoring. This is consistent with OJS design intent, not a theorem; measuring $d$ directly is what would test it.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>Zone social potential <em>Φz</em></h2></div>
+      <p>If the gap is real, what governs it? The framework proposes a scalar <strong>Zone Social Potential</strong> $\Phi_z(t)$ — a convex combination of norm level, visibility, feedback, skill-match, interaction rate, and (negatively) belt pressure, with literature-grounded prior weights summing to one:</p>
+
+      <div class="math-block">
+        <span class="label">// def 8.1 — zone social potential</span>
+        $$ \Phi_z(t) = w_n\bar{n}_z(t) + w_v\overline{\text{visibility}}_z(t) + w_f\,\text{feedback}_z(t) + w_s\,\text{skill\_match}_z + w_i\,\rho_z^\text{interact}(t) - w_d\,\rho_{b,z}(t) $$
+      </div>
+
+      <p>$\Phi_z$ is high when conditions favor collective flow, low or negative when they suppress it. <strong>Hypothesis 8.1</strong> proposes the emergence gap is a monotone-increasing function of $\Phi_z$ — positive premia above a flow threshold, negative cascades below a cascade threshold. This is explicitly a <em>hypothesis</em>: $g(\cdot)$ carries free parameters. Prior versions showed a "within 1% of prediction" worked example (predicted swing ≈ 600 vs observed 606), but the two premium knobs were chosen to hit the observed number — fitting two free parameters to one data point is curve-fitting, not validation, and that example is retained only as an illustration of the functional form.</p>
+
+      <p>The deployable part is humbler and real: $\Phi_z$'s six inputs map onto existing tracker fields, and three event types already in iGate/SOR history (a PPH drop without an induction decrease; a fidelity type-error cluster; a cross-zone correlation event) serve as <strong>implicit backtrack annotations</strong> with no new data collection. That implicit-$D_{back}$ construction — not the Φz field itself — is the paper's most directly shippable contribution. The operational takeaway survives as a <em>strategy hypothesis</em>: the coordinator's highest-leverage object is the zone condition, not the individual conversation.</p>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v4.0 reconciles three prior documents (v3.26, the κ-conformance revision, and the DeepSeek v4.0-ds audit) into one authoritative Branch C head and finishes the demotions the earlier audit left undone. What changed: the compliance <strong>"Nash equilibrium" (Thm 2.3) is demoted</strong> to a descriptive single-agent cost-ratio heuristic, the "Nash"/"game" language retracted, and its four downstream dependents — the Emergence-Gap proof, the OJS interpretation, the OJS-recertification corollary, and the visibility prior-weight rationale — corrected to no longer claim equilibrium. The <strong>Brouwer fixed-point theorem</strong> (left in v4.0-ds) is removed, the <strong>category-theory section</strong> confirmed deleted, and the series-independence theorem kept only as a neutral note. Tautology-"theorems" are demoted to definitions / hypotheses / conjectures (Thm 2.1 → Definition; 6.1, 8.1, 10.1 → Hypotheses; 13.1 → Conjecture; Remark 14.1 → a conditional observation under an explicit accurate-scorer assumption). Proposition 9.1 is the one valid formal result, kept with honest scope.</p>
+
+      <p>Constants are pinned to <code>metric_contract.json</code>: γ = <strong>0.982 ± 0.010</strong> (full 254-sort corpus; supersedes the stale 0.958 / 0.938); κ_Z3 is the <strong>DOW vector on the SEAS basis</strong> (Mon 0.413 → Fri 0.322, full-year mean ≈ 0.368 ± 0.014), with the iGate basis ≈ 0.31–0.33 sitting lower at every phase by the CCHIL→PD-09 attribution rule (not a contradiction); ρ_PD/Hub = 0.509 ± 0.025; and Π_SOR ≈ 120.3 with cost field c = 1/Π. Statistical hygiene followed: the Hackman 35–45% figure is down-qualified to a directional prior (the precise value could not be verified), the norm-anchor "35% core" is flagged n=1 / untested with surnames removed, and the SOR-signal table is flagged n=3 directional.</p>
+
+      <p>Honestly disclosed open items: the <strong>Φz field, the coordinator MDP, the compliance model, and the norm-anchor predictions are all untested</strong> — coordinator intervention logs do not exist, so the action variable is unlogged and the borrowed convergence result's coverage precondition is unmet. A cross-artifact naming collision remains flagged for the constants owner (the retired 188.6 / 155 avgPPH series still appears as engine cold-start seeds under a different object name). The deployable content is the implicit-$D_{back}$ construction and Proposition 9.1; the rest is operational hypothesis pending the Tailscale instrumentation.</p>
+
+      <div class="bt-callout">Rigor audit applied 2026-05-31. Reconciles v3.26 + v3.26_kappa-conformance + v4.0-ds into one Branch C head. Nash-equilibrium compliance theorem demoted to a descriptive cost-ratio model (no game, no second player); Brouwer and category-theory decoration removed; tautology-theorems demoted to definitions / hypotheses / conjectures; constants conformed to <code>metric_contract.json</code>. This is an applied operations-research position paper grounded in real Chelmsford operations, not a theorem-bearing mathematical paper — it states what it does and does not establish.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Hub Ops Mathematical Framework — v2.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">mathematical framework</span></span>
+  <div class="end"><span class="live">rigor-applied · v2.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · A · whitepaper</div>
+      <div class="doc-t">Mathematical <em>Framework</em></div>
+      <div class="doc-s">hub_ops · math · v2.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>2.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>Model layers</a>
+      <a href="#s2"><span class="n">/ 02</span>Operational constants</a>
+      <a href="#s3"><span class="n">/ 03</span>Jam-Breaker — conditional</a>
+      <a href="#s4"><span class="n">/ 04</span>ZIP ultrametric routing</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">corpus</div>
+      <dl><dt>sorts</dt><dd>30 (W13–W18)</dd><dt>snaps</dt><dd>100 intra-sort</dd><dt>window</dt><dd>Mar–May'26</dd><dt>γ basis</dt><dd>254-sort</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ branch a · hub ops math · v2.0 · rigor-applied ]</div>
+      <h1>Hub Operations <em>Mathematical Framework</em> — the operational baseline.</h1>
+      <p class="doc-sub">The consolidated Branch A head for the CHEMA Twilight sort: ZIP-ultrametric routing, the Sort Quality Score, the Jam-Breaker two-layer distortion model, predictive borrow/loan staffing, and the structural constants — each estimated with stated uncertainty and pinned to a single source of truth.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">This framework gives the three timescales of a UPS Twilight sort — per-question (LTC), per-snapshot (the live tracker), and per-sort (post-sort reporting) — <strong>one mathematical surface</strong>, so an instrument finding and an operational decision can be reasoned about in the same language. The mathematics that survives audit is structural: ZIP routing is a <strong>proved ultrametric</strong>, the sorter is a discrete memoryless channel, and the Sort Quality Score is a clipped convex combination. The Jam-Breaker model is restated as a <em>conditional</em> proposition — its bias sign is indeterminate, not "always upward." Four named constants ($\gamma$, $\kappa$, $\rho$, $\Pi$) are conformed to <code>metric_contract.json</code> and quoted with their sample size and uncertainty. This v2.0 head reconciles three prior drafts and applies a publishability audit; it is an operations-research and career brief, not a peer-reviewed paper.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>The <em>model layers</em></h2></div>
+      <p>The Twilight sort inducts 90,000–120,000 packages each weekday across ~17 work areas and twelve primary-destination (PD) belts, on three nested timescales — each with its own data product and decision horizon. The framework binds them so a single mathematical object can serve all three:</p>
+      <table class="tbl">
+        <thead><tr><th>timescale</th><th>instrument</th><th>object</th><th>decision horizon</th></tr></thead>
+        <tbody>
+          <tr><td>per-question</td><td>Label Training Certification (LTC)</td><td>ZIP→belt accuracy; sorter channel matrix $\mathbf{M}$</td><td>1–5 seconds</td></tr>
+          <tr><td>per-snapshot</td><td>Hub Operations Tracker</td><td>live PPH, FidelityScore, projected end-of-sort</td><td>15–30 minutes</td></tr>
+          <tr><td>per-sort</td><td>SEAS / CURE / LIB / Misload</td><td>Sort Quality Score, trend, quality control</td><td>4 hours (~250/yr)</td></tr>
+        </tbody>
+      </table>
+      <p>Two structural results anchor the surface. The sorter is modeled as a <strong>discrete memoryless channel</strong> with right-stochastic transition matrix $M_{ij}=\Pr[\text{answer}=b_j \mid \text{correct}=b_i]$; accuracy is the diagonal, missorts are the off-diagonal, and per-sorter estimates carry a <strong>Wilson score interval</strong> rather than a point estimate. The <strong>Sort Quality Score</strong> (SQS) is a convex combination of four components — PPH, fidelity, staffing adherence, missort quality — each clipped to $[0,1]$ <em>before</em> weighting so that $\mathrm{SQS}\in[0,1]$ with interpretable bounds. v2.0 documents in place where the live-tracker code diverges from this specification rather than silently reconciling the two.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>Operational <em>constants</em></h2></div>
+      <p>Every named structural constant is pinned to <code>metric_contract.json</code> — the ratified single source of truth — so the body cannot drift from the contract. Each is quoted with its basis and uncertainty; none is asserted.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly Mon→Fri geometric volume decay. Full 254-sort corpus, Fri/Mon ratio 0.9297. Supersedes the stale 0.958 (30-sort) and 0.938 (1-week), kept only as labeled history.</div><div class="nm">gamma_weekly</div><div class="v">γ = 0.982 ± 0.010</div></div>
+        <div class="const"><div class="sym">κ</div><div class="d">Zone 9-12 PD-belt share, SEAS basis — a DOW-indexed vector, not a scalar. iGate basis ≈ 0.31–0.33; the two differ by the CCHIL→PD-09 rule, not phase scope.</div><div class="nm">kappa(DOW)</div><div class="v">Mon 0.413 → Fri 0.322 · μ 0.368 ± 0.014</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">PD-belt share of total iGate Hub volume — a volume share, not a correlation. Corrected from a prior 0.65.</div><div class="nm">rho_PD/Hub</div><div class="v">ρ = 0.509 ± 0.025</div></div>
+        <div class="const"><div class="sym">Π</div><div class="d">Canonical building-aggregate hub PPH (iGate-net ÷ SOR-hours). Carries the per-piece cost field $c = 1/\Pi$ (paid-minutes-per-piece $=60/\Pi$).</div><div class="nm">Pi_SOR · c=1/Π</div><div class="v">Π<sub>SOR</sub> ≈ 120.3</div></div>
+      </div>
+
+      <p>The $\kappa_{9\text{-}12}$ SEAS-basis day-of-week vector is Mon 0.413 · Tue 0.395 · Wed 0.385 · Thu 0.380 · Fri 0.322 (full-year SEAS mean ≈ 0.368 ± 0.014). These are small-sample estimates (≈ 6 sorts per day of week): the Tue/Wed/Thu values are <strong>not statistically distinguishable</strong> from one another, and only the Monday-versus-Friday contrast — a ~9-percentage-point swing — is plausibly resolvable at this sample size. The Mon→Fri vector is the <strong>canonical object</strong>; a flat $\kappa = 0.311$ mis-calibrates Monday by ~0.10 (≈ 30% error) on the SEAS basis. PPH is always defined on the <strong>iGate-net ÷ SOR-hours</strong> basis; the SOR managed "PPH actual" field is not used, because it is inflated by district-level volume redistribution.</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>The <em>Jam-Breaker</em> — a conditional result</h2></div>
+      <p>When a jam piles packages on a sort aisle, jam-breaker employees clear it — but during clearing they (a) work without scanning, contributing zero to iGate, and (b) may be clocked under overhead codes rather than production codes, so their hours never enter the SOR denominator. This produces <strong>two distortion layers</strong> on observed PPH that push in <em>opposite</em> directions: Layer 1 (hiding jam-breaker hours $H_\text{jam}$) compresses the denominator and inflates the rate, while Layer 2 (the unscanned scan-gap volume $V_\text{gap}$) deflates it.</p>
+      <p>The prior drafts asserted observed PPH is <em>always biased upward</em>. That claim is algebraically false. The exact distortion ratio $\Delta = \mathrm{PPH}_\text{obs}/\mathrm{PPH}_\text{L2}$ and its sign condition are:</p>
+
+      <div class="math-block">
+        <span class="label">// prop. 7.1 — jam-breaker distortion, exact conditional sign</span>
+        $$ \Delta \;=\; \frac{(H_\text{prod} + H_\text{jam})\,V}{H_\text{prod}\,(V + V_\text{gap})}, \qquad \Delta > 1 \iff H_\text{jam}\cdot V \;>\; H_\text{prod}\cdot V_\text{gap}. $$
+      </div>
+
+      <p>The bias sign is therefore <strong>indeterminate</strong> when both $H_\text{jam}>0$ and $V_\text{gap}>0$: observed PPH is biased upward only if the denominator-compression effect $H_\text{jam}\cdot V$ exceeds the missing-volume effect $H_\text{prod}\cdot V_\text{gap}$, and downward otherwise. A worked counterexample — $H_\text{prod}=100$, $H_\text{jam}=10$, $V=1000$, $V_\text{gap}=200$ — gives $\Delta = \tfrac{110\cdot1000}{100\cdot1200} = 0.917 < 1$: a jam that biases the rate <em>down</em>, directly refuting the retracted statement. Accordingly v2.0 demotes this from a "Theorem (always upward)" to a <strong>Proposition (conditional sign)</strong>, and the tracker reports the measured <em>direction</em> of the bias from the $(H_\text{jam}, V_\text{gap})$ pair rather than assuming inflation.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>ZIP <em>ultrametric</em> routing</h2></div>
+      <p>The routing function $f : Z \to B$ maps five-digit ZIP codes to belts. Define the longest-common-prefix length $\ell(z_1,z_2)$ and the <strong>prefix metric</strong> $d(z_1,z_2) = 10^{\,5-\ell}$ for $z_1\ne z_2$ (and $0$ otherwise). This is the one structural theorem of the framework that is both proved and externally verified:</p>
+
+      <div class="math-block">
+        <span class="label">// thm. 2.1 — ultrametric property</span>
+        $$ d(z_1, z_3) \;\le\; \max\big(d(z_1, z_2),\; d(z_2, z_3)\big) \quad \text{for all } z_1, z_2, z_3 \in Z. $$
+      </div>
+
+      <p>The proof follows from $\ell_{13} \ge \min(\ell_{12}, \ell_{23})$ and the fact that $x \mapsto 10^{5-x}$ is decreasing. The operational consequence is <strong>prefix-based local constancy</strong>: ZIPs sharing a long prefix cluster together under $d$, and $f$ is constant on those clusters except where a SLIC-level rule cuts across a prefix. This is the load-bearing justification for prefix-based question selection in LTC and prefix-based aggregation in the tracker's per-zone summaries. Coordinator-side routing adjustments — a swap, an ad-hoc redirect, a one-day overflow override — are modeled as <strong>overlays</strong>: a finite partial function $o$ applied pointwise, $f \triangleleft o$, forming an idempotent monoid of partial overrides (v2.0 softened the prior unverified left-regular-band claim to this weaker, demonstrated one).</p>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v2.0 reconciles three prior Branch A drafts (<code>v1.27</code>, <code>v1.27_kappa-conformance</code>, <code>v2.0-ds</code>) into one authoritative head and applies a publishability audit. What changed: <strong>Theorem 7.1 (Jam-Breaker) corrected to a conditional Proposition</strong> with the indeterminate sign and worked counterexamples; the ~40% self-certifying <strong>autoresearch appendix excised</strong> (its $N$=2–3 ADMM / Kan-extension / MDL "constants" removed); constants <strong>pinned to <code>metric_contract.json</code></strong> (γ corrected from the stale 0.938→0.958 lineage to the full-corpus 0.982; ρ corrected to a 0.509 volume share, not a Pearson correlation; Π<sub>SOR</sub>≈120.3 with $c=1/\Pi$ named). Statistical hygiene was applied throughout: the CURE × PPH correlations now report <strong>$n$, 95% CIs, and two-sided $p$</strong> and are explicitly labeled <em>not statistically distinguishable from zero</em> (every $|r|<0.30$, every CI spans 0), with the "bottleneck-tail mechanism" demoted from a theorem to a hypothesis. The borrow/loan optimality condition was corrected to its true first-difference form; SQS components are clipped before weighting and the spec/implementation divergence is flagged in place; the decorative "Phase Markov chain" label was dropped for "phase partition."</p>
+      <p>Honestly disclosed limits: per-day-of-week sample sizes are small (≈ 6 sorts) and the κ DOW-vector and iGate-basis number are quoted from the contract / audit, not re-fit here; the 166→188.6→155 iGate avgPPH series is <strong>not reconstructable</strong> from any loader-derivable PPH metric and is carried as a historical UI artifact (deferred to Branch C), not a result; κ_Z1 and κ_Z2 remain uncomputed (a labeled data gap); the multi-period staffing optimizer is an engineering objective with <strong>no claimed approximation guarantee</strong>; and three SOR-exceeds-Hub sorts (2026-03-31, 04-02, 04-23) remain held back pending iGate/TMS disambiguation. OJS/GEMS and operator-confirmed facts are internal-source citations.</p>
+
+      <div class="bt-callout">Rigor audit applied 2026-05-31. Supersedes v1.27, v1.27_kappa-conformance, and v2.0-ds, reconciled into one Branch A head. Constants conformed to <code>metric_contract.json</code>; false/unproven flagship claims retracted or demoted. This is an internal operations-research and career brief, not a peer-reviewed paper — it states the sample size behind its numbers and the uncertainty around them.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

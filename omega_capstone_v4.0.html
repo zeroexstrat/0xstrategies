@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Omega Capstone — Distributed Digital Shadow v4.0 · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sw:280px;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:var(--sw);right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.14),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+.layout{display:grid;grid-template-columns:var(--sw) 1fr;min-height:100vh;padding-top:46px;position:relative;z-index:2}
+
+.side{background:var(--panel);border-right:1px solid var(--rule);position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}.side::-webkit-scrollbar-thumb{background:var(--rule-hi)}
+.side-head{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.side-head .eyebrow{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.side-head .doc-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--paper);line-height:1.15;letter-spacing:-.012em;margin-bottom:4px}
+.side-head .doc-t em{color:var(--gold);font-style:italic;font-weight:400}
+.side-head .doc-s{font-size:10px;color:var(--paper-3);letter-spacing:.04em}
+
+.sb-sec{padding:14px 22px;border-bottom:1px solid var(--rule)}
+.sb-lbl{font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.sb-sec dl{display:grid;grid-template-columns:74px 1fr;row-gap:4px;font-size:10.5px}
+.sb-sec dt{color:var(--mute);letter-spacing:.04em}
+.sb-sec dd{color:var(--paper);font-weight:500}
+
+.side-toc a{display:block;padding:6px 8px;font-size:12px;color:var(--paper-2);border-left:2px solid transparent;line-height:1.35;margin-left:-8px;transition:all .12s}
+.side-toc a:hover{background:var(--bg-2);color:var(--paper)}
+.side-toc a.active{border-left-color:var(--gold);color:var(--gold);background:var(--bg-2)}
+.side-toc a .n{display:block;font-size:9.5px;color:var(--mute);margin-bottom:1px;letter-spacing:.04em}
+
+.main{padding:36px 64px 100px;max-width:920px}
+.doc-title{padding-bottom:24px;border-bottom:1.5px solid var(--gold);margin-bottom:32px}
+.doc-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.doc-title h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4vw,46px);line-height:1.04;letter-spacing:-.02em;color:var(--paper);margin-bottom:10px}
+.doc-title h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.doc-title .doc-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:740px}
+
+.abstract{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px 24px;margin-bottom:32px}
+.abstract-l{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.abstract-r{font-family:var(--serif);font-size:15.5px;line-height:1.7;color:var(--paper-2)}
+.abstract-r strong{color:var(--paper);font-weight:600}
+.abstract-r em{color:var(--gold);font-style:italic;font-weight:500}
+
+.sec{margin-bottom:44px;scroll-margin-top:80px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi)}
+.sec-hdr .n{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+
+.main p{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);margin-bottom:14px}
+.main p strong{color:var(--paper);font-weight:600}
+.main p em{color:var(--paper);font-style:italic}
+.main code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+
+.constants{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:18px 0}
+.const{background:var(--bg-2);padding:20px}
+.const .sym{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);line-height:1;font-weight:400}
+.const .nm{font-size:10px;color:var(--paper-2);letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.const .d{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--paper-2);margin-top:8px}
+.const .v{font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;margin-top:6px;letter-spacing:.04em}
+
+.math-block{background:var(--bg-2);border:1px solid var(--rule);border-left:3px solid var(--amber);padding:18px 22px;margin:16px 0;overflow-x:auto;color:var(--paper)}
+.math-block .label{font-size:9.5px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:block;font-family:var(--mono)}
+
+.bt-callout{background:rgba(188,106,77,.05);border-left:3px solid var(--coral);padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:12.5px;color:var(--paper-2);line-height:1.65}
+.bt-callout::before{content:'RIGOR-AUDITED ─ ';color:var(--coral);font-weight:700;letter-spacing:.16em;font-size:10px}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+table.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);color:var(--paper-2);font-family:var(--serif)}
+table.tbl td:first-child{font-family:var(--mono);color:var(--gold);font-size:12px;font-weight:500}
+
+@media (max-width:1024px){:root{--sw:240px}.main{padding:30px 28px 80px}}
+@media (max-width:768px){:root{--sw:0px}.doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}.doc-bar .crumb a{display:none}.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}body::before{display:none}.main{padding:24px 18px 80px}.constants{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">omega capstone</span></span>
+  <div class="end"><span class="live">rigor-applied · v4.0</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="side-head">
+      <div class="eyebrow">dispatch · Ω · capstone</div>
+      <div class="doc-t">Digital <em>Shadow</em></div>
+      <div class="doc-s">omega_capstone · v4.0</div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">document</div>
+      <dl><dt>version</dt><dd>4.0</dd><dt>updated</dt><dd>2026-05-31</dd><dt>author</dt><dd>R. Almeida</dd><dt>status</dt><dd style="color:var(--moss)">rigor-applied</dd></dl>
+    </div>
+    <div class="sb-sec side-toc">
+      <div class="sb-lbl">contents</div>
+      <a href="#s1" class="active"><span class="n">/ 01</span>The digital-shadow thesis</a>
+      <a href="#s2"><span class="n">/ 02</span>The per-building fingerprint</a>
+      <a href="#s3"><span class="n">/ 03</span>The analytic layer</a>
+      <a href="#s4"><span class="n">/ 04</span>Toward a network standard</a>
+      <a href="#s5"><span class="n">/ 05</span>Rigor &amp; open problems</a>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">corpus</div>
+      <dl><dt>sorts</dt><dd>254</dd><dt>exports</dt><dd>SOR·iGate·SEAS·CURE</dd><dt>κ basis</dt><dd>SEAS yr</dd><dt>γ basis</dt><dd>254-sort</dd></dl>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="doc-title">
+      <div class="doc-eyebrow">[ omega capstone · v4.0 · rigor-applied ]</div>
+      <h1>A distributed digital <em>shadow</em> of UPS hub operations.</h1>
+      <p class="doc-sub">A coordinator's architecture, from the sort aisle to a calibrated network standard — built from the four exports every hub already produces, with no system integration and no special access.</p>
+    </div>
+
+    <div class="abstract">
+      <div class="abstract-l">// abstract</div>
+      <div class="abstract-r">This is the document of a working <strong>digital shadow</strong> of the UPS Chelmsford Twilight sort, built from the operations side — and it is also the pitch. Working only from <strong>SOR, iGate, SEAS, and CURE</strong>, a year of exports across <strong>254 sort days</strong> yields a small set of structural constants that describe the building's routing geometry, and those constants drive a staffing engine, a parametric-bootstrap simulator, an idealized shadow, a local model, and a knowledge graph. The product is the <em>measurable distance</em> between the engineered ideal — the MSD standard, in work units — and as-built reality, decomposed into a structural floor and a closeable slack. The thesis is simple: anyone can wire exports into a dashboard; what is not generic is a coordinator treating his own operation as a mathematical object, choosing estimators that respect its structure, and grounding every fit in operational truth. This v4.0 head is the rigor-applied reconciliation of three prior documents.</div>
+    </div>
+
+    <div class="sec" id="s1">
+      <div class="sec-hdr"><span class="n">/ 01</span><h2>The digital-shadow <em>thesis</em></h2></div>
+      <p>This is the architecture of a working digital shadow of the CHEMA Twilight sort, built from the operations side using only the data the building already produces. It was not built at an Industrial Engineering desk or in a corporate analytics group; it was built on the floor, on the four exports everyone already has, and that origin is the most interesting thing about it. The smallest unit is a single package and the decision about which belt it belongs on; the largest claim is that the same method, run across many hubs and the day, twilight, and night sorts inside each one, gives the company the empirical basis to calibrate its own engineered productivity standard.</p>
+      <p>One framing runs through all of it. <strong>The routing was engineered above me; what I built is a way to read it out of the exhaust the building already produces</strong>, and to measure the gap between the engineered ideal and what actually happens. That gap is the product. Everything else exists to make it honest. The model is explicitly a <em>shadow</em>: data flows in, no control surface flows out. It is an observer, not a controller — the precise sense in which it is a shadow rather than a digital twin.</p>
+      <p>The instruments carry a <strong>lag topology</strong>, $K_{\mathrm{live}} \subset K_{\mathrm{sornight}} \subset K_{\mathrm{nextday}}$: live iGate summaries, then SOR and prior-day CURE, then SEAS, LIB, and misload the next day. The coordinator operates in $K_{\mathrm{sornight}}$ during the sort; the post-sort dashboard operates in $K_{\mathrm{nextday}}$. Mixing latency layers produces systematically misleading numbers — a discipline most reporting ignores.</p>
+    </div>
+
+    <div class="sec" id="s2">
+      <div class="sec-hdr"><span class="n">/ 02</span><h2>The per-building <em>fingerprint</em></h2></div>
+      <p>Each building's geometry shows up as a small set of structural constants — its fingerprint. Each is a per-sort ratio summarized across the year, governed by a single source of truth, <code>metric_contract.json</code>. Where a constant is <em>not</em> level-stable but day-of-week-dependent ($\kappa$) or season-conditioned ($\gamma$), this head says so explicitly — pretending a varying quantity is a tight scalar is exactly the overconfidence a year of data caught.</p>
+
+      <div class="constants">
+        <div class="const"><div class="sym">κ</div><div class="d">Zone-3 share of PD-belt volume (PD-09–12). A DOW-indexed vector on the SEAS basis, not a flat scalar.</div><div class="nm">kappa_Z3(DOW)</div><div class="v">Mon 0.413 · Fri 0.322</div></div>
+        <div class="const"><div class="sym">γ</div><div class="d">Weekly volume decay, full 254-sort corpus (Fri/Mon 0.9297); Friday ≈ 93% of Monday.</div><div class="nm">gamma</div><div class="v">γ = 0.982 ± 0.010</div></div>
+        <div class="const"><div class="sym">ρ</div><div class="d">PD-belt share of total hub volume — a volume share, not a correlation. Staffing sizes against V·ρ.</div><div class="nm">rho_PD/Hub</div><div class="v">ρ = 0.509 ± 0.025</div></div>
+        <div class="const"><div class="sym">Π</div><div class="d">Total building PPH (direct + indirect, all roles). Cost field c = 1/Π. Not per-loader PPH.</div><div class="nm">Pi_SOR</div><div class="v">Π ≈ 120.3 · c = 1/Π</div></div>
+      </div>
+
+      <p>The Zone-3 share $\kappa_{9\text{-}12}$ is the fraction of PD-belt volume landing on PD-09 through PD-12, and the canonical object (<code>kappa_dow_steady</code>) is the <strong>SEAS-basis DOW vector</strong>: Mon 0.413 · Tue 0.395 · Wed 0.385 · Thu 0.380 · Fri 0.322, full-year mean $\approx 0.368 \pm 0.014$. The <strong>iGate basis</strong> sits ~0.04–0.06 lower at every phase (≈ 0.31–0.33) — this is what the historical "0.311" measured. The two bases differ by the <strong>CCHIL → PD-09 attribution rule</strong>, not by phase scope: SEAS bundles all CCHIL volume under PD-09, iGate distributes by physical scanner. A third independent path — a 345,131-row ZIP→SLIC→belt routing table with no scan data at all — gives 0.293. Three roads that do not talk to each other land within a few points of one another.</p>
+
+      <div class="math-block">
+        <span class="label">// eq. 2.1 — staffing sized against the PD share</span>
+        $$ n_{\mathrm{total}} = \left\lceil \frac{V \cdot \rho}{\mathrm{PPH}_{\mathrm{loader}} \cdot t_{\mathrm{sort}}} \right\rceil $$
+      </div>
+
+      <p>The weekly decay $\gamma$ recalibrated to <strong>0.982 ± 0.010</strong> on the full 254-sort corpus (Fri/Mon ratio 0.9297, so $\gamma = 0.9297^{1/4} = 0.9819$): Friday runs near 93% of Monday. It had looked tighter near 0.958 on six weeks of data; the full year revealed roughly twelve times the spread, and $\gamma$ is honestly a season-conditioned distribution. The PD/Hub share $\rho = 0.509$ is why staffing is sized against $V \cdot \rho$, never raw building volume. The total building PPH near $\Pi_{\mathrm{SOR}} \approx 120.3$ (all hours, all roles, cost field $c = 1/\Pi$) is distinct from the per-loader rate near 385 and from "Direct PPH" near 124 — the three must never be conflated.</p>
+    </div>
+
+    <div class="sec" id="s3">
+      <div class="sec-hdr"><span class="n">/ 03</span><h2>The <em>analytic layer</em> — what earns its place</h2></div>
+      <p>The operational story rests on an analytic layer built and refined deliberately. The point is not that the mathematics is exotic — it is that the mathematics is load-bearing, and a coordinator put it there on purpose. A sort is described by five operating quantities ($V$, $H$, $N$, $\Pi$, $S$) tied by exact identities $\Pi = V/H$, $P = H/N$, $\Phi = V/S$, $S = P$ — four equations in five unknowns, so the feasible set is not a point but a one-parameter family, a smooth 1-manifold by the implicit function theorem. The MSD column over-determines the system and collapses that manifold to a single corporate point; the empirical operation lives elsewhere on it, and the displacement is the attainment multiplier $\mu = \Pi_{\mathrm{actual}}/\Pi_{\mathrm{MSD}}$.</p>
+
+      <p><strong>The one validated structural object retained is the ZIP ultrametric.</strong> Destinations are ZIP codes, and the natural metric is the prefix metric — two ZIPs are close when they share a long leading prefix. That is genuinely an ultrametric, a non-Archimedean tree distance, and the consequence is concrete and acted upon: the routing function $f : Z \to B$ is a coarsening of that tree onto sixteen belts, the CCHIL belts are where the coarsening is multivalued, and seeing $Z$ as a tree rather than a flat list of ~41,000 codes is what makes the quiz-weighting and the SLIC-to-belt function behave correctly under aggregation. This abstraction earns its place.</p>
+
+      <div class="bt-callout">The differential-geometry / sheaf / free-energy / symplectic material is <strong>analogy, not derivation, and is treated as future work</strong>. The de Rham "incompressible flow" reading of conservation, the Frobenius-foliation framing (trivial at rank 1), the sheaf/colimit reading of the two κ views, the fiber-bundle reading of seasonality, and the free-energy reading of the cost field each suggested a useful construction — but none carries a theorem proved here, so none is load-bearing. The <strong>ZIP ultrametric is the one validated structural object retained</strong>; everything else in that family is disciplined scaffolding that pointed at the right plain construction.</div>
+
+      <p>What is kept as load-bearing besides the ultrametric: the conservation identity $V = \sum_i V_{\mathrm{PD},i} + \ldots$, whose real consequence is that per-belt allocation must be sampled jointly on the probability simplex (a Dirichlet-multinomial), not as independent marginals; the cost field $c = 1/\Pi$ as a plain scalar over the manifold; and the sorter-as-channel model $\mathbf{M} = \mathbf{M}_K \cdot \mathbf{M}_E$ — explicitly a <em>composition</em> of two separately measured channels (LTC measures the knowledge gap, OJS measures execution error), not a recovery of two factors from one observed matrix, which would be non-identifiable.</p>
+    </div>
+
+    <div class="sec" id="s4">
+      <div class="sec-hdr"><span class="n">/ 04</span><h2>Toward a <em>network standard</em></h2></div>
+      <p>This is the terminal operational result. MSD is the as-designed engineered ideal in work units; the corpus is the as-built reality; the system makes the distance between them measurable, explainable, and decomposable. The gap to ideal <strong>splits into two parts</strong>: a structural floor — what the building cannot exceed given its $\kappa$, $\gamma$, $\rho$ geometry, freight composition, phase structure, and arrival timing — and a closeable slack, the attainable recovery in internals rework, double-handling, and fatigue, attacked by LTC and staffing. That decomposition turns MSD from a flat number people argue about into a target with a map: this much is the building, and this much I can actually recover.</p>
+
+      <p>The verb matters. MSD is a Corporate IE standard; this work does not rewrite it. What it produces is the <strong>empirical evidence base IE would need to condition it</strong> — a measured standard that knows about season, phase, zone, and composition, sitting next to the engineered one. The memory-and-local-model pattern is how this scales without a cloud or an IT project: each hub runs the same four exports, the same pipeline re-calibrates in an afternoon, and a distributed coordinator-contributor network produces the cross-hub corpus that is the natural training set for a network-scale model.</p>
+
+      <p>The point that makes it a <em>network</em> standard rather than one ideal applied everywhere: the <strong>per-building fingerprints</strong> — each hub's own $\kappa$ vector, $\gamma$, and $\rho$ — let the standard itself be conditioned on building type. That is the prerequisite for fair automated targets. Automation optimizes execution while this calibrates the target; a faster belt raises $\Pi$, but raising $\Pi$ against a one-size-fits-all standard just moves you faster toward the wrong point on the manifold. The structural-versus-closeable decomposition is what tells automation where the recoverable slack actually is.</p>
+    </div>
+
+    <div class="sec" id="s5">
+      <div class="sec-hdr"><span class="n">/ 05</span><h2>Rigor &amp; <em>open problems</em></h2></div>
+      <p>v4.0 supersedes and consolidates three prior documents — the original <code>omega_whitepaper.md</code>, the DeepSeek revision (the cleanest base), and the induction-fix κ-conformance variant — into one authoritative head, applying the 2026-05-27 rigor audit against the ratified constants in <code>metric_contract.json</code>. What changed in this pass:</p>
+      <p><strong>γ fixed to the canonical 0.982 everywhere.</strong> The prior heads narrated the recalibration while still printing the pre-revision $\gamma \approx 0.951$–0.958 and its consequence "Fri ≈ 82% of Mon" — the self-contradiction the audit flagged as a blocker. The DOW-decay figure was <strong>re-rendered at γ = 0.982</strong> (Friday ≈ 93% of Monday). <strong>The Appendix A vs Appendix B κ contradiction was resolved</strong> by stating $\kappa$ as a DOW vector on a named denominator and explicitly labeling Appendix B as the SEAS basis, so the two appendices no longer disagree. <strong>Decorative geometry demoted to analogy</strong> — Frobenius integrability, the de Rham 0-form / "incompressible flow" framing, the sheaf/colimit metaphor, and the free-energy / finite-temperature language are collected under an explicit analogies note; only the ZIP ultrametric is kept as load-bearing.</p>
+      <p><strong>Overstated "results" downgraded to hypotheses.</strong> The missort factorization $\mathbf{M} = \mathbf{M}_K \cdot \mathbf{M}_E$ is reframed as a model of composition, not a recoverable decomposition (non-identifiable). The Fidelity Cascade and $\partial\mathbb{E}[\mathrm{LIB}]/\partial\Pi < 0$ are demoted to design hypotheses with directional evidence, not proven bounds. The Zone Social Potential is presented as a management heuristic with no operational definition yet. The <strong>~300-dimensional EKF idealized shadow is written as a proposed architecture with no performance numbers claimed</strong>, consistent with the finding that it was never built.</p>
+      <p>Honestly disclosed open items: the third independent κ path (0.293) and the ~3,400-node / ~5,000-edge knowledge-graph counts are reported as the project's numbers, not independently re-derived here; the remaining <code>wp_figs/*</code> figures beyond the DOW figure were not regenerated this pass and should be spot-checked before publication; and κ_Z1 and κ_Z2 remain uncomputed (a data gap, labeled as planned work).</p>
+
+      <div class="bt-callout">Rigor audit applied 2026-05-31 (verdict: major revision, closest to publishable). Reconciles the original, DeepSeek, and κ-conformance heads into one. Constants conformed to <code>metric_contract.json</code> (γ = 0.982; κ_Z3 SEAS DOW vector mean 0.368 ± 0.014; ρ = 0.509; Π_SOR ≈ 120.3, c = 1/Π). This is an internal operations-research and career capstone, not a peer-reviewed paper — it states the sample size behind its numbers and the uncertainty around them, and labels analogy as analogy.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
