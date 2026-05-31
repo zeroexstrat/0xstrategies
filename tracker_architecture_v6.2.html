@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F9">
+<title>Tracker v6.2 · Architecture · 0xStrategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F6F9;--bg-2:#FFFFFF;--bg-3:#ECEFF3;--panel:#FFFFFF;
+  --paper:#16243A;--paper-2:#34465C;--paper-3:#5A6878;
+  --mute:#5A6878;--rule:#DBE0E7;--rule-hi:#C8D0DA;
+  --moss:#3DAE8E;--gold:#BC6A4D;--amber:#C18B3C;--coral:#BC6A4D;--plum:#7E6BA8;--slate:#34465C;
+  --serif:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+html,body{background:var(--bg);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+body{background-image:linear-gradient(to right,rgba(30,58,95,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(30,58,95,.04) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scan{from{transform:translateY(-100vh)}to{transform:translateY(100vh)}}
+body::before{content:'';position:fixed;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(188,106,77,.12),transparent);pointer-events:none;animation:scan 12s linear infinite;z-index:1}
+
+.doc-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:18px;padding:12px 28px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--paper-3)}
+.doc-bar .mark{display:flex;gap:6px;align-items:baseline}
+.doc-bar .px{color:var(--gold);font-weight:600;font-size:14px}
+.doc-bar .nm{color:var(--paper);font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-.012em}
+.doc-bar .sep{color:var(--rule-hi)}
+.doc-bar .crumb a{color:var(--paper-3)}.doc-bar .crumb a:hover{color:var(--gold)}.doc-bar .crumb .cur{color:var(--paper)}
+.doc-bar .end{margin-left:auto;display:flex;gap:14px;align-items:center}
+.doc-bar .live{color:var(--moss)}.doc-bar .live::before{content:'●';color:var(--moss);margin-right:5px;animation:pulse 1.6s infinite}
+.doc-bar .back{padding:5px 10px;border:1px solid var(--rule-hi);color:var(--paper-2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:all .12s}
+.doc-bar .back:hover{border-color:var(--gold);color:var(--gold)}
+
+/* cover */
+.cover{padding:48px 64px 36px;border-bottom:1.5px solid var(--gold);background:var(--bg-2);position:relative;z-index:2}
+.cover .eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.cover h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4.4vw,48px);line-height:1.04;letter-spacing:-.018em;color:var(--paper);margin-bottom:10px;max-width:880px}
+.cover h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.cover .sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2);line-height:1.45;max-width:760px;margin-bottom:24px}
+.cover .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;padding-top:24px;border-top:1px solid var(--rule)}
+.cover .meta dt{font-size:9.5px;color:var(--mute);letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px}
+.cover .meta dd{color:var(--paper);font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:-.005em}
+.cover .meta dd .sub{display:block;font-family:var(--mono);font-size:10.5px;color:var(--paper-3);margin-top:2px;letter-spacing:.02em}
+
+/* toc */
+.toc{position:sticky;top:46px;background:rgba(244,246,249,.92);backdrop-filter:blur(8px);padding:12px 64px;display:flex;gap:0;flex-wrap:wrap;font-size:11px;border-bottom:1px solid var(--rule);z-index:25}
+.toc a{color:var(--paper-2);padding:0 16px;border-right:1px solid var(--rule);white-space:nowrap;letter-spacing:.04em;transition:color .12s}
+.toc a:first-child{padding-left:0}.toc a:last-child{border-right:none}
+.toc a:hover,.toc a.active{color:var(--gold);font-weight:600}
+.toc a .n{color:var(--mute);margin-right:6px}
+
+/* body */
+.body-wrap{max-width:1200px;margin:0 auto;padding:36px 64px 100px;position:relative;z-index:2}
+.section{margin-bottom:56px;scroll-margin-top:120px}
+.sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px dashed var(--rule-hi);flex-wrap:wrap}
+.sec-hdr .n{font-size:11px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:3px 9px;border:1px solid var(--gold);flex-shrink:0}
+.sec-hdr h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.8vw,28px);letter-spacing:-.013em;color:var(--paper);line-height:1.1}
+.sec-hdr h2 em{color:var(--gold);font-style:italic;font-weight:400}
+.sec-hdr .meta{margin-left:auto;font-size:10.5px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+.sec-hdr .meta .ok{color:var(--moss)}
+
+.prose{font-family:var(--serif);font-size:15.5px;line-height:1.78;color:var(--paper-2);max-width:820px;margin-bottom:24px}
+.prose p{margin-bottom:12px}
+.prose strong{color:var(--paper);font-weight:600}
+.prose em{color:var(--gold);font-style:italic;font-weight:500}
+.prose code{font-family:var(--mono);font-size:13px;background:var(--bg-3);color:var(--gold);padding:1px 6px;border:1px solid var(--rule-hi)}
+.prose a{color:var(--gold);border-bottom:1px solid var(--rule-hi)}
+
+/* legend */
+.legend{display:flex;gap:22px;flex-wrap:wrap;font-size:11px;color:var(--paper-2);margin-bottom:18px;padding:10px 14px;background:var(--bg-2);border:1px solid var(--rule)}
+.legend-i{display:flex;align-items:center;gap:7px}
+.legend-d{width:10px;height:10px;flex-shrink:0}
+.fn-d{background:var(--slate)}.mod-d{background:var(--coral)}.store-d{background:var(--moss)}.input-d{background:var(--plum)}
+
+/* diagram */
+.diagram{background:var(--bg-2);border:1px solid var(--rule);margin-bottom:24px}
+.diagram-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+.diagram-bar .lbl{color:var(--gold);font-weight:600}
+.diagram svg{display:block;width:100%;background:var(--bg-2)}
+
+/* function table */
+table.fn{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:20px}
+table.fn th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 12px;border-bottom:1.5px solid var(--rule-hi);text-align:left;font-weight:600}
+table.fn td{padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--paper-2);font-family:var(--serif)}
+table.fn td:first-child{font-family:var(--mono);color:var(--slate);font-size:12px;font-weight:500;white-space:nowrap}
+table.fn td:nth-child(2){color:var(--paper-2)}
+table.fn td:nth-child(3){font-family:var(--mono);font-size:11px;color:var(--mute)}
+table.fn tr:hover td{background:var(--bg-3)}
+
+/* callouts */
+.callout{padding:14px 18px;background:var(--bg-2);border-left:3px solid var(--gold);font-family:var(--serif);font-size:14px;color:var(--paper-2);margin-bottom:16px;line-height:1.65;max-width:880px}
+.callout strong{color:var(--paper);font-weight:600}
+.callout code{font-family:var(--mono);color:var(--gold);background:var(--bg);padding:1px 5px;border:1px solid var(--rule-hi);font-size:12.5px}
+.callout.amber{border-color:var(--amber);background:rgba(193,139,60,.06)}
+.callout.moss{border-color:var(--moss);background:rgba(61,174,142,.06)}
+.callout .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;display:block;margin-bottom:4px}
+.callout.amber .tag{color:var(--amber)}
+.callout.moss .tag{color:var(--moss)}
+
+/* foot */
+.foot{padding:32px 0 0;font-size:11px;color:var(--paper-2);line-height:1.75;border-top:1px solid var(--rule);margin-top:36px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px}
+.foot h5{font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+.foot a{color:var(--paper);border-bottom:1px solid var(--rule-hi)}
+.foot a:hover{color:var(--gold);border-color:var(--gold)}
+
+@media (max-width:1024px){.body-wrap{padding:30px 28px 80px}.cover{padding:30px 28px}}
+@media (max-width:768px){
+  .doc-bar{padding:10px 18px;flex-wrap:wrap;gap:10px}
+  .doc-bar .crumb a{display:none}
+  body::before{display:none}
+  .cover{padding:24px 18px}
+  .cover .meta{grid-template-columns:1fr 1fr;gap:14px 24px}
+  .toc{padding:10px 18px}
+  .body-wrap{padding:24px 18px 80px}
+  .foot{grid-template-columns:1fr;gap:20px}
+}
+@media (prefers-reduced-motion:reduce){body::before,.doc-bar .live::before{animation:none !important}}
+</style>
+<style id="signature-bg">
+html{background:#F4F6F9 !important}
+body{background-color:#F4F6F9 !important;
+  background-image:
+    linear-gradient(to right, rgba(30,58,95,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30,58,95,.05) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 40% at 50% -4%, rgba(56,122,190,.15) 0%, rgba(56,122,190,.04) 40%, transparent 72%),
+    radial-gradient(ellipse at 8% 0%, rgba(30,58,95,.05) 0%, transparent 55%) !important;
+  background-size:48px 48px,48px 48px,100% 100%,100% 100% !important;
+  background-attachment:fixed !important;}
+</style>
+</head>
+<body>
+
+<div class="doc-bar">
+  <div class="mark"><span class="px">0x</span><span class="nm">Strategies</span></div>
+  <span class="sep">·</span>
+  <span class="crumb"><a href="index.html">portfolio</a> · <a href="index.html#briefs">dispatches</a> · <span class="cur">tracker architecture</span></span>
+  <div class="end"><span class="live">deployed · spec v6.2</span><a class="back" href="index.html">← back</a></div>
+</div>
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="eyebrow">[ tracker · architecture specification · v6.2 ]</div>
+  <h1>Tracker <em>v6.2</em> — Subsystems, live ingestion, and the decision-first read.</h1>
+  <p class="sub">A working specification of the live tracker as deployed at CHEMA Twilight: ~10,100 lines, 7 tabs, three export sources plus a live-CSV auto-pull, an engine-parity Outbounds view, and a three-layer Intel read built around what the coordinator does next.</p>
+  <dl class="meta">
+    <div><dt>Station</dt><dd>CHEMA Twilight<span class="sub">PD-01 → PD-12</span></dd></div>
+    <div><dt>Scope</dt><dd>~10,100 lines · 7 tabs<span class="sub">SOR/TMS · iGate · CURE · live CSV</span></dd></div>
+    <div><dt>Models</dt><dd>projection v0.5 · κ(DOW) · γ<span class="sub">M/M/c · LP-Lite · phase · Wilson</span></dd></div>
+    <div><dt>Author</dt><dd>Rafael Almeida<span class="sub">2026-05-31 · spec v6.2</span></dd></div>
+  </dl>
+</div>
+
+<!-- ═══ TOC ═══ -->
+<nav class="toc">
+  <a href="#s1" class="active"><span class="n">/ 01</span>master map</a>
+  <a href="#s2"><span class="n">/ 02</span>ingestion</a>
+  <a href="#s3"><span class="n">/ 03</span>state &amp; constants</a>
+  <a href="#s4"><span class="n">/ 04</span>outbounds engine</a>
+  <a href="#s5"><span class="n">/ 05</span>intel · 3 layers</a>
+  <a href="#s6"><span class="n">/ 06</span>dop plan</a>
+  <a href="#s7"><span class="n">/ 07</span>feedback loop</a>
+  <a href="#s8"><span class="n">/ 08</span>v6.0 → v6.2</a>
+</nav>
+
+<div class="body-wrap">
+
+  <section class="section" id="s1">
+    <div class="sec-hdr"><span class="n">/ 01</span><h2>Master <em>architecture map</em></h2><span class="meta">7 tabs · <span class="ok">all online</span></span></div>
+
+    <div class="prose">
+      <p>The tracker is one HTML file holding the pipeline in conversation. <strong>Data flows left-to-right; corrections flow right-to-left.</strong> Sources arrive as drag-and-drop xlsx <em>or</em> as live CSV pulled from a watched folder; <code>ingest</code> reconciles them into one snapshot ledger; <code>state</code> derives a single truth keyed to the active sort snapshot; the seven tabs each read <code>state</code> and produce a report; the <code>feedback</code> path writes supervisor actions and constant changes back through <code>metric_contract.json</code>, the single source of truth the tools re-read.</p>
+    </div>
+
+    <div class="legend">
+      <div class="legend-i"><span class="legend-d fn-d"></span>function · pure computation</div>
+      <div class="legend-i"><span class="legend-d mod-d"></span>module · contains state</div>
+      <div class="legend-i"><span class="legend-d store-d"></span>data store · persisted</div>
+      <div class="legend-i"><span class="legend-d input-d"></span>source / input</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-bar">
+        <span class="lbl">Fig. 1.1 — tracker.architecture.svg</span>
+        <span>3 sources + live pull · left-to-right data flow · right-to-left corrections</span>
+      </div>
+      <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5A6878"/></marker>
+          <marker id="arr-fb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#BC6A4D"/></marker>
+        </defs>
+        <g font-family="JetBrains Mono" font-size="11" fill="#16243A">
+          <rect x="24" y="34" width="150" height="40" fill="#7E6BA8" rx="2"/><text x="99" y="50" text-anchor="middle" font-weight="600">SOR / TMS</text><text x="99" y="65" text-anchor="middle" fill="#E0CBE0" font-size="9.5">Header + Operations</text>
+          <rect x="24" y="84" width="150" height="40" fill="#7E6BA8" rx="2"/><text x="99" y="100" text-anchor="middle" font-weight="600">iGate</text><text x="99" y="115" text-anchor="middle" fill="#E0CBE0" font-size="9.5">Hub + Employee</text>
+          <rect x="24" y="134" width="150" height="40" fill="#7E6BA8" rx="2"/><text x="99" y="150" text-anchor="middle" font-weight="600">CURE</text><text x="99" y="165" text-anchor="middle" fill="#E0CBE0" font-size="9.5">destination atlas</text>
+          <rect x="24" y="190" width="150" height="40" fill="#3DAE8E" rx="2"/><text x="99" y="206" text-anchor="middle" font-weight="600">live CSV pull</text><text x="99" y="221" text-anchor="middle" fill="#D5E0D2" font-size="9.5">FS-Access · 2 min</text>
+
+          <rect x="226" y="96" width="168" height="72" fill="#34465C" rx="2"/><text x="310" y="120" text-anchor="middle" font-weight="600">ingest.reconcile()</text><text x="310" y="136" text-anchor="middle" fill="#C9D3DD" font-size="9.5">classify · 2-file SOR merge</text><text x="310" y="151" text-anchor="middle" fill="#C9D3DD" font-size="9.5">pull-bucket → 1 snapshot</text>
+
+          <rect x="446" y="86" width="158" height="92" fill="#BC6A4D" rx="2"/><text x="525" y="112" text-anchor="middle" font-weight="700" font-size="13">state</text><text x="525" y="130" text-anchor="middle" fill="#F4D9CF" font-size="9.5">active snapshot truth</text><text x="525" y="145" text-anchor="middle" fill="#F4D9CF" font-size="9.5">phase · zone · κ(DOW) · γ</text><text x="525" y="160" text-anchor="middle" fill="#F4D9CF" font-size="9.5">scrubbed PPH ledger</text>
+
+          <rect x="656" y="24" width="156" height="34" fill="#34465C" rx="2"/><text x="734" y="40" text-anchor="middle" font-weight="600" font-size="10.5">Hub · Timeline</text><text x="734" y="52" text-anchor="middle" fill="#C9D3DD" font-size="9">snapshot arc</text>
+          <rect x="656" y="64" width="156" height="34" fill="#34465C" rx="2"/><text x="734" y="80" text-anchor="middle" font-weight="600" font-size="10.5">Outbounds engine</text><text x="734" y="92" text-anchor="middle" fill="#C9D3DD" font-size="9">per belt+zone PPH</text>
+          <rect x="656" y="104" width="156" height="34" fill="#34465C" rx="2"/><text x="734" y="120" text-anchor="middle" font-weight="600" font-size="10.5">Intel · 3 layers</text><text x="734" y="132" text-anchor="middle" fill="#C9D3DD" font-size="9">project · live · post</text>
+          <rect x="656" y="144" width="156" height="34" fill="#34465C" rx="2"/><text x="734" y="160" text-anchor="middle" font-weight="600" font-size="10.5">DOP plan · History</text><text x="734" y="172" text-anchor="middle" fill="#C9D3DD" font-size="9">pre-sort wall sheet</text>
+
+          <rect x="446" y="276" width="158" height="44" fill="#3DAE8E" rx="2"/><text x="525" y="294" text-anchor="middle" font-weight="600">IDB v5 store</text><text x="525" y="310" text-anchor="middle" fill="#D5E0D2" font-size="9.5">tracker_ops_db · sort_snapshots</text>
+
+          <rect x="656" y="276" width="156" height="44" fill="#7E6BA8" rx="2"/><text x="734" y="294" text-anchor="middle" font-weight="600">metric_contract</text><text x="734" y="310" text-anchor="middle" fill="#E0CBE0" font-size="9.5">γ · κ · ρ · Π — single truth</text>
+
+          <rect x="226" y="276" width="168" height="44" fill="#34465C" rx="2"/><text x="310" y="294" text-anchor="middle" font-weight="600">feedback / recalibrate</text><text x="310" y="310" text-anchor="middle" fill="#C9D3DD" font-size="9.5">rebind constants → re-read</text>
+        </g>
+        <g stroke="#5A6878" stroke-width="1.5" fill="none" marker-end="url(#arr)">
+          <line x1="174" y1="54" x2="226" y2="120"/><line x1="174" y1="104" x2="226" y2="128"/><line x1="174" y1="154" x2="226" y2="136"/><line x1="174" y1="210" x2="226" y2="150"/>
+          <line x1="394" y1="132" x2="446" y2="132"/>
+          <line x1="604" y1="110" x2="656" y2="41"/><line x1="604" y1="120" x2="656" y2="81"/><line x1="604" y1="132" x2="656" y2="121"/><line x1="604" y1="150" x2="656" y2="161"/>
+          <line x1="525" y1="178" x2="525" y2="276"/>
+        </g>
+        <g stroke="#BC6A4D" stroke-width="1.5" fill="none" marker-end="url(#arr-fb)" stroke-dasharray="4,3">
+          <line x1="656" y1="298" x2="604" y2="298"/>
+          <line x1="446" y1="298" x2="394" y2="298"/>
+          <line x1="310" y1="276" x2="310" y2="168"/>
+        </g>
+        <g font-family="JetBrains Mono" font-size="10" fill="#5A6878">
+          <text x="500" y="240" text-anchor="middle">data flow ─→</text>
+          <text x="500" y="408" text-anchor="middle" fill="#BC6A4D">←─ ─ correction loop · constants re-read from metric_contract.json ─ ─</text>
+          <text x="500" y="432" text-anchor="middle" font-style="italic" fill="#8A94A2">one HTML file · ~10,100 lines · 7 tabs · IndexedDB v5</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="callout amber">
+      <span class="tag">v6.0 → v6.2 · what changed</span>
+      <strong>The tracker moved from a single static import to a live, decision-first instrument.</strong> v6.0 added the signature theme and an engine-parity <code>Outbounds</code> view; v6.1 rebuilt <code>Intel</code> into three decision layers and turned <code>DOP</code> into a pre-sort plan generator; v6.2 (Codex) fixed live-pull snapshot grouping so the current view stops losing SOR hours. The constants are pinned in <code>metric_contract.json</code> — γ = 0.982, κ as a day-of-week vector, ρ = 0.509.
+    </div>
+  </section>
+
+  <section class="section" id="s2">
+    <div class="sec-hdr"><span class="n">/ 02</span><h2>Data <em>ingestion</em> — xlsx drops &amp; live CSV</h2></div>
+
+    <div class="prose">
+      <p>Three sources arrive in different shapes: <strong>SOR/TMS</strong> (a Header sheet + an Operations sheet), <strong>iGate</strong> (Hub Summary + Employee Summary), and <strong>CURE</strong> (the destination atlas). They can be dragged in as xlsx, or pulled automatically as the live-CSV exhaust of the export script from a watched folder via the File-System Access API (re-checked about every two minutes). Each file is classified by name, the two SOR sheets of a pull are merged, and the result is bucketed into a single operational snapshot.</p>
+    </div>
+
+    <table class="fn">
+      <thead><tr><th>function</th><th>responsibility</th><th>basis</th></tr></thead>
+      <tbody>
+        <tr><td>_classifyTlFile()</td><td>Routes each dropped/pulled file to hub · emp · sor by filename pattern.</td><td>name-pattern match</td></tr>
+        <tr><td>_parseFilenameIdx()</td><td>Derives the snapshot index from the <code>(N)</code> suffix (xlsx) or the <code>YYYY-MM-DD_HHMMSS</code> timestamp (live CSV).</td><td>recency key</td></tr>
+        <tr><td>_livePullBucket()</td><td><strong>v6.2:</strong> rounds the timestamp to the nearest 30&nbsp;s so all files of one pull share one snapshot index.</td><td>30-second bucket</td></tr>
+        <tr><td>loadLatestFromFolder()</td><td>Picks the highest-index file of each required type and runs the same pipeline as manual drop.</td><td>FS-Access · ~2 min</td></tr>
+        <tr><td>reconcile / merge</td><td>Merges sources into the snapshot ledger; the 2-file SOR pull (Header + Operations) merges on the shared key.</td><td>per-snapshot ledger</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout moss">
+      <span class="tag">snapshot, not file</span>
+      <strong>One pull is one snapshot.</strong> A single live pull lands as separate files a few seconds apart — SOR at <code>23:10:59</code>, Hub at <code>23:11:00</code>, Employee at <code>23:11:03</code>. The latest pull (highest index) becomes the live current view; see <a href="#s8">§ 08</a> for the v6.2 fix that keeps those three files together.
+    </div>
+  </section>
+
+  <section class="section" id="s3">
+    <div class="sec-hdr"><span class="n">/ 03</span><h2>State &amp; <em>constants</em></h2></div>
+    <div class="prose">
+      <p>The <code>state</code> module is the only place truth lives, and it is keyed to the <strong>active sort snapshot</strong>. Every tab reads from <code>state</code> rather than from the raw ledger, which is what lets a correction or a new pull re-flow the whole view without re-importing. Snapshots persist in IndexedDB (<code>tracker_ops_db</code>, schema version 5, <code>sort_snapshots</code> store keyed by <code>[sort_date, source, snap_idx]</code>) so a sort can be reopened and replayed.</p>
+      <p>State carries: phase (Φ1 → Φ4 by elapsed-volume fraction), the per-zone κ day-of-week vector, the current γ, the scrubbed per-loader PPH ledger, and the active borrow/loan map. The structural constants are not hard-coded in the tracker — they are read from <code>metric_contract.json</code>: <strong>γ = 0.982</strong> (Friday ≈ 93% of Monday), <strong>κ_Z3</strong> as the SEAS-basis DOW vector (Mon 0.413 → Fri 0.322), <strong>ρ_PD/Hub = 0.509</strong> (a volume share), and <strong>Π_SOR ≈ 120.3</strong> with cost <code>c = 1/Π</code>.</p>
+    </div>
+  </section>
+
+  <section class="section" id="s4">
+    <div class="sec-hdr"><span class="n">/ 04</span><h2>Outbounds <em>live engine</em></h2><span class="meta">v6.0 · engine-parity</span></div>
+    <div class="prose">
+      <p>v6.0 replaced the old post-hoc "Area" view with <code>_renderOutboundsLive()</code>, which recomputes the loading picture from the same inputs the offline engine uses — iGate Hub + iGate Employee + live SOR — on every pull. For each belt and zone it reports <strong>Net</strong>, <strong>Loaders</strong>, <strong>Paid Hrs</strong>, <strong>Paid PPH</strong>, <strong>Scan Hrs</strong>, <strong>Scan PPH</strong>, and <strong>Util %</strong>, matching the engine rather than approximating it.</p>
+    </div>
+    <div class="callout moss">
+      <span class="tag">validated · 2026-05-28</span>
+      <strong>Engine-parity confirmed</strong> on a full sort: 59,863 net · 77 loaders · paid-PPH 179 · scan-PPH 156. The outbound-only first cut breaks out the PD belts; pick-off and non-outbound areas roll into the building total rather than being shown separately.
+    </div>
+  </section>
+
+  <section class="section" id="s5">
+    <div class="sec-hdr"><span class="n">/ 05</span><h2>Intel — three <em>decision layers</em></h2><span class="meta">v6.1 · decision-first</span></div>
+    <div class="prose">
+      <p>v6.1 rebuilt the Intel tab around what the coordinator actually decides, in three layers. <strong>(01) Pre-Sort Projection</strong> — per-belt expectancy bands from the hierarchical projection (<code>projection_per_belt_DOW_v05.json</code>): the building-volume DOW band × the canonical belt share, turned into a paid-hour target at a plan PPH that steps 230 → 190, with a reliability bar showing how deep the allocation evidence goes. <strong>(02) Live · Now vs Projected</strong> — per-belt scanned-net against the band (BEHIND / ON-TRACK / AHEAD), with a building queue-state light and the sort phase. <strong>(03) Post-Sort</strong> — the Sort Quality Score, the γ trajectory, and zone performance.</p>
+      <p>The academic constructs (κ, ε, zone-entropy, Wilson intervals, M/M/c ρ) were moved into a collapsible <em>Analyst-detail</em> panel, each with a plain "what it means / what to do" line. The earlier Destination Load Intelligence and the CURE Cube scorecard were retired from the live view and archived.</p>
+    </div>
+  </section>
+
+  <section class="section" id="s6">
+    <div class="sec-hdr"><span class="n">/ 06</span><h2>DOP — <em>pre-sort plan</em> generator</h2><span class="meta">v6.1 · two decoupled PPHs</span></div>
+    <div class="prose">
+      <p>The DOP tab became a pre-sort plan generator built on <strong>two decoupled PPHs</strong>. A user-fixed <em>Planned Adjusted Building PPH</em> (the corporate, all-buckets number, ~118–124) drives the building manifold — total building volume ÷ adjusted PPH gives total paid hours and the cost-per-piece identity <code>c = 1/Π</code>. A separate per-belt <em>outbound Load PPH</em> (each belt's own ~170–270, with an optional override) drives outbound loader staffing — belt volume ÷ belt PPH ÷ target paid-day = the boss's Column M. The two are never conflated; the output matches the <code>Friday-DOP.xlsx</code> PresortDOP format and prints as a wall sheet.</p>
+    </div>
+  </section>
+
+  <section class="section" id="s7">
+    <div class="sec-hdr"><span class="n">/ 07</span><h2>The <em>feedback loop</em></h2></div>
+    <div class="prose">
+      <p>Corrections flow right-to-left. Supervisor actions (borrow / loan, phase advance) rebind <code>state</code> rather than the data sources, so the next render reflects them without re-importing. Constant changes go one level deeper: when γ, κ, ρ, or Π are recalibrated, they are written to <code>metric_contract.json</code>, the single source of truth that both the tracker and the offline outbound engine re-read on boot. That is what stops net / window / exclusion definitions from drifting between the live tool and the engine.</p>
+    </div>
+  </section>
+
+  <section class="section" id="s8">
+    <div class="sec-hdr"><span class="n">/ 08</span><h2>v6.0 → v6.2 <em>changes</em></h2><span class="meta">Codex fix merged</span></div>
+    <div class="prose">
+      <p>The lineage from the v2.11 spec ran v3 → v4.1 → v5 (live-CSV ingestion) → v6.0 → v6.1, with v6.2 the current head. The notable changes:</p>
+    </div>
+    <ul style="font-family:var(--serif);font-size:15px;line-height:1.75;color:var(--paper-2);list-style:none;padding-left:0">
+      <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong style="color:var(--paper)">v5.9 ·</strong> Native live-CSV ingestion — parses the export-script exhaust, merges the 2-file SOR pull (OUT-1..12 → PD-01..12), and auto-pulls the latest of each file from a watched folder via the File-System Access API.</li>
+      <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong style="color:var(--paper)">v6.0 ·</strong> Signature theme in both light/dark modes; Timeline moved to slot 2; <code>Area</code> → <code>Outbounds</code> with the live engine-parity recompute (<code>_renderOutboundsLive</code>).</li>
+      <li style="padding:10px 0;border-bottom:1px solid var(--rule)"><strong style="color:var(--paper)">v6.1 ·</strong> Intel rebuilt into the three decision layers with a hierarchical pre-sort projection (v0.5); DOP repurposed into the two-PPH pre-sort plan generator; Destination Load Intelligence and the CURE Cube archived; academic constructs moved to a collapsible Analyst-detail.</li>
+      <li style="padding:10px 0"><strong style="color:var(--paper)">v6.2 · Codex fix —</strong> live-pull snapshot grouping. A single pull lands as separate files seconds apart (SOR <code>23:10:59</code>, Hub <code>23:11:00</code>, Employee <code>23:11:03</code>). Exact-second recency keys split the pull, so the latest active snapshot lost its SOR hours — which blocked per-belt <em>paid</em> PPH. <code>_livePullBucket()</code> now rounds each timestamp to the nearest 30&nbsp;s, so the three files share one snapshot index in both the folder auto-pull (<code>_latestN</code>) and the Timeline grouping (<code>_parseFilenameIdx</code>). The current view keeps its SOR hours and paid PPH computes again.</li>
+    </ul>
+    <div class="callout amber">
+      <span class="tag">provenance</span>
+      The v6.2 fix was authored by Codex as an isolated fork of the v6.1 head; this spec documents the merged behavior. The deployed tracker bundle is <code>tracker_v6.2.html</code> at the CHEMA hub-operations suite.
+    </div>
+  </section>
+
+  <div class="foot">
+    <div>
+      <h5>document</h5>
+      Tracker Architecture · spec v6.2<br>CHEMA Twilight Hub · 2026-05-31<br>Rafael Almeida · Employee 6068314
+    </div>
+    <div>
+      <h5>related</h5>
+      <a href="si_whitepaper_v3.0.html">Sort Intelligence v3.0</a><br>
+      <a href="unified_opus_v6.0.html">Unified Opus v6.0</a><br>
+      <a href="index.html#briefs">all dispatches</a>
+    </div>
+    <div>
+      <h5>source of truth</h5>
+      Constants from <code style="font-family:var(--mono);font-size:11px">metric_contract.json</code><br>γ 0.982 · κ(DOW) · ρ 0.509 · Π 120.3
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
